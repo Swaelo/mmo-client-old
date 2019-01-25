@@ -15,7 +15,7 @@ public class ServerConnection : MonoBehaviour
     private bool ShouldHandleData = false;  //Are we listening in for packets from the server right now
     private string ConsoleMessage = ""; //Update constantly checks the value of this string, when its not empty the value is displayed to the console log then reset, this is so SocketThread can set this value
     
-    public GameObject CurrentPlayer;
+    public GameObject CurrentPlayer = null;
     public Dictionary<string, GameObject> OtherPlayers = new Dictionary<string, GameObject>(); //Keep a list of the other players currently playing the game
 
     //When trying to connect to the server, it times out after 3 seconds
@@ -167,7 +167,11 @@ public class ServerConnection : MonoBehaviour
     //Close the connection to the server when the game is closed
     private void OnApplicationQuit()
     {
-        if(ClientSocket != null)
+        //If the application is quit while the player is logged into the game we need to quickly tell the server our current character data so it can be backed up into the database for next time
+        if(CurrentPlayer != null)
+            PacketSender.instance.SendCharacterData(CurrentPlayer.transform.position, CurrentPlayer.transform.rotation);
+        //Close the connection if we are connected to the server
+        if (ClientSocket != null)
             ClientSocket.Close();
     }
 }

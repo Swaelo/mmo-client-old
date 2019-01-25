@@ -8,14 +8,15 @@ public enum ServerPacketType
     EnterGame = 2,   //server sends character info data to the client and tells them to spawn into the game <int:PacketType, float:XPos, float:YPos, float:ZPos, float:XRot, float:YRot, float:ZRot, float:WRot>
     SpawnExternalClient = 3, //Gets a message from the server to spawn someone elses character into the game world <int:PacketType, float:XPos, float:YPos, float:ZPos, float:XRot, float:YRot, float:ZRot, float:WRot>
     UpdatePlayer = 4,    //Gets a message from the server with one of the other clients updated position and rotation data <int:PacketType, string:AccountName, vector3:position, vector4:rotation>
-    RemovePlayer = 5,
-    PlayerMessage = 6
+    RemovePlayer = 5,   //Server lets us know one of the other players has disconnected from the game
+    PlayerMessage = 6,  //Server tells us all of the chat messages sent by other players to be displayed in the chat window
+    GroundItems = 7 //When we join the game the server lets us know about all the items that are currently on the ground in the game world
 }
 
 public class PacketReader : MonoBehaviour
 {
     public static PacketReader instance;    //Initialise our singleton instance reference for easy global access, and register the packet handler functions for each packet type
-    private Prefabs PrefabList; //Used to spawn in clients when instructed to
+    private PlayerPrefabs PrefabList; //Used to spawn in clients when instructed to
     private MenuInterface UIElements;
     private ServerConnection Connection;
 
@@ -27,7 +28,7 @@ public class PacketReader : MonoBehaviour
     {
         instance = this;    //store singleton instance
         RegisterPacketHandlers();   //register all packet handler functions into the dictionary
-        PrefabList = GetComponent<Prefabs>();   //grab the prefab list so we can use it to spawn players into the world
+        PrefabList = GetComponent<PlayerPrefabs>();   //grab the prefab list so we can use it to spawn players into the world
         UIElements = GetComponent<MenuInterface>();
         Connection = GetComponent<ServerConnection>();
     }
@@ -42,6 +43,7 @@ public class PacketReader : MonoBehaviour
         Packets.Add((int)ServerPacketType.UpdatePlayer, HandlePlayerUpdate);
         Packets.Add((int)ServerPacketType.RemovePlayer, HandleRemovePlayer);
         Packets.Add((int)ServerPacketType.PlayerMessage, HandlePlayerMessage);
+        Packets.Add((int)ServerPacketType.GroundItems, HandleGroundItems);
     }
 
     //Gets a packet from the server and sends it onto whatever function its mapped to in the dictionary
@@ -63,6 +65,7 @@ public class PacketReader : MonoBehaviour
         if (Packets.TryGetValue(PacketType, out NewPacket))
             NewPacket.Invoke(PacketData);
     }
+
 
     private void HandleMessage(byte[] PacketData)
     {
@@ -139,6 +142,7 @@ public class PacketReader : MonoBehaviour
         Connection.OtherPlayers[AccountName].GetComponent<ExternalPlayerMovement>().UpdatePosition(NewPosition);
     }
 
+    //Server lets us know one of the other players has disconnected from the game
     private void HandleRemovePlayer(byte[] PacketData)
     {
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
@@ -150,6 +154,7 @@ public class PacketReader : MonoBehaviour
         GameObject.Destroy(Player);
     }
 
+    //Server tells us all of the chat messages sent by other players to be displayed in the chat window
     private void HandlePlayerMessage(byte[] PacketData)
     {
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
@@ -158,5 +163,32 @@ public class PacketReader : MonoBehaviour
         string AccountName = PacketReader.ReadString();
         string Message = PacketReader.ReadString();
         UIElements.ChatWindowObject.GetComponent<ChatWindow>().ExternalMessage(AccountName, Message);
+    }
+
+    //When we join the game the server lets us know about all the items that are currently on the ground in the game world
+    private void HandleGroundItems(byte[] PacketData)
+    {
+        ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
+        PacketReader.WriteBytes(PacketData);
+        int PacketType = PacketReader.ReadInteger();    //read in the packet type
+        int ItemCount = PacketReader.ReadInteger(); //read in how many items are in the world
+        Console.Instance.Print("There are " + ItemCount + " items on the ground");
+        //Grab the list all the items will be stored in
+        GroundItems ItemList = GetComponent<GroundItems>();
+        for(int iter = 0; iter < ItemCount; iter++)
+        {
+            //read in the information for each item there is stored
+            int ItemID = PacketReader.ReadInteger();
+            //read the position data where the item should be spawned at
+            Vector3 ItemPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            Quaternion ItemRotation = new Quaternion(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            //find the info about the object were about to spawn
+            GameObject CurrentItem = GetComponent<ItemPrefabs>().ItemPrefabList[ItemID-1];
+            string ItemName = CurrentItem.GetComponent<GameItem>().ItemName;
+            //spawn this object into the game world and add it to the list of items in the world
+            Console.Instance.Print(ItemName + " is on the ground");
+            GameObject NewItem = GameObject.Instantiate(CurrentItem, ItemPosition, ItemRotation);
+            ItemList.AddItem(NewItem.GetComponent<GameItem>());
+        }
     }
 }

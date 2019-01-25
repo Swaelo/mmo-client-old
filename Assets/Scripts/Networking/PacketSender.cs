@@ -9,7 +9,8 @@ public enum ClientPacketType
     Login = 3,   //client sends a request to the server to log into an account <int:PacketType, string:Username, string:Password>
     PlayerUpdate = 4,    //clients updating the server on their position and rotation information <int:PacketType, string:AccountName, vector3:position, vector4:rotation>
     Disconnect = 5,  //tell the server when we disconnect from the game
-    PlayerMessage = 6   //sends the clients chat message to the server to be sent to all other clients
+    PlayerMessage = 6,   //sends the clients chat message to the server to be sent to all other clients
+    CharacterData = 7   //sends the clients character data to the server to be backed up into the database
 }
 
 //sends packets to the game server
@@ -99,12 +100,32 @@ public class PacketSender : MonoBehaviour
         PacketWriter.Dispose();
     }
 
+    //Sends our chat message to the server to be delivered to all the other clients
     public void SendChatMessage(string Message)
     {
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();
         PacketWriter.WriteInteger((int)ClientPacketType.PlayerMessage);
         PacketWriter.WriteString(connection.CurrentPlayer.name);
         PacketWriter.WriteString(Message);
+        SendPacket(PacketWriter.ToArray());
+        PacketWriter.Dispose();
+    }
+
+    //Sends our character data to the server to be backed up into the database right before we stop playing
+    public void SendCharacterData(Vector3 Position, Quaternion Rotation)
+    {
+        ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();
+        PacketWriter.WriteInteger((int)ClientPacketType.CharacterData);
+        //position
+        PacketWriter.WriteFloat(Position.x);
+        PacketWriter.WriteFloat(Position.y);
+        PacketWriter.WriteFloat(Position.z);
+        //rotation
+        PacketWriter.WriteFloat(Rotation.x);
+        PacketWriter.WriteFloat(Rotation.y);
+        PacketWriter.WriteFloat(Rotation.z);
+        PacketWriter.WriteFloat(Rotation.w);
+        //send it
         SendPacket(PacketWriter.ToArray());
         PacketWriter.Dispose();
     }

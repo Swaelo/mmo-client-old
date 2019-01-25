@@ -9,6 +9,13 @@ public class PlayerController : MonoBehaviour
     public GameObject PlayerCamera;
     public float WalkSpeed = 3.0f;
     public float TurnSpeed = 300f;
+
+    public float GravityForce = 0.1f;
+    public float YVelocity = 0.0f;
+    public float JumpHeight = 3.0f;
+    public bool CanJump = true;
+
+    
     private CharacterController Controller;
 
     private float UpdateInterval = 1.0f;
@@ -35,6 +42,13 @@ public class PlayerController : MonoBehaviour
         Vector3 MovementX = Vector3.Cross(transform.up, PlayerCamera.transform.forward).normalized;
         Vector3 MovementY = Vector3.Cross(MovementX, transform.up).normalized;
         Vector3 PlayerMovement = XInput * MovementX + YInput * MovementY;
+        //Allow jumping with spacebar when the player is grounded
+        if (Controller.isGrounded && Input.GetKey(KeyCode.Space) && CanJump)
+            YVelocity = JumpHeight;
+        //Apply gravity when the player is in the air
+        if (!Controller.isGrounded)
+            YVelocity -= GravityForce;
+        PlayerMovement.y += YVelocity;
         Controller.Move(PlayerMovement * WalkSpeed * Time.deltaTime);
         //Slowly rotate towards the direction of movement
         if(PlayerMovement.x != 0 || PlayerMovement.z != 0)
