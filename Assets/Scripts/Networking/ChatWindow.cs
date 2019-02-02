@@ -14,6 +14,8 @@ public class ChatWindow : MonoBehaviour
 
     public void ChatMessage()
     {
+        if (AccountName == "")
+            AccountName = GameObject.Find("System").GetComponent<ServerConnection>().CurrentCharacterName;
         //Get the message from the input field
         string Message = Input.text;
         //Empty the message box
@@ -24,9 +26,9 @@ public class ChatWindow : MonoBehaviour
         ChatLines[3].text = ChatLines[2].text;
         ChatLines[2].text = ChatLines[1].text;
         ChatLines[1].text = ChatLines[0].text;
-        ChatLines[0].text = AccountName + ": " + Message;
+        ChatLines[0].text = AccountName  + ": " + Message;
         //Send the chat message to the server for all other clients to receive
-        PacketSender.instance.SendChatMessage(Message);
+        PacketSender.instance.SendPlayerMessage(Message);
     }
 
     public void ExternalMessage(string Sender, string Message)

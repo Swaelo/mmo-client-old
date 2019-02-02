@@ -32,6 +32,7 @@ public class ExternalPlayerMovement : MonoBehaviour
 
     public void UpdatePosition(Vector3 NewTarget)
     {
+        Console.Instance.Print("external client target position has been updated");
         Navigator.SetDestination(NewTarget);
     }
 }

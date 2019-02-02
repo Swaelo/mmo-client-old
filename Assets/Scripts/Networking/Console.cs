@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ public class Console : MonoBehaviour
         {
             Lines[i].text = Lines[i - 1].text;
         }
-        //Now set the new message into the last line
-        Lines[0].text = line;
+        //Now set the new message into the last line, put the time at the start of the message
+        Lines[0].text = DateTime.Now.ToLocalTime().Hour + ":" + DateTime.Now.ToLocalTime().Minute + ":" + DateTime.Now.ToLocalTime().Second + ": " + line;
     }
 }

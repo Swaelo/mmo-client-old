@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameItem : MonoBehaviour
 {
     public int ItemID = -1;
+    public int ItemNumber = -1;
     public string ItemName = "not set";
     public Vector3 ItemPosition = new Vector3();
 
