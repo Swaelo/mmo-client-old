@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Player\FirstPersonPlayerCamera.cs" />
     <Compile Include="Assets\Scripts\Player\FirstPersonPlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerPositionUpdating.cs" />
     <Compile Include="Assets\Scripts\Player\ThirdPersonPlayerCamera.cs" />
     <Compile Include="Assets\Scripts\Player\ThirdPersonPlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerPrefabs.cs" />

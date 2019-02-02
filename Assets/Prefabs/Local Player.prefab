@@ -840,6 +840,7 @@ GameObject:
   - component: {fileID: 282}
   - component: {fileID: 1600832443}
   - component: {fileID: 1600832446}
+  - component: {fileID: 3068759996562737299}
   m_Layer: 0
   m_Name: Local Player
   m_TagString: Untagged
@@ -917,7 +918,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirstPersonActive: 0
-  AnimationController: {fileID: 276}
   Controller: {fileID: 282}
   WalkSpeed: 3
   GravityForce: 0.1
@@ -936,7 +936,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThirdPersonControllerActive: 1
-  AnimationController: {fileID: 276}
   Controller: {fileID: 282}
   PlayerCamera: {fileID: 171}
   WalkSpeed: 3
@@ -944,6 +943,19 @@ MonoBehaviour:
   GravityForce: 0.1
   YVelocity: 0
   JumpHeight: 3
+--- !u!114 &3068759996562737299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad40302a76289334d9c8aa371389df07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationController: {fileID: 276}
 --- !u!1 &105
 GameObject:
   m_ObjectHideFlags: 0

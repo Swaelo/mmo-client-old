@@ -5,15 +5,11 @@ using UnityEngine;
 public class FirstPersonPlayerController : MonoBehaviour
 {
     public bool FirstPersonActive = false;
-    [SerializeField] private Animator AnimationController;
     [SerializeField] private CharacterController Controller;
     [SerializeField] private float WalkSpeed = 3;
     [SerializeField] private float GravityForce = 0.1f;
     [SerializeField] private float YVelocity = 0.0f;
     [SerializeField] private float JumpHeight = 3;
-    private Vector3 PreviousPosition;
-    private float UpdateInterval = 1.0f;
-    private float NextUpdate = 1.0f;
 
     public void StartFirstPersonMode()
     {
@@ -24,19 +20,11 @@ public class FirstPersonPlayerController : MonoBehaviour
         FirstPersonActive = false;
     }
 
-    private void Awake()
-    {
-        PreviousPosition = transform.position;
-    }
-
     private void Update()
     {
         //Do nothing while in third person mode
         if (!FirstPersonActive)
             return;
-
-        //Tell the animation controller how much we are moving, it will handle idle/walking animation blending
-        AnimationController.SetFloat("Movement", Vector3.Distance(transform.position, PreviousPosition));
 
         //Player moves around with WASD, Arrow Keys or Joystick
         Vector3 MovementX = Vector3.Cross(transform.up, transform.forward).normalized;

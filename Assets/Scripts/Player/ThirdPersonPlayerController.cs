@@ -14,8 +14,7 @@ public class ThirdPersonPlayerController : MonoBehaviour
     {
         ThirdPersonControllerActive = false;
     }
-
-    [SerializeField] private Animator AnimationController;
+    
     [SerializeField] private CharacterController Controller;
     [SerializeField] private Transform PlayerCamera;
 
@@ -25,13 +24,8 @@ public class ThirdPersonPlayerController : MonoBehaviour
     [SerializeField] private float YVelocity = 0.0f;
     [SerializeField] private float JumpHeight = 3;
 
-    private Vector3 PreviousPosition;
-    private float UpdateInterval = 1.0f;
-    private float NextUpdate = 1.0f;
-
     private void Awake()
     {
-        PreviousPosition = transform.position;
         PlayerCamera.transform.parent = null;
     }
 
@@ -40,9 +34,6 @@ public class ThirdPersonPlayerController : MonoBehaviour
         //Do nothing while in person person mode
         if (!ThirdPersonControllerActive)
             return;
-
-        //Tell the animation controller how much we are moving, it will handle idle/walking animation blending
-        AnimationController.SetFloat("Movement", Vector3.Distance(transform.position, PreviousPosition));
 
         //Figure out where the player should be moved to based on their input
         Vector3 MovementX = Vector3.Cross(transform.up, PlayerCamera.forward).normalized;
