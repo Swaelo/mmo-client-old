@@ -2,8 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+public class ThirdPersonPlayerCamera : MonoBehaviour
 {
+    public bool ThirdPersonActive = true;
+    [SerializeField] private FirstPersonPlayerController FirstPersonController;
+    [SerializeField] private ThirdPersonPlayerController ThirdPersonController;
+
+    public void StartThirdPersonMode()
+    {
+        ThirdPersonActive = true;
+        ThirdPersonController.StartThirdPersonMode();
+        FirstPersonController.EndFirstPersonMode();
+    }
+
+
+
+
+
+
     public GameObject PlayerTarget;
 
     public float CameraDistance = 10.0f;
@@ -19,6 +35,8 @@ public class PlayerCamera : MonoBehaviour
 
     private bool MouseLocked = true;
 
+    
+
     private void Start()
     {
         Vector3 angles = transform.eulerAngles;
@@ -30,6 +48,10 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        //Do nothing while in first person mode
+        if (!ThirdPersonActive)
+            return;
+
         //Pressing escape while the cursor is locked releases it
         if(Input.GetKeyDown(KeyCode.Escape) && MouseLocked)
         {
@@ -47,6 +69,10 @@ public class PlayerCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        //Do nothing while in first person mode
+        if (!ThirdPersonActive)
+            return;
+
         //Cant control the camera when the mouse cursor has been released
         if (!MouseLocked)
             return;
@@ -55,7 +81,16 @@ public class PlayerCamera : MonoBehaviour
         CurrentY -= Input.GetAxis("Mouse Y") * YSpeed * 0.02f;
         CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
         Quaternion NewRotation = Quaternion.Euler(CurrentY, CurrentX, 0f);
-        CameraDistance = Mathf.Clamp(CameraDistance - Input.GetAxis("Mouse ScrollWheel") * 5, DistanceMinimum, DistanceMaximum);
+        //If the camera is zoomed in closer than the minimum distance limit, then first person mode is activated
+        float CameraDistanceZoomAdjust = Input.GetAxis("Mouse ScrollWheel");
+        float DesiredCameraDistance = CameraDistance - CameraDistanceZoomAdjust * 5;
+        if(DesiredCameraDistance < DistanceMinimum)
+        {
+            GetComponent<FirstPersonPlayerCamera>().StartFirstPersonMode();
+            ThirdPersonActive = false;
+            return;
+        }
+        CameraDistance = Mathf.Clamp(CameraDistance - CameraDistanceZoomAdjust * 5, DistanceMinimum, DistanceMaximum);
         Vector3 NewPosition = NewRotation * new Vector3(0f, 0f, -CameraDistance) + PlayerTarget.transform.position;
         transform.position = NewPosition;
         transform.rotation = NewRotation;

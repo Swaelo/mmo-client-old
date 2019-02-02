@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private FirstPersonPlayerCamera FirstPerson;
+    [SerializeField] private ThirdPersonPlayerCamera ThirdPerson;
+
     private Animator AnimController;
     private Vector3 PreviousPosition;
     public GameObject PlayerCamera;
@@ -68,9 +71,4 @@ public class PlayerController : MonoBehaviour
             PacketSender.instance.SendPlayerUpdate(transform.position);
         }
     }
-
-    //private void OnApplicationQuit()
-    //{
-    //    PacketSender.instance.SendDisconnectNotice();
-    //}
 }

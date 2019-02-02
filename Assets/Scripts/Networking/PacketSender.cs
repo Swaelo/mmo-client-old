@@ -29,7 +29,7 @@ public class PacketSender : MonoBehaviour
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteBytes(PacketData);    //fill it with data
         //Make sure the connection to the server is still open
-        if(!connection.ClientStream.CanRead)
+        if(!connection.IsServerConnected() || !connection.ClientStream.CanRead)
         {
             Console.Instance.Print("couldnt send packet, connection to the server is no longer open");
             return;

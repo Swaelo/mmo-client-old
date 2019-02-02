@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\CharacterData.cs" />
     <Compile Include="Assets\Scripts\GameItem.cs" />
     <Compile Include="Assets\Scripts\Interface\CharacterCreation.cs" />
     <Compile Include="Assets\Scripts\ItemPrefabs.cs" />
@@ -75,9 +74,12 @@
     <Compile Include="Assets\Scripts\Networking\PacketReader.cs" />
     <Compile Include="Assets\Scripts\Networking\PacketSender.cs" />
     <Compile Include="Assets\Scripts\Networking\ServerConnection.cs" />
-    <Compile Include="Assets\Scripts\PlayerCamera.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\PlayerPickup.cs" />
+    <Compile Include="Assets\Scripts\Player\CharacterData.cs" />
+    <Compile Include="Assets\Scripts\Player\FirstPersonPlayerCamera.cs" />
+    <Compile Include="Assets\Scripts\Player\FirstPersonPlayerController.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Player\ThirdPersonPlayerCamera.cs" />
+    <Compile Include="Assets\Scripts\Player\ThirdPersonPlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerPrefabs.cs" />
     <Compile Include="Assets\Scripts\SetCharacterSlot.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
