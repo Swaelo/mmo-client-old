@@ -13,7 +13,8 @@ public enum ClientPacketType
     EnterWorldRequest = 6, //tell client to enter the game world with their selected character
     GetCharacterDataRequest = 7,   //get information regarding all characters created under our account
 
-    PlayerUpdatePosition = 8    //spread a players position update info to other clients
+    PlayerUpdatePosition = 8,   //spread a players position update info to other clients
+    PlayerDisconnectNotice = 9  //let the server know when we are leaving the game
 }
 
 //sends packets to the game server
@@ -31,7 +32,7 @@ public class PacketSender : MonoBehaviour
         //Make sure the connection to the server is still open
         if(!connection.IsServerConnected() || !connection.ClientStream.CanRead)
         {
-            Console.Instance.Print("couldnt send packet, connection to the server is no longer open");
+            ChatWindow.Instance.DisplayErrorMessage("couldnt send packet, connection to the server is no longer open");
             return;
         }
         //send the packet to the server
@@ -55,10 +56,9 @@ public class PacketSender : MonoBehaviour
     //Sends our chat message to the server to be delivered to all the other clients
     public void SendPlayerMessage(string Message)
     {
-        Console.Instance.Print("sending a chat message we typed to the server");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();
         PacketWriter.WriteInteger((int)ClientPacketType.PlayerMessage);
-        PacketWriter.WriteString(connection.CurrentPlayer.name);
+        PacketWriter.WriteString(PlayerInfo.CharacterName);
         PacketWriter.WriteString(Message);
         SendPacket(PacketWriter.ToArray());
         PacketWriter.Dispose();
@@ -67,7 +67,6 @@ public class PacketSender : MonoBehaviour
     //Sends a request to the server to register a new account <int:PacketType, string:Username, string:Password>
     public void SendRegisterRequest(string username, string password)
     {
-        Console.Instance.Print("Sending request to register a new account for " + username);
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.RegisterRequest);  //write the packet type
         //write the account credentials
@@ -80,7 +79,6 @@ public class PacketSender : MonoBehaviour
     //Sends a request to the server to log into an account <int:PacketType, string:Username, string:Password>
     public void SendLoginRequest(string username, string password)
     {
-        Console.Instance.Print("Sending request to log into the " + username + " account");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.LoginRequest); //write the packet type
         //write the account credentials
@@ -93,7 +91,6 @@ public class PacketSender : MonoBehaviour
     //Sends a request to the server to create a new character registered to our account
     public void SendCreateCharacterRequest(string AccountName, string CharacterName, bool IsMale)
     {
-        Console.Instance.Print("sending request to create a new character registerd to our account");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.CreateCharacterRequest); //write the packet type
         PacketWriter.WriteString(AccountName);
@@ -110,7 +107,6 @@ public class PacketSender : MonoBehaviour
         PacketWriter.WriteInteger((int)ClientPacketType.EnterWorldRequest); //write the packet type
         PacketWriter.WriteString(Data.Account);
         PacketWriter.WriteString(Data.Name);
-        PacketWriter.WriteInteger(Data.IsMale ? 1 : 0);
         PacketWriter.WriteFloat(Data.Position.x);
         PacketWriter.WriteFloat(Data.Position.y);
         PacketWriter.WriteFloat(Data.Position.z);
@@ -121,7 +117,6 @@ public class PacketSender : MonoBehaviour
     //Sends a request to the server to return all the data about any characters we have created so far
     public void SendGetCharacterDataRequest(string username)
     {
-        Console.Instance.Print("sending request to get all of " + username + "s created characters");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.GetCharacterDataRequest); //write the packet type
         PacketWriter.WriteString(username);
@@ -130,17 +125,33 @@ public class PacketSender : MonoBehaviour
     }
     
     //Sends information to the server updating them on our players current location <int:PacketType, string:AccountName, vector3:position, vector4:rotation>
-    public void SendPlayerUpdate(Vector3 Position)
+    public void SendPlayerUpdate(Vector3 Position, Quaternion Rotation)
     {
         //Console.Instance.Print("telling the server our players updated position information");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.PlayerUpdatePosition);  //write the packet type
-        PacketWriter.WriteString(connection.CurrentCharacterName);
+        PacketWriter.WriteString(PlayerInfo.CharacterName);
         //write the position data
         PacketWriter.WriteFloat(Position.x);
         PacketWriter.WriteFloat(Position.y);
         PacketWriter.WriteFloat(Position.z);
+        //write rotation data
+        PacketWriter.WriteFloat(Rotation.x);
+        PacketWriter.WriteFloat(Rotation.y);
+        PacketWriter.WriteFloat(Rotation.z);
+        PacketWriter.WriteFloat(Rotation.w);
         //send the packet and close the writer
+        SendPacket(PacketWriter.ToArray());
+        PacketWriter.Dispose();
+    }
+
+    //Tells the server we are leaving the game now
+    public void SendDisconnectNotice()
+    {
+        //Console.Instance.Print("telling the server our players updated position information");
+        ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
+        PacketWriter.WriteInteger((int)ClientPacketType.PlayerDisconnectNotice);  //write the packet type
+        //send and close the packet
         SendPacket(PacketWriter.ToArray());
         PacketWriter.Dispose();
     }

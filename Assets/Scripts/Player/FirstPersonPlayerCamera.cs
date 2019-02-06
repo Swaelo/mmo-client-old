@@ -60,6 +60,7 @@ public class FirstPersonPlayerCamera : MonoBehaviour
         if(Input.GetAxis("Mouse ScrollWheel") < 0.0f)
         {
             GetComponent<ThirdPersonPlayerCamera>().StartThirdPersonMode();
+            ThirdPersonController.StartThirdPersonMode();
             FirstPersonActive = false;
             transform.parent = null;
             return;

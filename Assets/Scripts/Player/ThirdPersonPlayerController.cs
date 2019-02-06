@@ -17,8 +17,10 @@ public class ThirdPersonPlayerController : MonoBehaviour
     
     [SerializeField] private CharacterController Controller;
     [SerializeField] private Transform PlayerCamera;
+    Animator AnimationController;
 
     [SerializeField] private float WalkSpeed = 3;
+    public float RunSpeed = 6;
     [SerializeField] private float TurnSpeed = 300;
     [SerializeField] private float GravityForce = 0.1f;
     [SerializeField] private float YVelocity = 0.0f;
@@ -26,7 +28,9 @@ public class ThirdPersonPlayerController : MonoBehaviour
 
     private void Awake()
     {
-        PlayerCamera.transform.parent = null;
+        if(ThirdPersonControllerActive)
+            PlayerCamera.transform.parent = null;
+        AnimationController = GetComponent<Animator>();
     }
 
     private void Update()
@@ -35,6 +39,8 @@ public class ThirdPersonPlayerController : MonoBehaviour
         if (!ThirdPersonControllerActive)
             return;
 
+        float MovementSpeed = Input.GetKey(KeyCode.LeftShift) ? RunSpeed : WalkSpeed;
+
         //Figure out where the player should be moved to based on their input
         Vector3 MovementX = Vector3.Cross(transform.up, PlayerCamera.forward).normalized;
         Vector3 MovementY = Vector3.Cross(MovementX, transform.up).normalized;
@@ -42,13 +48,16 @@ public class ThirdPersonPlayerController : MonoBehaviour
         Vector3 PlayerMovement = Input.GetAxis("Horizontal") * MovementX + Input.GetAxis("Vertical") * MovementY;
         //Jump with spacebar
         if (Controller.isGrounded && Input.GetKey(KeyCode.Space))
+        {
+            AnimationController.SetTrigger("Jump");
             YVelocity = JumpHeight;
+        }
         //Apply force of gravity whilst in the air
         if (!Controller.isGrounded)
             YVelocity -= GravityForce;
         PlayerMovement.y += YVelocity;
         //Apply this movement to the character controller component
-        Controller.Move(PlayerMovement * WalkSpeed * Time.deltaTime);
+        Controller.Move(PlayerMovement * MovementSpeed * Time.deltaTime);
 
         //Slowly rotate to face the direction the character is moving
         if(PlayerMovement.x != 0 || PlayerMovement.z != 0)

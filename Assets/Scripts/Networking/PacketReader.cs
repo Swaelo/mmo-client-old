@@ -16,8 +16,7 @@ public enum ServerPacketType
     PlayerUpdatePosition = 8,   //server giving us another players updated position information
 
     SpawnOtherPlayer = 9,   //server telling us to spawn another clients character into our world
-    SpawnOtherPlayers = 10, //server telling us to spawn in all of the other active players characters into our world
-    RemoveOtherPlayer = 11  //server telling us to remove a disconnected clients character from the world 
+    RemoveOtherPlayer = 10  //server telling us to remove a disconnected clients character from the world 
 }
 
 public class PacketReader : MonoBehaviour
@@ -58,7 +57,6 @@ public class PacketReader : MonoBehaviour
         Packets.Add((int)ServerPacketType.PlayerUpdatePosition, HandlePlayerUpdatePosition);
 
         Packets.Add((int)ServerPacketType.SpawnOtherPlayer, HandleSpawnOtherPlayer);
-        Packets.Add((int)ServerPacketType.SpawnOtherPlayers, HandleSpawnOtherPlayers);
         Packets.Add((int)ServerPacketType.RemoveOtherPlayer, HandleRemoveOtherPlayer);
     }
 
@@ -72,10 +70,7 @@ public class PacketReader : MonoBehaviour
         PacketReader.Dispose();
         //Ignore empty packets
         if (PacketType == 0)
-        {
-            Console.Instance.Print("ignoring network packet with type 0");
             return;
-        }
         //Pass packet onto correct handler function
         Packet NewPacket;
         if (Packets.TryGetValue(PacketType, out NewPacket))
@@ -91,7 +86,7 @@ public class PacketReader : MonoBehaviour
         int PacketType = PacketReader.ReadInteger();
         string Message = PacketReader.ReadString();
         //Display the message to the console
-        Console.Instance.Print("Server: " + Message);
+        ChatWindow.Instance.DisplaySystemMessage(Message);
         //Close the packet reader
         PacketReader.Dispose();
     }
@@ -104,7 +99,7 @@ public class PacketReader : MonoBehaviour
         int PacketType = PacketReader.ReadInteger();
         string Sender = PacketReader.ReadString();
         string Message = PacketReader.ReadString();
-        UI.ChatWindowObject.GetComponent<ChatWindow>().ExternalMessage(Sender, Message);
+        UI.ChatWindowObject.GetComponent<ChatWindow>().DisplayPlayerMessage(Sender, Message);
         PacketReader.Dispose();
     }
 
@@ -116,7 +111,7 @@ public class PacketReader : MonoBehaviour
         int PacketType = PacketReader.ReadInteger();
         int RegisterSuccess = PacketReader.ReadInteger();   //1 = success, 0 = failure
         string ReplyMessage = PacketReader.ReadString();   //tells us what went wrong if the account was not able to be created
-        Console.Instance.Print(ReplyMessage);   //show the reply message to the console log
+        ChatWindow.Instance.DisplayReplyMessage(RegisterSuccess == 1, ReplyMessage); //show the reply message to the console log
         //Update the menu UI state based on if the account was created successfully or not
         if (RegisterSuccess == 1)
             UI.RegisterSuccess();
@@ -133,7 +128,7 @@ public class PacketReader : MonoBehaviour
         int LoginSuccess = PacketReader.ReadInteger();   //1 = success, 0 = failure
         string ReplyMessage = PacketReader.ReadString();   //tells us what went wrong if the account was not able to be logged in to
         PacketReader.Dispose();
-        Console.Instance.Print(ReplyMessage);   //show the reply message to the console log
+        ChatWindow.Instance.DisplayReplyMessage(LoginSuccess == 1, ReplyMessage);
         //Update the menu UI state based on if the account was logged into successfully or not
         if (LoginSuccess == 1)
             UI.LoginSuccess();
@@ -151,9 +146,9 @@ public class PacketReader : MonoBehaviour
         string ReplyMessage = PacketReader.ReadString();
         PacketReader.Dispose();
         //If the character was not able to be created, return to character creation menu and print error message to the console
-        if(CreationSuccess == 0)
+        ChatWindow.Instance.DisplayReplyMessage(CreationSuccess == 1, ReplyMessage);
+        if (CreationSuccess == 0)
         {
-            Console.Instance.Print(ReplyMessage);
             UI.CreateCharacterFailure();
             return;
         }
@@ -188,21 +183,11 @@ public class PacketReader : MonoBehaviour
             Data.Level = PacketReader.ReadInteger();
             Data.IsMale = PacketReader.ReadInteger() == 1;
             //Save it into the correct character data slot
-            switch(i)
-            {
-                case (0):
-                    UI.FirstCharacterData = Data;
-                    break;
-                case (1):
-                    UI.SecondCharacterData = Data;
-                    break;
-                case (2):
-                    UI.ThirdCharacterData = Data;
-                    break;
-            }
+            UI.SaveCharacterData(i + 1, Data);
+            //UI.SetSelectedCharacterData(i + 1);
         }
         //All information has been extracted successfully
-        UI.CharactersCreated = CharacterCount;
+        UI.SetCreatedCharacterCount(CharacterCount);
         PacketReader.Dispose();
         UI.CharacterDataLoaded();
     }
@@ -210,85 +195,73 @@ public class PacketReader : MonoBehaviour
     //server tells us to enter into the game world
     private void HandlePlayerEnterWorld(byte[] PacketData)
     {
-        Console.Instance.Print("handle player enter world");
+        //Spawn our character into the world
+        CharacterData Data = UI.GetSelectedCharacterData();
+        GameObject NewPlayer = Instantiate(PrefabList.ClientPlayer, Data.Position, Quaternion.identity);
+        GameObject.Find("Main Camera").SetActive(false);
+        UI.WorldEntered();
+        NewPlayer.name = Data.Name;
+        PlayerInfo.CharacterName = Data.Name;
+        PlayerInfo.AccountName = Data.Account;
+        PlayerInfo.PlayerObject = NewPlayer;
+        PlayerInfo.GameState = GameStates.PlayingGame;
+
+        //Spawn all the other players characters into the world too
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
-        string AccountName = PacketReader.ReadString();
-        string CharacterName = PacketReader.ReadString();
-        bool IsMale = PacketReader.ReadInteger() == 1;
+        int OtherPlayerCount = PacketReader.ReadInteger();
+        for(int i = 0; i < OtherPlayerCount; i++)
+        {
+            string CharacterName = PacketReader.ReadString();
+            Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            GameObject OtherPlayer = Instantiate(PrefabList.ExternalPlayer, CharacterPosition, Quaternion.identity);
+            OtherPlayer.GetComponentInChildren<TextMesh>().text = CharacterName;
+            OtherPlayer.name = CharacterName;
+            Connection.OtherPlayers.Add(CharacterName, OtherPlayer);
+        }
         PacketReader.Dispose();
-        CharacterData Data = UI.SelectedCharacterData;
-        GameObject NewPlayer = Instantiate(PrefabList.ClientPlayer, Data.Position, Quaternion.identity);
-        GameObject.Find("Menu Camera").SetActive(false);
-        UI.WorldEntered();
-        NewPlayer.name = CharacterName;
-        Connection.CurrentPlayer = NewPlayer;
     }
 
     //server giving us another characters updated position information
     private void HandlePlayerUpdatePosition(byte[] PacketData)
     {
-        Console.Instance.Print("handle player update");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();    //read in the packet type
         string CharacterName = PacketReader.ReadString();
         Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+        Quaternion CharacterRotation = new Quaternion(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
         PacketReader.Dispose();
+
         //Client dont need to update themselves
-        if (CharacterName == Connection.CurrentCharacterName)
+        if (CharacterName == PlayerInfo.CharacterName)
             return;
         //Otherwise we find this character in the world and update their position value
-        Connection.OtherPlayers[CharacterName].GetComponent<ExternalPlayerMovement>().UpdatePosition(CharacterPosition);
+        Connection.OtherPlayers[CharacterName].GetComponent<ExternalPlayerMovement>().UpdatePosition(CharacterPosition, CharacterRotation);
     }
 
     //server tells us to spawn someone elses character into our world
     private void HandleSpawnOtherPlayer(byte[] PacketData)
     {
-        Console.Instance.Print("handle player spawn other");
+        //Extract packet information
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
-        string AccountName = PacketReader.ReadString();
-        Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
         string CharacterName = PacketReader.ReadString();
+        Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
         PacketReader.Dispose();
+
+        //Spawn the other player into the world
         GameObject OtherPlayer = Instantiate(PrefabList.ExternalPlayer, CharacterPosition, Quaternion.identity);
         OtherPlayer.GetComponentInChildren<TextMesh>().text = CharacterName;
         OtherPlayer.name = CharacterName;
         Connection.OtherPlayers.Add(CharacterName, OtherPlayer);
     }
-
-    //server tells us to spawn in a list of characters into our world
-    private void HandleSpawnOtherPlayers(byte[] PacketData)
-    {
-        Console.Instance.Print("handle player spawn everyone else");
-        ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
-        PacketReader.WriteBytes(PacketData);
-        int PacketType = PacketReader.ReadInteger();
-        int PlayerCount = PacketReader.ReadInteger();
-        for(int i = 0; i < PlayerCount; i++)
-        {
-            //extract each players character info from the packet
-            string AccountName = PacketReader.ReadString();
-            Vector3 PlayerPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
-            string PlayerName = PacketReader.ReadString();
-
-            //Now spawn this player into the world
-            GameObject OtherPlayer = Instantiate(PrefabList.ExternalPlayer, PlayerPosition, Quaternion.identity);
-            OtherPlayer.GetComponentInChildren<TextMesh>().text = PlayerName;   //update the name above their head
-            OtherPlayer.name = PlayerName;  //name the object so we can find it later on
-            Connection.OtherPlayers.Add(PlayerName, OtherPlayer); //add them to the list of players
-        }
-        //Now everyone else has been spawned in
-        PacketReader.Dispose();
-    }
     
     //server tells us to remove another clients character from our game world
     private void HandleRemoveOtherPlayer(byte[] PacketData)
     {
-        Console.Instance.Print("handle remove other player");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();

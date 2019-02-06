@@ -15,8 +15,6 @@ public class ServerConnection : MonoBehaviour
     private byte[] PacketBuffer;    //data from the asynchronous buffer is copied into here once the stream of data has been completely sent through the socket
     private bool ShouldHandleData = false;  //Are we listening in for packets from the server right now
 
-    public GameObject CurrentPlayer = null;
-    public string CurrentCharacterName = "";
     public Dictionary<string, GameObject> OtherPlayers = new Dictionary<string, GameObject>(); //Keep a list of the other players currently playing the game
 
     //Attempts to establish a connection with the game server
@@ -91,7 +89,7 @@ public class ServerConnection : MonoBehaviour
         //If the packet size is 0 the connection to the server has probably been lost
         if (PacketSize == 0)
         {
-            Console.Instance.Print("Connection to the server was lost");
+            ChatWindow.Instance.DisplayErrorMessage("Connection to the server was lost");
             ClientSocket.Close();
             return;
         }
