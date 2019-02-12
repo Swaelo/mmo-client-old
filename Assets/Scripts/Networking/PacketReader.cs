@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ServerPacketType
 {
@@ -16,27 +17,27 @@ public enum ServerPacketType
     PlayerUpdatePosition = 8,   //server giving us another players updated position information
 
     SpawnOtherPlayer = 9,   //server telling us to spawn another clients character into our world
-    RemoveOtherPlayer = 10  //server telling us to remove a disconnected clients character from the world 
+    RemoveOtherPlayer = 10  //server telling us to remove a disconnected clients character from the world
 }
 
 public class PacketReader : MonoBehaviour
 {
     public static PacketReader instance;    //Initialise our singleton instance reference for easy global access, and register the packet handler functions for each packet type
     private PlayerPrefabs PrefabList; //Used to spawn in clients when instructed to
-   // private MenuInterface UIElements;
+                                      // private MenuInterface UIElements;
     private ServerConnection Connection;
 
     //Each type of packet is mapped through the dictionary, executed through the delegate so each packet type is automatically passed on to its corresponding handler function
     private delegate void Packet(byte[] PacketData);
     private Dictionary<int, Packet> Packets;
-    [SerializeField] private MenuHandler UI;
 
     private void Awake()
     {
         instance = this;    //store singleton instance
         RegisterPacketHandlers();   //register all packet handler functions into the dictionary
+        GameObject System = GameObject.Find("System");
         PrefabList = GetComponent<PlayerPrefabs>();   //grab the prefab list so we can use it to spawn players into the world
-     //   UIElements = GetComponent<MenuInterface>();
+                                                      //   UIElements = GetComponent<MenuInterface>();
         Connection = GetComponent<ServerConnection>();
     }
 
@@ -99,7 +100,8 @@ public class PacketReader : MonoBehaviour
         int PacketType = PacketReader.ReadInteger();
         string Sender = PacketReader.ReadString();
         string Message = PacketReader.ReadString();
-        UI.ChatWindowObject.GetComponent<ChatWindow>().DisplayPlayerMessage(Sender, Message);
+
+        ChatWindow.Instance.DisplayPlayerMessage(Sender, Message);
         PacketReader.Dispose();
     }
 
@@ -114,9 +116,9 @@ public class PacketReader : MonoBehaviour
         ChatWindow.Instance.DisplayReplyMessage(RegisterSuccess == 1, ReplyMessage); //show the reply message to the console log
         //Update the menu UI state based on if the account was created successfully or not
         if (RegisterSuccess == 1)
-            UI.RegisterSuccess();
+            MenuStateManager.GetMenuComponents("Account Creation").GetComponent<AccountCreationButtonFunctions>().RegisterSuccess();
         else
-            UI.RegisterFail();
+            MenuStateManager.GetMenuComponents("Account Creation").GetComponent<AccountCreationButtonFunctions>().RegisterFail();
     }
 
     //Gets a reply from the server letting us know if our account login request was successful or not
@@ -131,9 +133,9 @@ public class PacketReader : MonoBehaviour
         ChatWindow.Instance.DisplayReplyMessage(LoginSuccess == 1, ReplyMessage);
         //Update the menu UI state based on if the account was logged into successfully or not
         if (LoginSuccess == 1)
-            UI.LoginSuccess();
+            MenuStateManager.GetMenuComponents("Account Login").GetComponent<AccountLoginButtonFunctions>().LoginSuccess();
         else
-            UI.LoginFail();
+            MenuStateManager.GetMenuComponents("Account Login").GetComponent<AccountLoginButtonFunctions>().LoginFail();
     }
 
     //server tells us if our character creation was succesful
@@ -147,12 +149,12 @@ public class PacketReader : MonoBehaviour
         PacketReader.Dispose();
         //If the character was not able to be created, return to character creation menu and print error message to the console
         ChatWindow.Instance.DisplayReplyMessage(CreationSuccess == 1, ReplyMessage);
-        if (CreationSuccess == 0)
+        if(CreationSuccess == 0)
         {
-            UI.CreateCharacterFailure();
+            MenuStateManager.GetMenuComponents("Character Creation").GetComponent<CharacterCreationButtonFunctions>().CreateCharacterFail();
             return;
         }
-        UI.CreateCharacterSuccess();
+        MenuStateManager.GetMenuComponents("Character Creation").GetComponent<CharacterCreationButtonFunctions>().CreateCharacterSuccess();
     }
 
     //Gets a packet from the server with info on every character registered to our account so far
@@ -164,14 +166,14 @@ public class PacketReader : MonoBehaviour
         //Get how many characters info is in this packet
         int CharacterCount = PacketReader.ReadInteger();
         //If the character count is 0, we must send the client straight to the character creation screen
-        if(CharacterCount == 0)
+        if (CharacterCount == 0)
         {
-            UI.NoCharactersCreated();
+            MenuStateManager.GetMenuComponents("Character Selection").GetComponent<CharacterSelectionButtonFunctions>().NoCharactersCreated();
             return;
         }
-
         //Otherwise we need to loop through however many characters exists in this account and extract all of the information for each of them
-        for(int i = 0; i < CharacterCount; i++)
+        CharacterSelectionButtonFunctions CharacterSelect = MenuStateManager.GetMenuComponents("Character Selection").GetComponent<CharacterSelectionButtonFunctions>();
+        for (int i = 0; i < CharacterCount; i++)
         {
             //Extract all the information and save it into a characterdata object structure
             CharacterData Data = new CharacterData();
@@ -182,43 +184,44 @@ public class PacketReader : MonoBehaviour
             Data.ExperienceToLevel = PacketReader.ReadInteger();
             Data.Level = PacketReader.ReadInteger();
             Data.IsMale = PacketReader.ReadInteger() == 1;
-            //Save it into the correct character data slot
-            UI.SaveCharacterData(i + 1, Data);
-            //UI.SetSelectedCharacterData(i + 1);
+            CharacterSelect.SaveCharacterData(i + 1, Data);
+            CharacterSelect.SetSelectedCharacter(i + 1);
         }
         //All information has been extracted successfully
-        UI.SetCreatedCharacterCount(CharacterCount);
+        CharacterSelect.CharacterCount = CharacterCount;
         PacketReader.Dispose();
-        UI.CharacterDataLoaded();
+        CharacterSelect.CharacterDataLoaded();
     }
-    
+
     //server tells us to enter into the game world
     private void HandlePlayerEnterWorld(byte[] PacketData)
     {
         //Spawn our character into the world
-        CharacterData Data = UI.GetSelectedCharacterData();
+        CharacterData Data = MenuStateManager.GetMenuComponents("Character Selection").GetComponent<CharacterSelectionButtonFunctions>().SelectedCharacter;
         GameObject NewPlayer = Instantiate(PrefabList.ClientPlayer, Data.Position, Quaternion.identity);
+        //Disable the main scene camera
         GameObject.Find("Main Camera").SetActive(false);
-        UI.WorldEntered();
+        MenuStateManager.SetMenuState("UI");
+        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Chat Message Input").GetComponentInChildren<Text>().text = "[Press Enter to chat]";
         NewPlayer.name = Data.Name;
-        PlayerInfo.CharacterName = Data.Name;
         PlayerInfo.AccountName = Data.Account;
+        PlayerInfo.CharacterName = Data.Name;
         PlayerInfo.PlayerObject = NewPlayer;
         PlayerInfo.GameState = GameStates.PlayingGame;
-
         //Spawn all the other players characters into the world too
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
         int OtherPlayerCount = PacketReader.ReadInteger();
-        for(int i = 0; i < OtherPlayerCount; i++)
+        for (int i = 0; i < OtherPlayerCount; i++)
         {
             string CharacterName = PacketReader.ReadString();
+            //ChatWindow.Instance.DisplaySystemMessage(CharacterName + " is already playing ")
             Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
             GameObject OtherPlayer = Instantiate(PrefabList.ExternalPlayer, CharacterPosition, Quaternion.identity);
             OtherPlayer.GetComponentInChildren<TextMesh>().text = CharacterName;
             OtherPlayer.name = CharacterName;
-            Connection.OtherPlayers.Add(CharacterName, OtherPlayer);
+            Connection.AddOtherPlayer(CharacterName, OtherPlayer);
         }
         PacketReader.Dispose();
     }
@@ -238,7 +241,7 @@ public class PacketReader : MonoBehaviour
         if (CharacterName == PlayerInfo.CharacterName)
             return;
         //Otherwise we find this character in the world and update their position value
-        Connection.OtherPlayers[CharacterName].GetComponent<ExternalPlayerMovement>().UpdatePosition(CharacterPosition, CharacterRotation);
+        Connection.GetOtherPlayer(CharacterName).GetComponent<ExternalPlayerMovement>().UpdatePosition(CharacterPosition, CharacterRotation);
     }
 
     //server tells us to spawn someone elses character into our world
@@ -249,6 +252,7 @@ public class PacketReader : MonoBehaviour
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
         string CharacterName = PacketReader.ReadString();
+        ChatWindow.Instance.DisplaySystemMessage(CharacterName + " has entered the world.");
         Vector3 CharacterPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
         PacketReader.Dispose();
 
@@ -256,9 +260,10 @@ public class PacketReader : MonoBehaviour
         GameObject OtherPlayer = Instantiate(PrefabList.ExternalPlayer, CharacterPosition, Quaternion.identity);
         OtherPlayer.GetComponentInChildren<TextMesh>().text = CharacterName;
         OtherPlayer.name = CharacterName;
-        Connection.OtherPlayers.Add(CharacterName, OtherPlayer);
+        Connection.AddOtherPlayer(CharacterName, OtherPlayer);
+        ChatWindow.Instance.DisplaySystemMessage("Add " + CharacterName + " to the game");
     }
-    
+
     //server tells us to remove another clients character from our game world
     private void HandleRemoveOtherPlayer(byte[] PacketData)
     {
@@ -266,10 +271,9 @@ public class PacketReader : MonoBehaviour
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
         string CharacterName = PacketReader.ReadString();
+        ChatWindow.Instance.DisplaySystemMessage("Remove " + CharacterName + " from the game");
         PacketReader.Dispose();
         //remove the player from the world and the list of other players
-        GameObject OtherPlayer = Connection.OtherPlayers[CharacterName];
-        Connection.OtherPlayers.Remove(CharacterName);
-        GameObject.Destroy(OtherPlayer);
+        Connection.RemoveOtherPlayer(CharacterName);
     }
 }

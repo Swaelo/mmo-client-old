@@ -14,15 +14,16 @@ public enum ClientPacketType
     GetCharacterDataRequest = 7,   //get information regarding all characters created under our account
 
     PlayerUpdatePosition = 8,   //spread a players position update info to other clients
-    PlayerDisconnectNotice = 9  //let the server know when we are leaving the game
+    PlayerDisconnectNotice = 9,  //let the server know when we are leaving the game
+    AccountLogoutNotice = 10    //let the server know we have logged out of this user account
 }
 
 //sends packets to the game server
 public class PacketSender : MonoBehaviour
 {
-    public static PacketSender instance;
+    public static PacketSender Instance;
     private ServerConnection connection;
-    private void Awake() { instance = this; connection = GetComponent<ServerConnection>(); }
+    private void Awake() { Instance = this; connection = GetComponent<ServerConnection>(); }
 
     //Sends a packet to the server after its been filled with data from one of the other functions in this class
     private void SendPacket(byte[] PacketData)
@@ -151,6 +152,17 @@ public class PacketSender : MonoBehaviour
         //Console.Instance.Print("telling the server our players updated position information");
         ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
         PacketWriter.WriteInteger((int)ClientPacketType.PlayerDisconnectNotice);  //write the packet type
+        //send and close the packet
+        SendPacket(PacketWriter.ToArray());
+        PacketWriter.Dispose();
+    }
+
+    //Tells the server we are logging out of this user account
+    public void SendAccountLogoutNotice()
+    {
+        //Console.Instance.Print("telling the server our players updated position information");
+        ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
+        PacketWriter.WriteInteger((int)ClientPacketType.AccountLogoutNotice);  //write the packet type
         //send and close the packet
         SendPacket(PacketWriter.ToArray());
         PacketWriter.Dispose();

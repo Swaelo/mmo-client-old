@@ -32,13 +32,15 @@ public class ChatWindow : MonoBehaviour
     [SerializeField] private Color SystemMessageColor;
     [SerializeField] private Color ErrorMessageColor;
 
+    public GameObject PlaceholderText;
+
     //Singleton design allows quick and easy global access anywhere in the project code e.g: ChatWindow.Instance.DisplayMessage("easy");
     public static ChatWindow Instance = null;
     private void Awake() { Instance = this; }
 
     //UI Components used for displaying the chat window
     [SerializeField] private GameObject ChatPanel;  //window used to display message
-    [SerializeField] private InputField ChatInput;  //input field used to type a new message
+    [SerializeField] private CustomInputField ChatInput;  //input field used to type a new message
 
     //Message window stores up to the last 100 messages that were received
     private List<ChatMessage> MessageList = new List<ChatMessage>();
@@ -47,35 +49,79 @@ public class ChatWindow : MonoBehaviour
     //Chat object used to store and display 1 message in the window
     public GameObject ChatMessagePrefab;
 
+    private PlayerCameraController CameraController = null;
+    private bool ChatActive = false;
+    
     private void Update()
     {
-        //When the input field is currently active
-        if (ChatInput.isFocused)
-        {
-            //Press the Escape key to cancel the message and deactivate the input field
-            if(Input.GetKeyDown(KeyCode.Escape))
-            {
-                ChatInput.text = "";
-                ChatInput.DeactivateInputField();
-            }
-            //Press the Return key to send any message that has been typed in
+        //Chat window may only be controlled while the player is in the game world
+        if (PlayerInfo.GameState != GameStates.PlayingGame)
+            return;
+
+        //Assign the players camera controller if we havnt yet, we use this to enable/disable player controls as needed
+        if (CameraController == null)
+            CameraController = PlayerInfo.PlayerObject.GetComponent<PlayerCharacterController>().CameraTransform.GetComponent<PlayerCameraController>();
+
+        if (ChatActive)
+        {//If the user is currently typing a message in the chat window
+            //Press enter to finish typing a message
             if(Input.GetKeyDown(KeyCode.Return))
             {
-                //If a message was typed and the player is logged in then display the message to the console window
-                if (PlayerInfo.GameState == GameStates.PlayingGame && ChatInput.text != "")
-                    DisplayPlayerMessage(PlayerInfo.CharacterName, ChatInput.text);
-                
-                //Empty the input field now that were done with it
-                ChatInput.text = "";
+                DeliverMessage();
+                StopTyping();
+            }
+            //Press escape to cancel typing a message
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClearMessage();
+                StopTyping();
             }
         }
-        //When the input field is inactive
         else
-        {
-            //Press the Return key to activate the input field and start typing a new message
-            if (Input.GetKeyDown(KeyCode.Return))
-                ChatInput.ActivateInputField();
+        {//If the chat window is inactive and the player is currently controlling their character, but only if the cursor isnt internally locked by the controller
+            //Press enter to start typing a message
+            if(Input.GetKeyDown(KeyCode.Return) && !CameraController.IsInternalLocked())
+                StartTyping();
         }
+    }
+
+    private void StartTyping()
+    {
+        //Disable the player controls and release the mouse cursor lock
+        CameraController.DisableChatCursorLock();
+        //Hide the placeholder text, bring focus to the input field and note that the chat window is now active
+        PlaceholderText.SetActive(false);
+        ChatInput.ActivateInputField();
+        ChatActive = true;
+    }
+
+    private void StopTyping()
+    {
+        //Re-enable the player controls and lock the mouse cursor again
+        CameraController.EnableChatCursorLock();
+        //Display the placeholder text and remove the focus from the input field
+        PlaceholderText.SetActive(true);
+        ChatInput.DeactivateInputField();
+        ChatActive = false;
+    }
+
+    private void DeliverMessage()
+    {
+        //Deliver nothing if the chat box is empty
+        if (ChatInput.text == "")
+            return;
+
+        //Display this players message to the chat window
+        DisplayPlayerMessage(PlayerInfo.CharacterName, ChatInput.text);
+        //Send this players message to the server to be shared with all other players
+        PacketSender.Instance.SendPlayerMessage(ChatInput.text);
+        //Clear the chat input field
+        ChatInput.text = "";
+    }
+
+    private void ClearMessage()
+    {
+        ChatInput.text = "";
     }
 
     //Returns what color a message should be based on its type
@@ -131,7 +177,7 @@ public class ChatWindow : MonoBehaviour
         //Update the text component with the new message text
         NewMessageContent.Component.text = NewMessageContent.Text;
         //Set the message text color based on message type
-       // NewMessageContent.Component.color = GetMessageColor(Type);
+        NewMessageContent.Component.color = GetMessageColor(Type);
         //Store the message with the rest of them
         MessageList.Add(NewMessageContent);
     }
@@ -141,26 +187,32 @@ public class ChatWindow : MonoBehaviour
     {//public player chat
         DisplayMessage(Sender + ": " + Message, ChatMessage.MessageType.PlayerMessage);
     }
+    
     public void DisplayPrivateMessage(string Sender, string Message)
     {//private player chat
         DisplayMessage(Sender + ": " + Message, ChatMessage.MessageType.PrivateMessage);
     }
+
     public void DisplayClanMessage(string ClanName, string Message)
     {//clan chat
         DisplayMessage(ClanName + ": " + Message, ChatMessage.MessageType.ClanMessage);
     }
+
     public void DisplayGroupMessage(string Sender, string Message)
     {//party chat
         DisplayMessage(Sender + ": " + Message, ChatMessage.MessageType.GroupMessage);
     }
+
     public void DisplaySystemMessage(string Message)
     {//game system message
         DisplayMessage(Message, ChatMessage.MessageType.SystemMessage);
     }
+
     public void DisplayErrorMessage(string Message)
     {//game system error message
         DisplayMessage(Message, ChatMessage.MessageType.ErrorMessage);
     }
+
     public void DisplayReplyMessage(bool Success, string Message)
     {//Success = SystemMessage, Failure = ErrorMessage
         if (Success)
