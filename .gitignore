@@ -1,8 +1,9 @@
 Assembly-CSharp.csproj
-Assembly-CSharp.Editor.csproj
+Assembly-CSharp-Editor.csproj
 /Builds/*
 /Library/*
 /Logs/*
 /obj/*
 /Packages/*
 /Patches/*
+/.vs/*
