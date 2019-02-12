@@ -1,0 +1,7 @@
+Assembly-CSharp.csproj
+Assembly-CSharp.Editor.csproj
+/Builds/*
+/Library/*
+/obj/*
+/Packages/*
+/Patches/*
