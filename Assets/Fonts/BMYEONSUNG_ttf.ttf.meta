@@ -3,7 +3,7 @@ guid: 3fad8b1f09d81d441b6bc1aa9fa7f487
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 16
+  fontSize: 22
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
@@ -11,7 +11,8 @@ TrueTypeFontImporter:
   fontName: BM YEONSUNG
   fontNames:
   - BM YEONSUNG
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 2f5cd78f42c4b97438bcf1f62d878312, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

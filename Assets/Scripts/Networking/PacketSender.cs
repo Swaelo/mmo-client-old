@@ -4,17 +4,17 @@ using UnityEngine;
 
 public enum ClientPacketType
 {
-    ConsoleMessage = 1,    //send a message to be displayed in servers console window
-    PlayerMessage = 2,  //spread a player chat message to other clients chat windows
+    ConsoleMessage = 1, //client sent a message to be displayed in the console log window
+    PlayerMessage = 2,  //player sent a message to be spread to other clients chat windows
 
-    RegisterRequest = 3,   //request to register a new account
-    LoginRequest = 4,      //request to log into an account
-    CreateCharacterRequest = 5, //request to create a new character and save it under our account
-    EnterWorldRequest = 6, //tell client to enter the game world with their selected character
-    GetCharacterDataRequest = 7,   //get information regarding all characters created under our account
+    RegisterRequest = 3,    //client wants to register a new account
+    LoginRequest = 4,   //client wants to log into their account
+    CreateCharacterRequest = 5, //client wants to create a new character
+    EnterWorldRequest = 6,  //client wants to enter into the game world with their selected character
+    GetCharacterDataRequest = 7,    //client wants info about all their created characters
 
     PlayerUpdatePosition = 8,   //spread a players position update info to other clients
-    PlayerDisconnectNotice = 9,  //let the server know when we are leaving the game
+    PlayerDisconnectNotice = 9,  //tell everyone else they stopped playing
     AccountLogoutNotice = 10    //let the server know we have logged out of this user account
 }
 

@@ -16,8 +16,11 @@ public enum ServerPacketType
     PlayerEnterWorld = 7,    //server telling us to enter the game world with our selected character
     PlayerUpdatePosition = 8,   //server giving us another players updated position information
 
-    SpawnOtherPlayer = 9,   //server telling us to spawn another clients character into our world
-    RemoveOtherPlayer = 10  //server telling us to remove a disconnected clients character from the world
+    SpawnActiveEntityList = 9,  //server gives us a list of all the active entities in the game for us to spawn in
+    SendEntityUpdates = 10, //server is giving us the updated info for all the entities active in the game right now
+
+    SpawnOtherPlayer = 11,   //server telling us to spawn another clients character into our world
+    RemoveOtherPlayer = 12  //server telling us to remove a disconnected clients character from the world
 }
 
 public class PacketReader : MonoBehaviour
@@ -56,6 +59,9 @@ public class PacketReader : MonoBehaviour
         Packets.Add((int)ServerPacketType.SendCharacterData, HandleSendCharacterData);
         Packets.Add((int)ServerPacketType.PlayerEnterWorld, HandlePlayerEnterWorld);
         Packets.Add((int)ServerPacketType.PlayerUpdatePosition, HandlePlayerUpdatePosition);
+
+        Packets.Add((int)ServerPacketType.SpawnActiveEntityList, HandleSpawnActiveEntityList);
+        Packets.Add((int)ServerPacketType.SendEntityUpdates, HandleEntityUpdates);
 
         Packets.Add((int)ServerPacketType.SpawnOtherPlayer, HandleSpawnOtherPlayer);
         Packets.Add((int)ServerPacketType.RemoveOtherPlayer, HandleRemoveOtherPlayer);
@@ -202,7 +208,7 @@ public class PacketReader : MonoBehaviour
         //Disable the main scene camera
         GameObject.Find("Main Camera").SetActive(false);
         MenuStateManager.SetMenuState("UI");
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Chat Message Input").GetComponentInChildren<Text>().text = "[Press Enter to chat]";
+        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("InputField").GetComponentInChildren<Text>().text = "[Press Enter to chat]";
         NewPlayer.name = Data.Name;
         PlayerInfo.AccountName = Data.Account;
         PlayerInfo.CharacterName = Data.Name;
@@ -244,6 +250,47 @@ public class PacketReader : MonoBehaviour
         Connection.GetOtherPlayer(CharacterName).GetComponent<ExternalPlayerMovement>().UpdatePosition(CharacterPosition, CharacterRotation);
     }
 
+    private void HandleSpawnActiveEntityList(byte[] PacketData)
+    {
+        //Extract from the packet the entire list of active entities
+        ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
+        PacketReader.WriteBytes(PacketData);
+        int PacketType = PacketReader.ReadInteger();
+        int EntityCount = PacketReader.ReadInteger();
+        for(int i = 0; i < EntityCount; i++)
+        {
+            //Get the information for each of the entities that have been sent to us
+            string ID = PacketReader.ReadString();
+            string Type = PacketReader.ReadString();
+            Vector3 Location = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            //Spawn this entity into our game world and store them within the entity manager
+            ChatWindow.Log("spawn " + Type + " at " + Location);
+            GameObject NewEntity = GameObject.Instantiate(EntityPrefabs.GetEntityPrefab(Type), Location, Quaternion.identity);
+            NewEntity.GetComponent<ServerEntity>().ID = ID;
+            EntityManager.AddNewEntity(ID, NewEntity);
+        }
+        PacketReader.Dispose();
+    }
+
+    private void HandleEntityUpdates(byte[] PacketData)
+    {
+        ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
+        PacketReader.WriteBytes(PacketData);
+        int PacketType = PacketReader.ReadInteger();
+        int EntityCount = PacketReader.ReadInteger();
+        //ChatWindow.Instance.DisplaySystemMessage("handle " + EntityCount + " entity updates");
+        for (int i = 0; i < EntityCount; i++)
+        {
+            //Extract this entities data from the network packet
+            string EntityID = PacketReader.ReadString();
+            Vector3 EntityPosition = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            Quaternion EntityRotation = new Quaternion(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            //Send this info to the entity manager who will know where to find the entity who needs updating
+            EntityManager.UpdateEntity(EntityID, EntityPosition, EntityRotation);
+        }
+        PacketReader.Dispose();
+    }
+
     //server tells us to spawn someone elses character into our world
     private void HandleSpawnOtherPlayer(byte[] PacketData)
     {
@@ -261,7 +308,6 @@ public class PacketReader : MonoBehaviour
         OtherPlayer.GetComponentInChildren<TextMesh>().text = CharacterName;
         OtherPlayer.name = CharacterName;
         Connection.AddOtherPlayer(CharacterName, OtherPlayer);
-        ChatWindow.Instance.DisplaySystemMessage("Add " + CharacterName + " to the game");
     }
 
     //server tells us to remove another clients character from our game world
@@ -271,7 +317,7 @@ public class PacketReader : MonoBehaviour
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
         string CharacterName = PacketReader.ReadString();
-        ChatWindow.Instance.DisplaySystemMessage("Remove " + CharacterName + " from the game");
+        ChatWindow.Instance.DisplaySystemMessage(CharacterName + " has left the world.");
         PacketReader.Dispose();
         //remove the player from the world and the list of other players
         Connection.RemoveOtherPlayer(CharacterName);

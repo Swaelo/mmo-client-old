@@ -18,7 +18,8 @@ public class ChatMessage
         ClanMessage,
         GroupMessage,
         SystemMessage,
-        ErrorMessage
+        ErrorMessage,
+        LogMessage
     }
 }
 
@@ -31,6 +32,7 @@ public class ChatWindow : MonoBehaviour
     [SerializeField] private Color GroupMessageColor;
     [SerializeField] private Color SystemMessageColor;
     [SerializeField] private Color ErrorMessageColor;
+    [SerializeField] private Color LogMessageColor;
 
     public GameObject PlaceholderText;
 
@@ -155,6 +157,11 @@ public class ChatWindow : MonoBehaviour
 
         //return the color the message should be
         return MessageColor;
+    }
+
+    public static void Log(string Text)
+    {
+        Instance.DisplayMessage(Text, ChatMessage.MessageType.LogMessage);
     }
 
     private void DisplayMessage(string Text, ChatMessage.MessageType Type)

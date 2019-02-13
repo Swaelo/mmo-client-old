@@ -18,6 +18,7 @@ public class MenuStateManager : MonoBehaviour
     //Change to another menu state
     public static void SetMenuState(string NewState)
     {
+        
         //Disable the previous menu state objects
         MenuStateDictionary[CurrentMenuState].SetActive(false);
         //Enable and assign the new state as active
