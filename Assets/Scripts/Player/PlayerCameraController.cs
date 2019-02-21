@@ -136,6 +136,9 @@ public class PlayerCameraController : MonoBehaviour
         transform.position = FirstPersonPositionAnchor.transform.position;
         transform.LookAt(FirstPersonDirectionAnchor.transform);
         transform.parent = CharacterController.transform;
+        Vector3 Angles = transform.eulerAngles;
+        CurrentX = Angles.x;
+        CurrentY = Angles.y;
     }
 
     private void FirstPersonMode()
@@ -154,6 +157,9 @@ public class PlayerCameraController : MonoBehaviour
         GetComponent<Camera>().fieldOfView = ThirdPersonFOV;
         CharacterController.ControllerState = PlayerControllerState.ThirdPersonMode;
         transform.parent = null;
+        Vector3 Angles = transform.eulerAngles;
+        CurrentX = Angles.x;
+        CurrentY = Angles.y;
     }
 
     private void ThirdPersonMode()

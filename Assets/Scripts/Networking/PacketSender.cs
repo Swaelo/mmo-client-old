@@ -14,8 +14,9 @@ public enum ClientPacketType
     GetCharacterDataRequest = 7,    //client wants info about all their created characters
 
     PlayerUpdatePosition = 8,   //spread a players position update info to other clients
-    PlayerDisconnectNotice = 9,  //tell everyone else they stopped playing
-    AccountLogoutNotice = 10    //let the server know we have logged out of this user account
+    PlayerMeleeAttack = 9,  //tell the server where our attack landed
+    PlayerDisconnectNotice = 10,  //tell everyone else they stopped playing
+    AccountLogoutNotice = 11    //let the server know we have logged out of this user account
 }
 
 //sends packets to the game server
@@ -142,6 +143,25 @@ public class PacketSender : MonoBehaviour
         PacketWriter.WriteFloat(Rotation.z);
         PacketWriter.WriteFloat(Rotation.w);
         //send the packet and close the writer
+        SendPacket(PacketWriter.ToArray());
+        PacketWriter.Dispose();
+    }
+
+    //Tells the server where our attack landed
+    public void SendPlayerAttack(Vector3 Position, Vector3 Scale, Quaternion Rotation)
+    {
+        ByteBuffer.ByteBuffer PacketWriter = new ByteBuffer.ByteBuffer();   //start the packet writer
+        PacketWriter.WriteInteger((int)ClientPacketType.PlayerMeleeAttack);
+        PacketWriter.WriteFloat(Position.x);
+        PacketWriter.WriteFloat(Position.y);
+        PacketWriter.WriteFloat(Position.z);
+        PacketWriter.WriteFloat(Scale.x);
+        PacketWriter.WriteFloat(Scale.y);
+        PacketWriter.WriteFloat(Scale.z);
+        PacketWriter.WriteFloat(Rotation.x);
+        PacketWriter.WriteFloat(Rotation.y);
+        PacketWriter.WriteFloat(Rotation.z);
+        PacketWriter.WriteFloat(Rotation.w);
         SendPacket(PacketWriter.ToArray());
         PacketWriter.Dispose();
     }

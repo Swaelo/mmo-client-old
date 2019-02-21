@@ -18,9 +18,10 @@ public enum ServerPacketType
 
     SpawnActiveEntityList = 9,  //server gives us a list of all the active entities in the game for us to spawn in
     SendEntityUpdates = 10, //server is giving us the updated info for all the entities active in the game right now
+    UpdateEntityHealth = 11,
 
-    SpawnOtherPlayer = 11,   //server telling us to spawn another clients character into our world
-    RemoveOtherPlayer = 12  //server telling us to remove a disconnected clients character from the world
+    SpawnOtherPlayer = 12,   //server telling us to spawn another clients character into our world
+    RemoveOtherPlayer = 13  //server telling us to remove a disconnected clients character from the world
 }
 
 public class PacketReader : MonoBehaviour
@@ -62,6 +63,7 @@ public class PacketReader : MonoBehaviour
 
         Packets.Add((int)ServerPacketType.SpawnActiveEntityList, HandleSpawnActiveEntityList);
         Packets.Add((int)ServerPacketType.SendEntityUpdates, HandleEntityUpdates);
+        Packets.Add((int)ServerPacketType.UpdateEntityHealth, HandleUpdateEntityHealth);
 
         Packets.Add((int)ServerPacketType.SpawnOtherPlayer, HandleSpawnOtherPlayer);
         Packets.Add((int)ServerPacketType.RemoveOtherPlayer, HandleRemoveOtherPlayer);
@@ -306,6 +308,19 @@ public class PacketReader : MonoBehaviour
             //Send this info to the entity manager who will know where to find the entity who needs updating
             EntityManager.UpdateEntity(EntityID, EntityPosition, EntityRotation);
         }
+        PacketReader.Dispose();
+    }
+
+    private void HandleUpdateEntityHealth(byte[] PacketData)
+    {
+        ChatWindow.Log("handle entity health update");
+        ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
+        PacketReader.WriteBytes(PacketData);
+        int PacketType = PacketReader.ReadInteger();
+        string EntityID = PacketReader.ReadString();
+        int EntityHealth = PacketReader.ReadInteger();
+        GameObject TargetEntity = EntityManager.ActiveEntities[EntityID];
+        TargetEntity.GetComponentInChildren<TextMesh>().text = "Fox Princess " + EntityHealth + "/5";
         PacketReader.Dispose();
     }
 
