@@ -25,6 +25,13 @@ public class EntityManager : MonoBehaviour
     //Finds the right entity and delivers their updates to them
     public static void UpdateEntity(string EntityID, Vector3 EntityPosition, Quaternion EntityRotation)
     {
+        //Make sure the given entity actually exists
+        if(!ActiveEntities.ContainsKey(EntityID))
+        {
+            ChatWindow.Log(EntityID + " entity ID does not exist");
+            return;
+        }
+
         //Use the dictionary to quickly find the entity who needs updating
         ServerEntity OutOfDateEntity = ActiveEntities[EntityID].GetComponent<ServerEntity>();
         OutOfDateEntity.UpdatePosition(EntityPosition, EntityRotation);

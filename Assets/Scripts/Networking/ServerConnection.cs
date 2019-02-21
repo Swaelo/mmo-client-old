@@ -7,6 +7,7 @@ using System;
 
 public class ServerConnection : MonoBehaviour
 {
+    public string ServerIP = "192.168.0.14";
     public static ServerConnection Instance;
     private void Awake() { Instance = this; }
 
@@ -54,7 +55,7 @@ public class ServerConnection : MonoBehaviour
         //Set our buffers where packet data will be streamed to
         Array.Resize(ref ASyncBuffer, 8192);
         //Try to connect to the server
-        ClientSocket.BeginConnect("172.193.56.42", 5500, new AsyncCallback(ConnectionResult), ClientSocket);
+        ClientSocket.BeginConnect(ServerIP, 5500, new AsyncCallback(ConnectionResult), ClientSocket);
     }
 
     //Severs the connection to the game server

@@ -87,6 +87,7 @@ public class PacketReader : MonoBehaviour
     //Recieves a message from the console to be displayed in our console log window
     private void HandleConsoleMessage(byte[] PacketData)
     {
+        ChatWindow.Log("handle  console message");
         //Extract the information we need from the packet
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
@@ -101,6 +102,7 @@ public class PacketReader : MonoBehaviour
     //message from server to display a players chat message in the chat window
     private void HandlePlayerMessage(byte[] PacketData)
     {
+        ChatWindow.Log("handle player message");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -114,6 +116,7 @@ public class PacketReader : MonoBehaviour
     //Gets a reply from the server letting us know if our account registration request was successfull or not
     private void HandleRegisterReply(byte[] PacketData)
     {
+        ChatWindow.Log("handle register reply");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -130,6 +133,7 @@ public class PacketReader : MonoBehaviour
     //Gets a reply from the server letting us know if our account login request was successful or not
     private void HandleLoginReply(byte[] PacketData)
     {
+        ChatWindow.Log("handle login reply");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -147,6 +151,7 @@ public class PacketReader : MonoBehaviour
     //server tells us if our character creation was succesful
     private void HandleCreateCharacterReply(byte[] PacketData)
     {
+        ChatWindow.Log("handle create character reply");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -166,6 +171,7 @@ public class PacketReader : MonoBehaviour
     //Gets a packet from the server with info on every character registered to our account so far
     private void HandleSendCharacterData(byte[] PacketData)
     {
+        ChatWindow.Log("handle send character data");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -202,6 +208,7 @@ public class PacketReader : MonoBehaviour
     //server tells us to enter into the game world
     private void HandlePlayerEnterWorld(byte[] PacketData)
     {
+        ChatWindow.Log("handle player enter world");
         //Spawn our character into the world
         CharacterData Data = MenuStateManager.GetMenuComponents("Character Selection").GetComponent<CharacterSelectionButtonFunctions>().SelectedCharacter;
         GameObject NewPlayer = Instantiate(PrefabList.ClientPlayer, Data.Position, Quaternion.identity);
@@ -229,12 +236,22 @@ public class PacketReader : MonoBehaviour
             OtherPlayer.name = CharacterName;
             Connection.AddOtherPlayer(CharacterName, OtherPlayer);
         }
+        int EntityCount = PacketReader.ReadInteger();
+        for(int i = 0; i < EntityCount; i++)
+        {
+            string EntityID = PacketReader.ReadString();
+            Vector3 EntityPos = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
+            GameObject NewEntity = GameObject.Instantiate(EntityPrefabs.GetEntityPrefab("Fox Princess"), EntityPos, Quaternion.identity);
+            NewEntity.GetComponent<ServerEntity>().ID = EntityID;
+            EntityManager.AddNewEntity(EntityID, NewEntity);
+        }
         PacketReader.Dispose();
     }
 
     //server giving us another characters updated position information
     private void HandlePlayerUpdatePosition(byte[] PacketData)
     {
+        ChatWindow.Log("handle update player position");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();    //read in the packet type
@@ -252,6 +269,7 @@ public class PacketReader : MonoBehaviour
 
     private void HandleSpawnActiveEntityList(byte[] PacketData)
     {
+        ChatWindow.Log("handle spawn entity list");
         //Extract from the packet the entire list of active entities
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
@@ -261,11 +279,10 @@ public class PacketReader : MonoBehaviour
         {
             //Get the information for each of the entities that have been sent to us
             string ID = PacketReader.ReadString();
-            string Type = PacketReader.ReadString();
             Vector3 Location = new Vector3(PacketReader.ReadFloat(), PacketReader.ReadFloat(), PacketReader.ReadFloat());
             //Spawn this entity into our game world and store them within the entity manager
-            ChatWindow.Log("spawn " + Type + " at " + Location);
-            GameObject NewEntity = GameObject.Instantiate(EntityPrefabs.GetEntityPrefab(Type), Location, Quaternion.identity);
+            //ChatWindow.Log("spawn " + Type + " at " + Location);
+            GameObject NewEntity = GameObject.Instantiate(EntityPrefabs.GetEntityPrefab("Fox Princess"), Location, Quaternion.identity);
             NewEntity.GetComponent<ServerEntity>().ID = ID;
             EntityManager.AddNewEntity(ID, NewEntity);
         }
@@ -274,6 +291,7 @@ public class PacketReader : MonoBehaviour
 
     private void HandleEntityUpdates(byte[] PacketData)
     {
+        ChatWindow.Log("handle entity updates");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();
@@ -294,6 +312,7 @@ public class PacketReader : MonoBehaviour
     //server tells us to spawn someone elses character into our world
     private void HandleSpawnOtherPlayer(byte[] PacketData)
     {
+        ChatWindow.Log("handle spawn other players");
         //Extract packet information
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
@@ -313,6 +332,7 @@ public class PacketReader : MonoBehaviour
     //server tells us to remove another clients character from our game world
     private void HandleRemoveOtherPlayer(byte[] PacketData)
     {
+        ChatWindow.Log("handle remove other player");
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);
         int PacketType = PacketReader.ReadInteger();

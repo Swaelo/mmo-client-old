@@ -5,21 +5,27 @@ using UnityEngine;
 public class PlayerCameraController : MonoBehaviour
 {
     [SerializeField] private PlayerCharacterController CharacterController;
+
+    //Different FOV value for first person and third person modes
+    [SerializeField] private float FirstPersonFOV = 90;
+    [SerializeField] private float ThirdPersonFOV = 70;
+
+    //Different mouse sensitivity levels for first and third person modes
+    [SerializeField] private float FirstPersonMouseXSpeed = 30;
+    [SerializeField] private float FirstPersonMouseYSpeed = 25;
+    [SerializeField] private float ThirdPersonMouseXSpeed = 30;
+    [SerializeField] private float ThirdPersonMouseYSpeed = 25;
     
     //First person mode variables
     [SerializeField] private GameObject FirstPersonPositionAnchor;
     [SerializeField] private GameObject FirstPersonDirectionAnchor;
     [SerializeField] private Transform PlayerTransform;
-    private float MouseLookSpeed = 15;
-    private float MouseTurnSpeed = 15;
 
     //Third person mode variables
     [SerializeField] private GameObject ThirdPersonCameraTarget;
     private float CurrentCameraDistance = 3.5f; //Current distance between player and camera
     private float MinimumCameraDistance = 1.0f; //The minimum allowed distance between player and camera / how far you can zoom in
     private float MaximumCameraDistance = 8.0f; //Maximum allowed distance / how far you can zoom out
-    private float XSpeed = 30;  //How fast the camera rotates around the player X axis
-    private float YSpeed = 25;  //How fast the camera rotates around the player Y axis
     private float YMinimum = -20;   //Camera Y Rotation values must be clamped to avoid gimbal lock
     private float YMaximum = 80;
     private float CurrentX = 0f;    //Current rotation values must be tracked so they can be clamped too
@@ -125,6 +131,7 @@ public class PlayerCameraController : MonoBehaviour
     //Activated when zooming the camera all the way in during third person mode
     private void StartFirstPersonMode()
     {
+        GetComponent<Camera>().fieldOfView = FirstPersonFOV;
         CharacterController.ControllerState = PlayerControllerState.FirstPersonMode;
         transform.position = FirstPersonPositionAnchor.transform.position;
         transform.LookAt(FirstPersonDirectionAnchor.transform);
@@ -134,9 +141,9 @@ public class PlayerCameraController : MonoBehaviour
     private void FirstPersonMode()
     {
         //Moving the cursor up and down rotates the camera on the X axis to look up and down
-        transform.Rotate(-Vector3.right * Input.GetAxis("Mouse Y") * MouseLookSpeed * Time.deltaTime);
+        transform.Rotate(-Vector3.right * Input.GetAxis("Mouse Y") * FirstPersonMouseYSpeed * Time.deltaTime);
         //Moving the cursor left and right rotates the player character on its Y axis to turn left and right
-        PlayerTransform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * MouseTurnSpeed * Time.deltaTime);
+        PlayerTransform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * FirstPersonMouseXSpeed * Time.deltaTime);
         if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
             StartThirdPersonMode();
     }
@@ -144,6 +151,7 @@ public class PlayerCameraController : MonoBehaviour
     //Activated when zooming the camera out during first person mode
     private void StartThirdPersonMode()
     {
+        GetComponent<Camera>().fieldOfView = ThirdPersonFOV;
         CharacterController.ControllerState = PlayerControllerState.ThirdPersonMode;
         transform.parent = null;
     }
@@ -151,8 +159,8 @@ public class PlayerCameraController : MonoBehaviour
     private void ThirdPersonMode()
     {
         //Moving the mouse cursor around will rotate the camera around the player
-        CurrentX += Input.GetAxis("Mouse X") * XSpeed * CurrentCameraDistance * 0.02f;
-        CurrentY -= Input.GetAxis("Mouse Y") * YSpeed * 0.02f;
+        CurrentX += Input.GetAxis("Mouse X") * ThirdPersonMouseXSpeed * CurrentCameraDistance * 0.02f;
+        CurrentY -= Input.GetAxis("Mouse Y") * ThirdPersonMouseYSpeed * 0.02f;
         CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
         //Scrolling the mouse wheel adjusts the distance between the camera and the player, lets you zoom in and out
         float CameraZoomAdjust = Input.GetAxis("Mouse ScrollWheel");
