@@ -7,3 +7,5 @@ Assembly-CSharp-Editor.csproj
 /Packages/*
 /Patches/*
 /.vs/*
+/Assets/DungeonCharacters/*
+/Assets/Models/*
