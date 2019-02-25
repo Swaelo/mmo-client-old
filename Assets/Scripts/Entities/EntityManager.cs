@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        EntityManager.cs
+// Description: Keeps track of all the entities the server has told us about
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

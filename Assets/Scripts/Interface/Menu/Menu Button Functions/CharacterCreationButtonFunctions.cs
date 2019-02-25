@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        CharacterCreationButtonFunctions.cs
+// Description: Button function events for anything in the character create screen
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

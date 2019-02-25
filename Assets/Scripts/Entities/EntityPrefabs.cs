@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        EntityPrefabs.cs
+// Description: Contains a list of entities used by the EntityManager to instantiate the correct things after being
+//              told by the server
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

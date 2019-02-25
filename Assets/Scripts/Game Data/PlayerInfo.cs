@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        PlayerInfo.cs
+// Description: Tracks all the users information as they login to their account and enter the game
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

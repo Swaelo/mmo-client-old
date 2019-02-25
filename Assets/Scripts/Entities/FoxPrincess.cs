@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        FoxPrincess.cs
+// Description: First entity we have ever added to the game, using this for a lot of things until it becomes
+//              more important that all the enemies look different to one another
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

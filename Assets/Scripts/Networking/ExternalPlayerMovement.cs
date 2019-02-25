@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        ExternalPlayerMovement.cs
+// Description: Relies of receiving updates from the server, moves towards whatever location the server has told us
+// Author:      Harley Laurie          
+// Notes:       client side predicition needs to be implemented here when combat mechanics start being implemented, thats when
+//              having more accurate details will make a huge difference in the quality of the gameplay
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;

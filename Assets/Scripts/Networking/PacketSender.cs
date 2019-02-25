@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        PacketSender.cs
+// Description: Whenever the client needs to communicate with the game server, it will be done with one of the functions in here
+// Author:      Harley Laurie          
+// Notes:       This needs to be split up into multiple seperate classes soon, this file is way too big
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

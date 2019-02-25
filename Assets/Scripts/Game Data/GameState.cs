@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        GameState.cs
+// Description: enum definition for game client application states
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

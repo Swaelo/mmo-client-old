@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        PacketReader.cs
+// Description: Receives all packets sent to us from the server and performs whatever tasks are required based on the packet type
+// Author:      Harley Laurie          
+// Notes:       This needs to be split up into multiple seperate classes soon, this file is way too big
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -89,7 +96,7 @@ public class PacketReader : MonoBehaviour
     //Recieves a message from the console to be displayed in our console log window
     private void HandleConsoleMessage(byte[] PacketData)
     {
-        ChatWindow.Log("handle  console message");
+        ChatWindow.Log("handle console message");
         //Extract the information we need from the packet
         ByteBuffer.ByteBuffer PacketReader = new ByteBuffer.ByteBuffer();
         PacketReader.WriteBytes(PacketData);

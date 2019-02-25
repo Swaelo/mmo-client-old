@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿// ================================================================================================================================
+// File:        ServerEntity.cs
+// Description: Stores all of the information regarding a single entity active in the game world that the server
+//              has told us to keep track of
+// Author:      Harley Laurie          
+// Notes:       
+// ================================================================================================================================
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
