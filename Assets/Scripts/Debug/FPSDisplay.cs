@@ -1,6 +1,6 @@
 ﻿// ================================================================================================================================
-// File:        UIButtonFunctions.cs
-// Description: Button function events for gameplay UI
+// File:        FPSDisplay.cs
+// Description: Displays the current frame rate in the top right corner of the screen
 // Author:      Harley Laurie          
 // Notes:       
 // ================================================================================================================================
@@ -10,21 +10,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIButtonFunctions : MonoBehaviour
+public class FPSDisplay : MonoBehaviour
 {
-    public void ClickQuitGameButton()
+    private int AverageFPS;
+    private Text Component;
+
+    private void Awake()
     {
-        PacketSenderLogic.Instance.SendDisconnectNotice();
-        Application.Quit();
+        Component = GetComponent<Text>();
     }
 
-    public void ClickChangeCharacterButton()
+    private void Update()
     {
-
-    }
-
-    public void ClickLogoutAccountButton()
-    {
-
+        AverageFPS = (int)(Time.frameCount / Time.time);
+        Component.text = AverageFPS + " FPS";
     }
 }

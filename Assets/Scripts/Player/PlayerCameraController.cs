@@ -80,8 +80,8 @@ public class PlayerCameraController : MonoBehaviour
         InternalLock = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        CharacterController.PreviousState = CharacterController.ControllerState;
-        CharacterController.ControllerState = PlayerControllerState.Disabled;
+        //CharacterController.PreviousState = CharacterController.ControllerState;
+        //CharacterController.ControllerState = PlayerControllerState.Disabled;
     }
 
     private void EnableCursorInternalLock()
@@ -132,6 +132,9 @@ public class PlayerCameraController : MonoBehaviour
             case (PlayerControllerState.ThirdPersonMode):
                 ThirdPersonMode();
                 break;
+            case (PlayerControllerState.Disabled):
+                DisabledMode();
+                break;
         }
     }
 
@@ -142,12 +145,13 @@ public class PlayerCameraController : MonoBehaviour
         CharacterController.ControllerState = PlayerControllerState.FirstPersonMode;
         transform.position = FirstPersonPositionAnchor.transform.position;
         transform.LookAt(FirstPersonDirectionAnchor.transform);
-        transform.parent = CharacterController.transform;
+        transform.parent = FirstPersonPositionAnchor.transform;//CharacterController.transform;
         Vector3 Angles = transform.eulerAngles;
         CurrentX = Angles.x;
         CurrentY = Angles.y;
     }
 
+    //Allows the player full control of their FPS camera
     private void FirstPersonMode()
     {
         //Moving the cursor up and down rotates the camera on the X axis to look up and down
@@ -169,6 +173,7 @@ public class PlayerCameraController : MonoBehaviour
         CurrentY = Angles.y;
     }
 
+    //Allows the player full control of their 3rd person camera
     private void ThirdPersonMode()
     {
         //Moving the mouse cursor around will rotate the camera around the player
@@ -179,7 +184,7 @@ public class PlayerCameraController : MonoBehaviour
         float CameraZoomAdjust = Input.GetAxis("Mouse ScrollWheel");
         float DesiredCameraDistance = CurrentCameraDistance - CameraZoomAdjust * 5;
         //Zooming the camera in closer than the minimum allowed distance activates first person mode
-        if(DesiredCameraDistance < MinimumCameraDistance)
+        if (DesiredCameraDistance < MinimumCameraDistance)
         {
             StartFirstPersonMode();
             return;
@@ -194,6 +199,18 @@ public class PlayerCameraController : MonoBehaviour
         transform.rotation = NewRotation;
     }
 
+    //Applies movement to the third person camera as if no user input has been recieved
+    private void ThirdPersonDisabled()
+    {
+        CurrentX += 0f * ThirdPersonMouseXSpeed * CurrentCameraDistance * 0.02f;
+        CurrentY -= 0f * ThirdPersonMouseYSpeed * 0.02f;
+        CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
+        Quaternion NewRotation = Quaternion.Euler(CurrentY, CurrentX, 0f);
+        Vector3 NewPosition = NewRotation * new Vector3(0f, 0f, -CurrentCameraDistance) + ThirdPersonCameraTarget.transform.position;
+        transform.position = NewPosition;
+        transform.rotation = NewRotation;
+    }
+
     private float ClampAngle(float Angle, float Minimum, float Maximum)
     {
         if (Angle < -360)
@@ -201,5 +218,11 @@ public class PlayerCameraController : MonoBehaviour
         if (Angle > 360)
             Angle -= 360;
         return Mathf.Clamp(Angle, Minimum, Maximum);
+    }
+
+    private void DisabledMode()
+    {
+        if (CharacterController.PreviousState == PlayerControllerState.ThirdPersonMode)
+            ThirdPersonDisabled();
     }
 }

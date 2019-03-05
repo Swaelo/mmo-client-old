@@ -14,7 +14,7 @@ using System;
 
 public class ServerConnection : MonoBehaviour
 {
-    public string ServerIP = "192.168.0.14";
+    public string ServerIP = "192.168.0.4";
     public static ServerConnection Instance;
     private void Awake() { Instance = this; }
 
@@ -108,7 +108,7 @@ public class ServerConnection : MonoBehaviour
         if(IsConnected && ShouldHandleData)
         {
             //Pass the packet onto the handler class
-            PacketReader.instance.HandlePacket(PacketBuffer);
+            PacketReaderLogic.Instance.HandlePacket(PacketBuffer);
             //Start waiting for the next packet from the server
             ShouldHandleData = false;
         }

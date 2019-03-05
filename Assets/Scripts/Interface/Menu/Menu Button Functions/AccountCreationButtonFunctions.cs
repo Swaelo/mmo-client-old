@@ -34,7 +34,7 @@ public class AccountCreationButtonFunctions : MonoBehaviour
             return;
         }
         //Send a request to the server to register the new account
-        PacketSender.Instance.SendRegisterRequest(AccountName, AccountPassword);
+        PacketSenderLogic.Instance.SendRegisterRequest(AccountName, AccountPassword);
         //Save this account info into the player info class
         PlayerInfo.AccountName = AccountName;
         PlayerInfo.AccountPass = AccountPassword;
@@ -58,7 +58,7 @@ public class AccountCreationButtonFunctions : MonoBehaviour
         //Display the login menus waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server to log into our new account
-        PacketSender.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
+        PacketSenderLogic.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
     }
 
     public void RegisterFail()

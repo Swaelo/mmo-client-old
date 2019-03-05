@@ -123,7 +123,7 @@ public class ChatWindow : MonoBehaviour
         //Display this players message to the chat window
         DisplayPlayerMessage(PlayerInfo.CharacterName, ChatInput.text);
         //Send this players message to the server to be shared with all other players
-        PacketSender.Instance.SendPlayerMessage(ChatInput.text);
+        PacketSenderLogic.Instance.SendPlayerMessage(ChatInput.text);
         //Clear the chat input field
         ChatInput.text = "";
     }

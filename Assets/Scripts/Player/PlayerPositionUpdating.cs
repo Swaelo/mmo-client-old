@@ -47,7 +47,7 @@ public class PlayerPositionUpdating : MonoBehaviour
             {
                 //Before we update, remember what position was sent to the server
                 PreviousUpdatePosition = transform.position;
-                PacketSender.Instance.SendPlayerUpdate(transform.position, transform.rotation);
+                PacketSenderLogic.Instance.SendPlayerUpdate(transform.position, transform.rotation);
             }
         }
     }
@@ -55,6 +55,6 @@ public class PlayerPositionUpdating : MonoBehaviour
     //When we close the game send the server our disconnect notice
     private void OnApplicationQuit()
     {
-        PacketSender.Instance.SendDisconnectNotice();
+        PacketSenderLogic.Instance.SendDisconnectNotice();
     }
 }

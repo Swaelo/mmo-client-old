@@ -27,7 +27,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
             return;
         }
         //Send a request to the server to create this character
-        PacketSender.Instance.SendCreateCharacterRequest(PlayerInfo.AccountName, PlayerInfo.CharacterName, IsMale);
+        PacketSenderLogic.Instance.SendCreateCharacterRequest(PlayerInfo.AccountName, PlayerInfo.CharacterName, IsMale);
         //Display the waiting animation
         Components.ToggleAllBut("Waiting Animation", true);
     }
@@ -39,7 +39,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
         //Display the waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server for all of our character information
-        PacketSender.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
+        PacketSenderLogic.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
     }
 
     public void CreateCharacterSuccess()
@@ -49,7 +49,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
         //Display the waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server for all of our character information
-        PacketSender.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
+        PacketSenderLogic.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
     }
 
     public void CreateCharacterFail()

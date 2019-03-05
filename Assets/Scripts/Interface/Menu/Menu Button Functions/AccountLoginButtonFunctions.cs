@@ -27,7 +27,7 @@ public class AccountLoginButtonFunctions : MonoBehaviour
             return;
         }
         //Send a request to the server to login to this account
-        PacketSender.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
+        PacketSenderLogic.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
         //Display the waiting animation
         Components.ToggleAllBut("Waiting Animation", true);
     }
@@ -47,7 +47,7 @@ public class AccountLoginButtonFunctions : MonoBehaviour
         //Display the loading animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Request all of our character data from the server
-        PacketSender.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
+        PacketSenderLogic.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
     }
 
     public void LoginFail()

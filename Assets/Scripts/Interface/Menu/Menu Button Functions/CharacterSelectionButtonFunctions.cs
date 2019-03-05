@@ -27,7 +27,7 @@ public class CharacterSelectionButtonFunctions : MonoBehaviour
         //Display the waiting animation
         Components.ToggleAllBut("Select Waiting Animation", true);
         //Send a request to the server to enter the game with this character
-        PacketSender.Instance.SendEnterWorldRequest(SelectedCharacter);
+        PacketSenderLogic.Instance.SendEnterWorldRequest(SelectedCharacter);
     }
 
     public void ClickCreateCharacterButton()
