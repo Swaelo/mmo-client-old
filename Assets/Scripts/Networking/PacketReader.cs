@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// ================================================================================================================================
+// File:        PacketReader.cs
+// Description: Class for extracting data from network packets received from game clients
+// ================================================================================================================================
+
+using System;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class PacketReader
