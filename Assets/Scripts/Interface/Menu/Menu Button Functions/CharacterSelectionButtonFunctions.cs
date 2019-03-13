@@ -1,14 +1,9 @@
 ﻿// ================================================================================================================================
 // File:        CharacterSelectionButtonFunctions.cs
 // Description: Button function events for anything in the character select screen
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CharacterSelectionButtonFunctions : MonoBehaviour
 {
@@ -27,7 +22,7 @@ public class CharacterSelectionButtonFunctions : MonoBehaviour
         //Display the waiting animation
         Components.ToggleAllBut("Select Waiting Animation", true);
         //Send a request to the server to enter the game with this character
-        PacketSenderLogic.Instance.SendEnterWorldRequest(SelectedCharacter);
+        PacketManager.Instance.SendEnterWorldRequest(SelectedCharacter);
     }
 
     public void ClickCreateCharacterButton()

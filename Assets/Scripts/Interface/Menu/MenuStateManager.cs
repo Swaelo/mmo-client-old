@@ -1,11 +1,8 @@
 ﻿// ================================================================================================================================
-// File:        
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// File:        MenuStateManager.cs
+// Description: Controls which section of the main menu the game is currently in
 // ================================================================================================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

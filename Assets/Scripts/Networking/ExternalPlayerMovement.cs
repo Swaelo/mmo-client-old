@@ -1,15 +1,11 @@
 ﻿// ================================================================================================================================
 // File:        ExternalPlayerMovement.cs
-// Description: Relies of receiving updates from the server, moves towards whatever location the server has told us
-// Author:      Harley Laurie          
-// Notes:       client side predicition needs to be implemented here when combat mechanics start being implemented, thats when
+// Description: Relies of receiving updates from the server, moves towards whatever location the server has told us     
+//              client side predicition needs to be implemented here when combat mechanics start being implemented, thats when
 //              having more accurate details will make a huge difference in the quality of the gameplay
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class ExternalPlayerMovement : MonoBehaviour
 {
@@ -52,9 +48,9 @@ public class ExternalPlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, TargetRotation, 300 * Time.deltaTime);
     }
 
-    public void UpdatePosition(Vector3 NewTarget, Quaternion NewRotation)
+    public void UpdateTargetValues(Vector3 TargetPosition, Quaternion TargetRotation)
     {
-        TargetPosition = NewTarget;
-        TargetRotation = NewRotation;
+        this.TargetPosition = TargetPosition;
+        this.TargetRotation = TargetRotation;
     }
 }

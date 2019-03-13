@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        AccountCreationButtonFunctions.cs
 // Description: Button function events for anything in the account create screen
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +30,7 @@ public class AccountCreationButtonFunctions : MonoBehaviour
             return;
         }
         //Send a request to the server to register the new account
-        PacketSenderLogic.Instance.SendRegisterRequest(AccountName, AccountPassword);
+        PacketManager.Instance.SendRegisterRequest(AccountName, AccountPassword);
         //Save this account info into the player info class
         PlayerInfo.AccountName = AccountName;
         PlayerInfo.AccountPass = AccountPassword;
@@ -58,7 +54,7 @@ public class AccountCreationButtonFunctions : MonoBehaviour
         //Display the login menus waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server to log into our new account
-        PacketSenderLogic.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
+        PacketManager.Instance.SendLoginRequest(PlayerInfo.AccountName, PlayerInfo.AccountPass);
     }
 
     public void RegisterFail()

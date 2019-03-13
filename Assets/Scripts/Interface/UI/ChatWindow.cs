@@ -1,11 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        ChatWindow.cs
 // Description: Delivers messages to the chat window in the game ui, colors them etc.
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -123,7 +120,7 @@ public class ChatWindow : MonoBehaviour
         //Display this players message to the chat window
         DisplayPlayerMessage(PlayerInfo.CharacterName, ChatInput.text);
         //Send this players message to the server to be shared with all other players
-        PacketSenderLogic.Instance.SendPlayerMessage(ChatInput.text);
+        PacketManager.Instance.SendPlayerMessage(ChatInput.text);
         //Clear the chat input field
         ChatInput.text = "";
     }

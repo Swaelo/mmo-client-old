@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
-// File:        
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// File:        SetCharacterSlot.cs
+// Description: Takes in all of a characters data and stores that to be displayed in one of the character slots in the select screen
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

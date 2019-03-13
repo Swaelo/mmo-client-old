@@ -1,8 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// ================================================================================================================================
+// File:        PacketWriter.cs
+// Description: Class used to define an array of information that is going to be send through the network to one of the clients
+//              While the object is active, more values can be added dynamically and it will keep everything formatted correctly
+//              When all the data has been added it can be acquired in the formatted array with the ToArray function which can be
+//              passed onto the ConnectionManager class to be sent through the network to the target game client which is connected
+// ================================================================================================================================
+
+using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PacketWriter

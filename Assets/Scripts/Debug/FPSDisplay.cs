@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        FPSDisplay.cs
 // Description: Displays the current frame rate in the top right corner of the screen
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

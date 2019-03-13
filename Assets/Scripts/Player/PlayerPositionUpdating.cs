@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        PlayerPositionUpdating.cs
 // Description: Keeps the server up to date on our current location
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerPositionUpdating : MonoBehaviour
@@ -47,7 +43,7 @@ public class PlayerPositionUpdating : MonoBehaviour
             {
                 //Before we update, remember what position was sent to the server
                 PreviousUpdatePosition = transform.position;
-                PacketSenderLogic.Instance.SendPlayerUpdate(transform.position, transform.rotation);
+                PacketManager.Instance.SendPlayerUpdate(transform.position, transform.rotation);
             }
         }
     }
@@ -55,6 +51,6 @@ public class PlayerPositionUpdating : MonoBehaviour
     //When we close the game send the server our disconnect notice
     private void OnApplicationQuit()
     {
-        PacketSenderLogic.Instance.SendDisconnectNotice();
+        PacketManager.Instance.SendDisconnectNotice();
     }
 }

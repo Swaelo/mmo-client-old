@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        PlayerResources.cs
 // Description: Tracks the player characters current Health, Mana and Stamina values
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,27 +1,22 @@
 ﻿// ================================================================================================================================
 // File:        ServerConnection.cs
 // Description: Manages the clients connection to the game server
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
+using System;
+using System.Net.Sockets;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Net.Sockets;
-using System.IO;
-using System;
 
 public class ServerConnection : MonoBehaviour
 {
-    public string ServerIP = "192.168.0.4";
-    public static ServerConnection Instance;
+    public string ServerIP = "192.168.0.4"; //IP Address of the game server
+    public static ServerConnection Instance;    //Singleton instance
     private void Awake() { Instance = this; }
 
     private TcpClient ClientSocket = null;  //This clients connection to the game server
     public NetworkStream ClientStream = null;  //Stream of data between server and client
-    private bool IsConnected = false;   //Is this client connected to the server right now
-    public bool IsServerConnected() { return IsConnected; }
+    public bool IsConnected = false;   //Is this client connected to the server right now
     private byte[] ASyncBuffer; //asynchronous packet buffer, streams in data from the server over time
     private byte[] PacketBuffer;    //data from the asynchronous buffer is copied into here once the stream of data has been completely sent through the socket
     private bool ShouldHandleData = false;  //Are we listening in for packets from the server right now
@@ -83,7 +78,7 @@ public class ServerConnection : MonoBehaviour
         }
 
         //If we are trying to establish a connection, check if it has been successful
-        if(TryingToConnect && IsServerConnected())
+        if(TryingToConnect && IsConnected)
         {
             ChatWindow.Instance.DisplaySystemMessage("Connected!");
             MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", false);
@@ -108,7 +103,7 @@ public class ServerConnection : MonoBehaviour
         if(IsConnected && ShouldHandleData)
         {
             //Pass the packet onto the handler class
-            PacketReaderLogic.Instance.HandlePacket(PacketBuffer);
+            PacketManager.Instance.HandlePacket(PacketBuffer);
             //Start waiting for the next packet from the server
             ShouldHandleData = false;
         }
@@ -136,7 +131,7 @@ public class ServerConnection : MonoBehaviour
         }
     }
 
-    ////Reads packets sent from the server
+    //Reads packets sent from the server
     void ReadPacket(IAsyncResult Result)
     {
         //make sure connection is still open

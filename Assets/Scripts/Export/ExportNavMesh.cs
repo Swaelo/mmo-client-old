@@ -1,8 +1,7 @@
 ﻿// ================================================================================================================================
 // File:        ExportNavMesh.cs
 // Description: Exports the navmesh as a .obj file, after converting that the navmesh can be loaded in the server
-// Author:      Harley Laurie          
-// Notes:       
+//              Obj exporter component based on: http://wiki.unity3d.com/index.php?title=ObjExporter
 // ================================================================================================================================
 
 using System.IO;
@@ -10,8 +9,6 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-
-// Obj exporter component based on: http://wiki.unity3d.com/index.php?title=ObjExporter
 
 //For some reason the project will not build when this script is included, so ive added this if clause to only compile this script in the unity editor
 #if (UNITY_EDITOR)
@@ -54,8 +51,6 @@ public class ExportNavMesh : MonoBehaviour
         for (int material = 0; material < mesh.subMeshCount; material++)
         {
             sb.Append("\n");
-            //sb.Append("usemtl ").Append(mats[material].name).Append("\n");
-            //sb.Append("usemap ").Append(mats[material].name).Append("\n");
 
             int[] triangles = mesh.GetTriangles(material);
             for (int i = 0; i < triangles.Length; i += 3)

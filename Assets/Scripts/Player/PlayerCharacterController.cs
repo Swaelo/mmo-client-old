@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        PlayerCharacterController.cs
 // Description: Allows the user full control of their player character, first person and third person available
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerControllerState
@@ -91,7 +87,7 @@ public class PlayerCharacterController : MonoBehaviour
             if (transform.position != PreviousUpdatePosition || transform.rotation != PreviousUpdateRotation)
             {
                 //Tell the server our new position value
-                PacketSenderLogic.Instance.SendPlayerUpdate(transform.position, transform.rotation);
+                PacketManager.Instance.SendPlayerUpdate(transform.position, transform.rotation);
                 //Now remember what we last told the server our values where
                 PreviousUpdatePosition = transform.position;
                 PreviousUpdateRotation = transform.rotation;

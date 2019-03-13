@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        CharacterCreationButtonFunctions.cs
 // Description: Button function events for anything in the character create screen
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +23,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
             return;
         }
         //Send a request to the server to create this character
-        PacketSenderLogic.Instance.SendCreateCharacterRequest(PlayerInfo.AccountName, PlayerInfo.CharacterName, IsMale);
+        PacketManager.Instance.SendCreateCharacterRequest(PlayerInfo.AccountName, PlayerInfo.CharacterName, IsMale);
         //Display the waiting animation
         Components.ToggleAllBut("Waiting Animation", true);
     }
@@ -39,7 +35,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
         //Display the waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server for all of our character information
-        PacketSenderLogic.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
+        PacketManager.Instance.SendCharacterDataRequest(PlayerInfo.AccountName);
     }
 
     public void CreateCharacterSuccess()
@@ -49,7 +45,7 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
         //Display the waiting animation
         MenuStateManager.GetCurrentMenuStateObject().GetComponent<MenuComponentObjects>().ToggleAllBut("Waiting Animation", true);
         //Send a request to the server for all of our character information
-        PacketSenderLogic.Instance.SendGetCharacterDataRequest(PlayerInfo.AccountName);
+        PacketManager.Instance.SendCharacterDataRequest(PlayerInfo.AccountName);
     }
 
     public void CreateCharacterFail()

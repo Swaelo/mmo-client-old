@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        EnemyEntity.cs
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// Description: Defines a single enemy currently active in the servers world simulation, controls all of their AI/Behaviour during play
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EnemyState

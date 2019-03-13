@@ -2,17 +2,10 @@
 // File:        CustomInputField.cs
 // Description: I was having troubles with the default input field and performing extreme handling of the mouse cursor at the same time
 //              so I made my own where I have full control over the cursor, regardless of the state of the input field
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;

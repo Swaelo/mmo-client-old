@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        CharacterData.cs
 // Description: Stores all the information for a single character in the game world
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterData : MonoBehaviour

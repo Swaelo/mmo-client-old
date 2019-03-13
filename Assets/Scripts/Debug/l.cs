@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ================================================================================================================================
+// File:        l.cs
+// Description: Quickly and easily print messages to the chat window from anywhere in the code by typing l.og("hello world");
+// ================================================================================================================================
 
 public class l
 {

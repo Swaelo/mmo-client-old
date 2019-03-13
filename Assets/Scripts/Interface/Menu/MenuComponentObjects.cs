@@ -1,8 +1,6 @@
 ﻿// ================================================================================================================================
-// File:        
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// File:        MenuComponentObjects.cs
+// Description: A list of all the objects which make up one section of the main menu
 // ================================================================================================================================
 
 using System.Collections;

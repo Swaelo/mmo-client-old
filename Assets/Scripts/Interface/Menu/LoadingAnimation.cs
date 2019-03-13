@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
-// File:        
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// File:        LoadingAnimation.cs
+// Description: Displays an animation in the game UI while waiting for something to happen, usually waiting for packets from server
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,11 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        PlayerTargetLock.cs
 // Description: Allows player to lock onto their target enemy for better controls during combat
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

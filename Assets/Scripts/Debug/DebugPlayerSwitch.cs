@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        DebugPlayerSwitch.cs
 // Description: Quick switch between debug player or normal game play
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DebugPlayerSwitch : MonoBehaviour

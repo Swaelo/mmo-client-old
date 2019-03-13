@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
-// File:        
-// Description: 
-// Author:      Harley Laurie          
-// Notes:       
+// File:        CharacterCreation.cs
+// Description: Allows the player to assign their character statistics using the game UI during character creation
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 

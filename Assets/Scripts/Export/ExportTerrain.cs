@@ -1,17 +1,13 @@
 ﻿// ================================================================================================================================
 // File:        ExportTerrain.cs
 // Description: Exports the terrain as .obj file, then it can load into the server
-// Author:      Harley Laurie          
-// Notes:       
+//              Converted from UnityScript to C# at http://www.M2H.nl/files/js_to_c.php - by Mike Hergaarden
+//              C # manual conversion work by Yun Kyu Choi
 // ================================================================================================================================
-
-// Converted from UnityScript to C# at http://www.M2H.nl/files/js_to_c.php - by Mike Hergaarden
-// C # manual conversion work by Yun Kyu Choi
 
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Collections;
 using System.IO;
 using System.Text;
 

@@ -1,11 +1,7 @@
 ﻿// ================================================================================================================================
 // File:        CustomSetPropertyUtility.cs
 // Description: This doesnt really do much, but I needed to create this for the CustomInputField to work
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
-
-using UnityEngine.Events;
 
 namespace UnityEngine.UI
 {

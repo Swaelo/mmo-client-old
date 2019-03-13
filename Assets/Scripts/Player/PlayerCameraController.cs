@@ -1,12 +1,8 @@
 ﻿// ================================================================================================================================
 // File:        PlayerCameraController.cs
 // Description: Gives the player full control of their camera, both 1st and 3rd person views implemented here
-// Author:      Harley Laurie          
-// Notes:       
 // ================================================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
@@ -176,20 +172,24 @@ public class PlayerCameraController : MonoBehaviour
     //Allows the player full control of their 3rd person camera
     private void ThirdPersonMode()
     {
-        //Moving the mouse cursor around will rotate the camera around the player
-        CurrentX += Input.GetAxis("Mouse X") * ThirdPersonMouseXSpeed * CurrentCameraDistance * 0.02f;
-        CurrentY -= Input.GetAxis("Mouse Y") * ThirdPersonMouseYSpeed * 0.02f;
-        CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
-        //Scrolling the mouse wheel adjusts the distance between the camera and the player, lets you zoom in and out
-        float CameraZoomAdjust = Input.GetAxis("Mouse ScrollWheel");
-        float DesiredCameraDistance = CurrentCameraDistance - CameraZoomAdjust * 5;
-        //Zooming the camera in closer than the minimum allowed distance activates first person mode
-        if (DesiredCameraDistance < MinimumCameraDistance)
+        //Ignore any mouse input if the cursor isnt locked to the game window
+        if(CursorLocked)
         {
-            StartFirstPersonMode();
-            return;
+            //Moving the mouse cursor around will rotate the camera around the player
+            CurrentX += Input.GetAxis("Mouse X") * ThirdPersonMouseXSpeed * CurrentCameraDistance * 0.02f;
+            CurrentY -= Input.GetAxis("Mouse Y") * ThirdPersonMouseYSpeed * 0.02f;
+            CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
+            //Scrolling the mouse wheel adjusts the distance between the camera and the player, lets you zoom in and out
+            float CameraZoomAdjust = Input.GetAxis("Mouse ScrollWheel");
+            float DesiredCameraDistance = CurrentCameraDistance - CameraZoomAdjust * 5;
+            //Zooming the camera in closer than the minimum allowed distance activates first person mode
+            if (DesiredCameraDistance < MinimumCameraDistance)
+            {
+                StartFirstPersonMode();
+                return;
+            }
+            CurrentCameraDistance = Mathf.Clamp(CurrentCameraDistance - CameraZoomAdjust * 5, MinimumCameraDistance, MaximumCameraDistance);
         }
-        CurrentCameraDistance = Mathf.Clamp(CurrentCameraDistance - CameraZoomAdjust * 5, MinimumCameraDistance, MaximumCameraDistance);
 
         //Find a new target position and rotation for the player camera based on all of this input so far
         Quaternion NewRotation = Quaternion.Euler(CurrentY, CurrentX, 0f);
