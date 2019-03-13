@@ -9,3 +9,5 @@ Assembly-CSharp-Editor.csproj
 /.vs/*
 /Assets/DungeonCharacters/*
 /Assets/Models/*
+/Assets/*.obj
+/Assets/*.obj.meta
