@@ -32,9 +32,12 @@ public class PlayerResources : MonoBehaviour
 
     private void Awake()
     {
-        HealthBarDisplay = GameObject.Find("Health Bar Display").GetComponent<Image>();
-        ManaBarDisplay = GameObject.Find("Mana Bar Display").GetComponent<Image>();
-        StaminaBarDisplay = GameObject.Find("Stamina Bar Display").GetComponent<Image>();
+        if(GameObject.Find("Health Bar Display"))
+            HealthBarDisplay = GameObject.Find("Health Bar Display").GetComponent<Image>();
+        if(GameObject.Find("Mana Bar Display"))
+            ManaBarDisplay = GameObject.Find("Mana Bar Display").GetComponent<Image>();
+        if (GameObject.Find("Stamina Bar Display"))
+            StaminaBarDisplay = GameObject.Find("Stamina Bar Display").GetComponent<Image>();
     }
 
     public void Update()
@@ -54,12 +57,31 @@ public class PlayerResources : MonoBehaviour
         else if (StaminaRegenDelay <= 0.0f && CurrentStamina < MaxStamina)
             CurrentStamina += IdleStaminaReplenish * Time.deltaTime;
 
-        //Find the current percentage of stamine relative to the maximum stamina amount
-        float StaminaFraction = CurrentStamina / MaxStamina;
-        //Find StaminaPercentage of the MaxBarLength, and set that as the new y value of the stamina bar
-        float NewBarLength = MaxBarLength * StaminaFraction;
-        //Reset the stamina bars rect transform with the new bar length to be displayed
-        RectTransform StaminaRect = StaminaBarDisplay.rectTransform;
-        StaminaRect.sizeDelta = new Vector2(NewBarLength, StaminaRect.sizeDelta.y);
+        UpdateResourceUI();
     }
+
+    //Updates all the UI bars display how much of each resource the player has remaining
+    private void UpdateResourceUI()
+    {
+        //Update stamina bar display
+        if(StaminaBarDisplay)
+            UpdateResourceUI(MaxBarLength * CurrentStamina / MaxStamina, StaminaBarDisplay.rectTransform);
+        //Update health bar
+        if(HealthBarDisplay)
+            UpdateResourceUI(MaxBarLength * CurrentHealth / MaxHealth, HealthBarDisplay.rectTransform);
+        //and lastly the mana bar
+        if(ManaBarDisplay)
+            UpdateResourceUI(MaxBarLength * CurrentMana / MaxMana, ManaBarDisplay.rectTransform);
+    }
+
+    //Updates the UI display of whatever resources bar is given with the new given length value
+    private void UpdateResourceUI(float NewBarLength, RectTransform BarDisplay)
+    {
+        BarDisplay.sizeDelta = new Vector2(NewBarLength, BarDisplay.sizeDelta.y);
+    }
+
+    //Functions to apply external changes to the players resources values
+    public void AdjustHealth(int AdjustmentValue) { CurrentHealth += AdjustmentValue; }
+    public void AdjustMana(int AdjustmentValue) { CurrentMana += AdjustmentValue; }
+    public void AdjustStamina(int AdjustmentValue) { CurrentStamina += AdjustmentValue; }
 }

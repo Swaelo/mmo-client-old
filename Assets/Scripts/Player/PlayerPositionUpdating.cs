@@ -13,7 +13,7 @@ public class PlayerPositionUpdating : MonoBehaviour
     private float NextUpdate = 0.25f;
 
     //Were also going to handle the animation controller while were here
-    [SerializeField] private Animator AnimationController;
+    public Animator AnimationController;
     private Vector3 PreviousFramePosition;
 
     private void Awake()

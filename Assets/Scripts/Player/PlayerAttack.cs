@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private Animator AnimationController;
-    [SerializeField] private GameObject AttackBox;
-    [SerializeField] private PlayerResources Resources;
-    [SerializeField] private PlayerCharacterController Controller;
+    public Animator AnimationController;
+    public GameObject AttackBox;
+    public PlayerResources Resources;
+    public PlayerCharacterController Controller;
 
     void Update()
     {
@@ -32,6 +32,10 @@ public class PlayerAttack : MonoBehaviour
                 AnimationController.SetTrigger("Attack 2");
             else
                 AnimationController.SetTrigger("Attack 1");
+
+            //Tell the game server where our attack landed
+            if(PacketManager.Instance != null)
+                PacketManager.Instance.SendPlayerAttack(AttackBox.transform.position, AttackBox.transform.localScale, AttackBox.transform.rotation);
         }
     }
 }

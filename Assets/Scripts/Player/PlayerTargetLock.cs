@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class PlayerTargetLock : MonoBehaviour
 {
-    [SerializeField] private float MaxTargetDistance;
+    public float MaxTargetDistance;
     public GameObject CurrentTarget = null;
     private Image TargettingReticle;
     private RectTransform ReticleRect;
@@ -19,7 +19,12 @@ public class PlayerTargetLock : MonoBehaviour
     private void Awake()
     {
         PlayerCam = GetComponent<PlayerCharacterController>().CameraTransform.gameObject.GetComponent<Camera>();
-        TargettingReticle = GameObject.Find("Reticle").GetComponent<Image>();
+
+        GameObject ReticleObject = GameObject.Find("Reticle");
+        if(ReticleObject != null)
+            TargettingReticle = ReticleObject.GetComponent<Image>();
+
+
         //Make sure the targetting reticle is hidden to start off with
         if (TargettingReticle)
         {

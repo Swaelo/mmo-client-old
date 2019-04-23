@@ -9,6 +9,8 @@ public class ServerEntity : MonoBehaviour
 {
     public string ID = "-1";
     public string Type = "N/A";
+    public int Health = 1;
+    public int MaxHealth = 1;
 
     public Vector3 TargetPosition;
     public Quaternion TargetRotation;
@@ -20,6 +22,12 @@ public class ServerEntity : MonoBehaviour
     {
         TargetPosition = NewTarget;
         TargetRotation = NewRotation;
+    }
+
+    public void UpdateHealth(int Health)
+    {
+        this.Health = Health;
+        GetComponentInChildren<TextMesh>().text = Type + " " + Health + "/" + MaxHealth;
     }
 
     public void Update()

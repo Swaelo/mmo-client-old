@@ -7,25 +7,25 @@ using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
 {
-    [SerializeField] private PlayerCharacterController CharacterController;
+    public PlayerCharacterController CharacterController;
 
     //Different FOV value for first person and third person modes
-    [SerializeField] private float FirstPersonFOV = 90;
-    [SerializeField] private float ThirdPersonFOV = 70;
+    public float FirstPersonFOV = 90;
+    public float ThirdPersonFOV = 70;
 
     //Different mouse sensitivity levels for first and third person modes
-    [SerializeField] private float FirstPersonMouseXSpeed = 30;
-    [SerializeField] private float FirstPersonMouseYSpeed = 25;
-    [SerializeField] private float ThirdPersonMouseXSpeed = 30;
-    [SerializeField] private float ThirdPersonMouseYSpeed = 25;
+    public float FirstPersonMouseXSpeed = 30;
+    public float FirstPersonMouseYSpeed = 25;
+    public float ThirdPersonMouseXSpeed = 30;
+    public float ThirdPersonMouseYSpeed = 25;
     
     //First person mode variables
-    [SerializeField] private GameObject FirstPersonPositionAnchor;
-    [SerializeField] private GameObject FirstPersonDirectionAnchor;
-    [SerializeField] private Transform PlayerTransform;
+    public GameObject FirstPersonPositionAnchor;
+    public GameObject FirstPersonDirectionAnchor;
+    public Transform PlayerTransform;
 
     //Third person mode variables
-    [SerializeField] private GameObject ThirdPersonCameraTarget;
+    public GameObject ThirdPersonCameraTarget;
     private float CurrentCameraDistance = 3.5f; //Current distance between player and camera
     private float MinimumCameraDistance = 1.0f; //The minimum allowed distance between player and camera / how far you can zoom in
     private float MaximumCameraDistance = 8.0f; //Maximum allowed distance / how far you can zoom out
@@ -63,37 +63,20 @@ public class PlayerCameraController : MonoBehaviour
         CharacterController.ControllerState = CharacterController.PreviousState;
     }
 
-    private void DisableCursorInternalLock()
+    private void SetCursorInternalLock(bool LockValue)
     {
-        //Cant do anything here while the cursor is being controlled by the chat input field
+        //Dont do anything if the player is typing a message into the chat window right now
         if (CursorChat)
             return;
+        
+        //Toggle the cursor lock state and visibility accordingly
+        CursorLocked = LockValue;
+        InternalLock = !LockValue;
+        Cursor.lockState = LockValue ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !LockValue;
 
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Quit Button").SetActive(true);
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Change Character Button").SetActive(true);
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Logout Account Button").SetActive(true);
-        CursorLocked = false;
-        InternalLock = true;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        //CharacterController.PreviousState = CharacterController.ControllerState;
-        //CharacterController.ControllerState = PlayerControllerState.Disabled;
-    }
-
-    private void EnableCursorInternalLock()
-    {
-        //Cant do anything here while the cursor is being controlled by the chat input field
-        if (CursorChat)
-            return;
-
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Quit Button").SetActive(false);
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Change Character Button").SetActive(false);
-        MenuStateManager.GetMenuComponents("UI").GetComponent<MenuComponentObjects>().GetComponentObject("Logout Account Button").SetActive(false);
-        CursorLocked = true;
-        InternalLock = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        CharacterController.ControllerState = CharacterController.PreviousState;
+        //Finally, lock the players ability to control their character if the cursor lock is being enabled
+        CharacterController.ControllerState = LockValue ? CharacterController.PreviousState : CharacterController.ControllerState;
     }
 
     private void Start()
@@ -109,12 +92,9 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Update()
     {
-        //Pressing escape while the cursor is locked disables the cursor lock and displays the game menu
-        if (CursorLocked && Input.GetKeyDown(KeyCode.Escape))
-            DisableCursorInternalLock();
-        //Pressing escape while the cursor is unlocked enabled the cursor lock and hides the game menu
-        else if (!CursorLocked && Input.GetKeyDown(KeyCode.Escape))
-            EnableCursorInternalLock();
+        //Pressing escape toggles the cursor lock mode
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SetCursorInternalLock(!CursorLocked);
     }
 
     //Camera controls should always be done inside the LateUpdate method
@@ -127,9 +107,6 @@ public class PlayerCameraController : MonoBehaviour
                 break;
             case (PlayerControllerState.ThirdPersonMode):
                 ThirdPersonMode();
-                break;
-            case (PlayerControllerState.Disabled):
-                DisabledMode();
                 break;
         }
     }
@@ -150,12 +127,15 @@ public class PlayerCameraController : MonoBehaviour
     //Allows the player full control of their FPS camera
     private void FirstPersonMode()
     {
-        //Moving the cursor up and down rotates the camera on the X axis to look up and down
-        transform.Rotate(-Vector3.right * Input.GetAxis("Mouse Y") * FirstPersonMouseYSpeed * Time.deltaTime);
-        //Moving the cursor left and right rotates the player character on its Y axis to turn left and right
-        PlayerTransform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * FirstPersonMouseXSpeed * Time.deltaTime);
-        if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
-            StartThirdPersonMode();
+        if(CursorLocked)
+        {
+            //Moving the cursor up and down rotates the camera on the X axis to look up and down
+            transform.Rotate(-Vector3.right * Input.GetAxis("Mouse Y") * FirstPersonMouseYSpeed * Time.deltaTime);
+            //Moving the cursor left and right rotates the player character on its Y axis to turn left and right
+            PlayerTransform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * FirstPersonMouseXSpeed * Time.deltaTime);
+            if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
+                StartThirdPersonMode();
+        }
     }
 
     //Activated when zooming the camera out during first person mode
@@ -199,18 +179,6 @@ public class PlayerCameraController : MonoBehaviour
         transform.rotation = NewRotation;
     }
 
-    //Applies movement to the third person camera as if no user input has been recieved
-    private void ThirdPersonDisabled()
-    {
-        CurrentX += 0f * ThirdPersonMouseXSpeed * CurrentCameraDistance * 0.02f;
-        CurrentY -= 0f * ThirdPersonMouseYSpeed * 0.02f;
-        CurrentY = ClampAngle(CurrentY, YMinimum, YMaximum);
-        Quaternion NewRotation = Quaternion.Euler(CurrentY, CurrentX, 0f);
-        Vector3 NewPosition = NewRotation * new Vector3(0f, 0f, -CurrentCameraDistance) + ThirdPersonCameraTarget.transform.position;
-        transform.position = NewPosition;
-        transform.rotation = NewRotation;
-    }
-
     private float ClampAngle(float Angle, float Minimum, float Maximum)
     {
         if (Angle < -360)
@@ -218,11 +186,5 @@ public class PlayerCameraController : MonoBehaviour
         if (Angle > 360)
             Angle -= 360;
         return Mathf.Clamp(Angle, Minimum, Maximum);
-    }
-
-    private void DisabledMode()
-    {
-        if (CharacterController.PreviousState == PlayerControllerState.ThirdPersonMode)
-            ThirdPersonDisabled();
     }
 }

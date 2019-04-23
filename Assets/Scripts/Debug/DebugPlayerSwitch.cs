@@ -7,20 +7,22 @@ using UnityEngine;
 
 public class DebugPlayerSwitch : MonoBehaviour
 {
-    [SerializeField] private GameObject MainCamera;
-    [SerializeField] private GameObject DebugPlayer;
-    [SerializeField] private GameObject MenuUI;
+    public static DebugPlayerSwitch Instance = null;
+    private void Awake() { Instance = this; }
+
+    public GameObject MainCamera;
+    public GameObject DebugPlayer;
 
     public bool UseDebugPlayer = true;
 
-    private void Awake()
+    private void Start()
     {
+        MainCamera.SetActive(!UseDebugPlayer);
+        DebugPlayer.SetActive(UseDebugPlayer);
         if (UseDebugPlayer)
-            DebugPlayer.SetActive(true);
-        else
         {
-            MainCamera.SetActive(true);
-            MenuUI.SetActive(true);
+            MenuPanelDisplayManager.Instance.HideAllPanels();
+            MenuPanelDisplayManager.Instance.HideGameTitle();
         }
     }
 }

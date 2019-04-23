@@ -10,8 +10,8 @@ using UnityEngine;
 public class ExternalPlayerMovement : MonoBehaviour
 {
     //Components to move and animate the character
-    [SerializeField] private CharacterController CharacterController;
-    [SerializeField] private Animator AnimationController;
+    public CharacterController CharacterController;
+    public Animator AnimationController;
 
     //Position and Rotation values we should be moving towards
     private Vector3 TargetPosition;

@@ -28,7 +28,7 @@ public class EntityManager : MonoBehaviour
     }
 
     //Finds the right entity and delivers their updates to them
-    public static void UpdateEntity(string EntityID, Vector3 EntityPosition, Quaternion EntityRotation)
+    public static void UpdateEntity(string EntityID, Vector3 EntityPosition, Quaternion EntityRotation, int EntityHealth)
     {
         //Make sure the given entity actually exists
         if (!ActiveEntities.ContainsKey(EntityID))
@@ -37,5 +37,14 @@ public class EntityManager : MonoBehaviour
         //Use the dictionary to quickly find the entity who needs updating
         ServerEntity OutOfDateEntity = ActiveEntities[EntityID].GetComponent<ServerEntity>();
         OutOfDateEntity.UpdatePosition(EntityPosition, EntityRotation);
+        OutOfDateEntity.UpdateHealth(EntityHealth);
+    }
+
+    //Removes an entity from the game
+    public static void RemoveEntity(string EntityID)
+    {
+        GameObject Entity = ActiveEntities[EntityID];
+        ActiveEntities.Remove(EntityID);
+        Destroy(Entity);
     }
 }

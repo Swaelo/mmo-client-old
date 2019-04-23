@@ -3,11 +3,13 @@
 // Description: Quickly and easily print messages to the chat window from anywhere in the code by typing l.og("hello world");
 // ================================================================================================================================
 
+using UnityEngine;
+
 public class l
 {
     public static void og(string msg)
     {
-        ChatWindow.Instance.DisplaySystemMessage(msg);
+        ChatWindowManager.Instance.DisplayMessage(msg);
     }
 
     public static void og(int value)

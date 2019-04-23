@@ -7,11 +7,11 @@ using UnityEngine;
 
 public class FootStepSoundEffects : MonoBehaviour
 {
-    [SerializeField] private AudioClip[] FootStepSounds;
-    [SerializeField] private AudioSource Source;
+    public AudioClip[] FootStepSounds;
+    public AudioSource Source;
 
     //If we were in the air last frame and on the ground now, play a footstep sound
-    [SerializeField] private CharacterController Controller;
+    public CharacterController Controller;
     private bool GroundedLastFrame = true;
 
     private void Update()
