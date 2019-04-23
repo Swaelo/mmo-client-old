@@ -15,6 +15,9 @@ public class ItemList : MonoBehaviour
 
     public Item GetItem(int ItemID)
     {
+        if (ItemID - 1 <= 0)
+            return null;
+
         return GameItems[ItemID - 1];
     }
 }

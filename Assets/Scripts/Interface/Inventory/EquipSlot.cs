@@ -11,7 +11,8 @@ public class EquipSlot : MonoBehaviour
     public GameObject IconObject;
     
     private Image ItemIcon;
-    private Item Item = null;
+    public Item Item = null;
+    public EquipmentSlot SlotType;
 
     //Checks if there is any item currently equipped in this slot
     public bool SlotAvailable()
@@ -36,6 +37,13 @@ public class EquipSlot : MonoBehaviour
     //Stores a new item in the slot
     public void UpdateItem(Item NewItem)
     {
+        if (NewItem == null)
+            return;
+
+        //Display the item on the player character
+        PlayerItemEquip Equipment = PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>();
+        Equipment.EquipItem(NewItem.Slot, NewItem.Name);
+
         Item = NewItem;
         UpdateDisplay();
     }

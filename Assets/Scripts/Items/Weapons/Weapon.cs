@@ -10,7 +10,7 @@ public class Weapon : Item
 {
     public Weapon()
     {
-        Type = ItemType.Weapon;
+        Type = ItemType.Equipment;
     }
 
     //Range of physical damage applied when this weapon hits a target

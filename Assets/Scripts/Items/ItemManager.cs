@@ -23,15 +23,6 @@ public class ItemManager : MonoBehaviour
         ActiveItems.Add(NewConsumable); 
     }
 
-    //Adds a new weapon pickup into the game world
-    public void AddWeapon(int ItemID, string ItemName, Vector3 ItemLocation)
-    {
-        GameObject Prefab = WeaponPrefabs.Instance.GetWeaponPrefab(ItemName);
-        GameObject NewWeapon = Instantiate(Prefab, ItemLocation, Quaternion.identity);
-        NewWeapon.GetComponent<Pickup>().ItemID = ItemID;
-        ActiveItems.Add(NewWeapon);
-    }
-
     //Adds a new piece of equipment into the game world
     public void AddEquipment(int ItemID, string ItemName, Vector3 ItemLocation)
     {

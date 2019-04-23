@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e99bbe8c8e9824468a99ee2fa044bf4, type: 3}
-  m_Name: 7 - Shield
+  m_Name: 17 - RightBoot
   m_EditorClassIdentifier: 
-  Name: Shield
+  Name: RightBoot
   Type: 1
-  Slot: 11
-  Icon: {fileID: 21300000, guid: 0f48e27fad845d34497a6b844504b10b, type: 3}
-  ID: 7
-  ArmourValue: 5
+  Slot: 13
+  Icon: {fileID: 21300000, guid: 71cb46bbea0e7a248b2baa9e0fe4b729, type: 3}
+  ID: 17
+  ArmourValue: 1
   FireResistance: 0
   LightningResistance: 0
   FrostResistance: 0

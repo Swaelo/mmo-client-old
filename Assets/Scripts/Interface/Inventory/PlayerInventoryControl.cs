@@ -28,13 +28,21 @@ public class PlayerInventoryControl : MonoBehaviour
         }
     }
 
+    public bool IsInventoryFull()
+    {
+        for (int i = 0; i < InventorySlotPanels.Length; i++)
+            if (InventorySlotPanels[i].GetComponent<InventorySlot>().Item == null)
+                return false;
+        return true;
+    }
+
     public void UseInventoryItem(int ItemSlot)
     {
         //Grab the InventorySlot component of the slot that has been used
         InventorySlot InventorySlot = InventorySlotPanels[ItemSlot - 1].GetComponent<InventorySlot>();
-        
+
         //Check if there is an item in this slot
-        if(InventorySlot.Item)
+        if (InventorySlot.Item)
         {
             //Find out what type of item this is
             ItemType Type = InventorySlot.Item.Type;
@@ -45,7 +53,6 @@ public class PlayerInventoryControl : MonoBehaviour
                 //Consumables are simply used
                 case (ItemType.Consumable):
                     InventorySlot.Use();
-                    l.og("Player is consuming their " + InventorySlot.Item.Name);
                     PacketManager.Instance.SendRemoveInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), ItemSlot);
                     break;
 
@@ -57,20 +64,16 @@ public class PlayerInventoryControl : MonoBehaviour
                     //Make sure this gear slot is available for use
                     EquipSlot GearSlot = PlayerEquipmentControl.Instance.GetEquipmentPanel(Slot).GetComponent<EquipSlot>();
                     bool SlotAvailable = GearSlot.SlotAvailable();
-                    if(SlotAvailable)
+                    if (SlotAvailable)
                     {
                         //Tell the server to move this item from our inventory to our equipment screen
                         PacketManager.Instance.SendEquipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), ItemSlot, InventorySlot.Item.ID, Slot);
                         //Locally equip the item into the equipment screen
-                        GearSlot.UpdateItem(InventorySlot.Item);
+                        Item EquippingItem = InventorySlot.Item;
+                        GearSlot.UpdateItem(EquippingItem);
                         //Locally remove the item from the inventory
                         InventorySlot.SetEmpty();
                     }
-                    break;
-
-                //Weapons are equipped onto the player
-                case (ItemType.Weapon):
-                    l.og("Playing is trying to wield their " + InventorySlot.Item.Name);
                     break;
             }
         }

@@ -24,9 +24,11 @@ public enum ClientPacketType
     ConnectionCheckReply = 13,
 
     PlayerInventoryRequest = 14,
-    PlayerTakeItemRequest = 15,
-    RemoveInventoryItem = 16,
-    EquipInventoryItem = 17
+    PlayerEquipmentRequest = 15,
+    PlayerTakeItemRequest = 16,
+    RemoveInventoryItem = 17,
+    EquipInventoryItem = 18,
+    UnequipItem = 19
 }
 public enum ServerPacketType
 {
@@ -50,7 +52,8 @@ public enum ServerPacketType
     RemovePlayer = 15,
 
     PlayerInventoryItems = 16,
-    PlayerInventoryUpdate = 17
+    PlayerEquipmentItems = 17,
+    PlayerInventoryUpdate = 18
 }
 
 public class PacketManager : MonoBehaviour
@@ -89,6 +92,7 @@ public class PacketManager : MonoBehaviour
         Packets.Add((int)ServerPacketType.RemovePlayer, HandleRemovePlayer);
 
         Packets.Add((int)ServerPacketType.PlayerInventoryItems, HandlePlayerInventory);
+        Packets.Add((int)ServerPacketType.PlayerEquipmentItems, HandlePlayerEquipment);
         Packets.Add((int)ServerPacketType.PlayerInventoryUpdate, HandlePlayerInventoryUpdate);
 
     }
@@ -143,10 +147,54 @@ public class PacketManager : MonoBehaviour
     {
         PacketWriter Writer = new PacketWriter();
         Writer.WriteInt((int)ClientPacketType.PlayerInventoryRequest);
-        Writer.WriteString(PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterName);
+        Writer.WriteString(PlayerManager.Instance.GetCurrentPlayerName());
         SendPacket(Writer);
     }
 
+    //Recieves a list of all the items equipped to the players characters
+    private void HandlePlayerEquipment(byte[] PacketData)
+    {
+        //Read in what item is equipped into each of the players equipment slots
+        PacketReader Reader = new PacketReader(PacketData);
+        int PacketType = Reader.ReadInt();
+        int HeadItem = Reader.ReadInt();
+        int BackItem = Reader.ReadInt();
+        int NeckItem = Reader.ReadInt();
+        int ChestItem = Reader.ReadInt();
+        int LeftShoulderItem = Reader.ReadInt();
+        int RightShoulderItem = Reader.ReadInt();
+        int LeftGloveItem = Reader.ReadInt();
+        int RightGloveItem = Reader.ReadInt();
+        int LegItem = Reader.ReadInt();
+        int LeftHandItem = Reader.ReadInt();
+        int RightHandItem = Reader.ReadInt();
+        int LeftFootItem = Reader.ReadInt();
+        int RightFootItem = Reader.ReadInt();
+
+        //Find the PlayerEquipmentControl class and use it to add all these items to the players equipment screen
+        ItemList Items = ItemList.Instance;
+        PlayerEquipmentControl Equipment = PlayerEquipmentControl.Instance;
+        Equipment.GetEquipmentPanel(EquipmentSlot.Head).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(HeadItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.Back).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(BackItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.Neck).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(NeckItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.Chest).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(ChestItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.LeftShoulder).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(LeftShoulderItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.RightShoulder).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(RightShoulderItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.LeftGlove).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(LeftGloveItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.RightGlove).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(RightGloveItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.Legs).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(LegItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.LeftHand).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(LeftHandItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.RightHand).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(RightHandItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.LeftFoot).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(LeftFootItem));
+        Equipment.GetEquipmentPanel(EquipmentSlot.RightFoot).GetComponent<EquipSlot>().UpdateItem(Items.GetItem(RightFootItem));
+
+        //Now everything is done loading we can let the server know the player has entered into the game world without error
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.NewPlayerReady);
+        SendPacket(Writer);
+    }
+
+    //Recieves a list of all the items in the players inventory
     private void HandlePlayerInventory(byte[] PacketData)
     {
         //Read the ID number of each item stored in the players inventory
@@ -169,9 +217,10 @@ public class PacketManager : MonoBehaviour
                 BagSlot.UpdateItem(ItemList.Instance.GetItem(ItemID));
         }
 
-        //Now the players inventory has been loaded and everything is setup, tell the game we have loaded in successfully
+        //Now request to know what equipment this character is wearing
         PacketWriter Writer = new PacketWriter();
-        Writer.WriteInt((int)ClientPacketType.NewPlayerReady);
+        Writer.WriteInt((int)ClientPacketType.PlayerEquipmentRequest);
+        Writer.WriteString(PlayerManager.Instance.GetCurrentPlayerName());
         SendPacket(Writer);
     }
 
@@ -191,6 +240,17 @@ public class PacketManager : MonoBehaviour
         }
     }
 
+    //Sends a request to the game server that the player wants to unequip on of their items and move it to their inventory
+    public void SendUnequipItemRequest(string PlayerName, int ItemNumber, EquipmentSlot EquipSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.UnequipItem);
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt(ItemNumber);
+        Writer.WriteInt((int)EquipSlot);
+        SendPacket(Writer);
+    }
+
     //Sends a request to the game server that the player wnats to equip one of the items from their inventory
     public void SendEquipItemRequest(string PlayerName, int BagSlot, int ItemNumber, EquipmentSlot EquipSlot)
     {
@@ -200,6 +260,7 @@ public class PacketManager : MonoBehaviour
         Writer.WriteInt(BagSlot);
         Writer.WriteInt(ItemNumber);
         Writer.WriteInt((int)EquipSlot);
+        SendPacket(Writer);
     }
 
     //Sends a request to the game server that the player wants to pick up an item from the ground
@@ -230,9 +291,6 @@ public class PacketManager : MonoBehaviour
             case ("Consumable"):
                 //Use the ItemManager to spawn the correct consumable pickup prefab into the game world
                 ItemManager.Instance.AddConsumable(ItemID, ItemName, ItemPos);
-                break;
-            case ("Weapon"):
-                ItemManager.Instance.AddWeapon(ItemID, ItemName, ItemPos);
                 break;
             case ("Equipment"):
                 ItemManager.Instance.AddEquipment(ItemID, ItemName, ItemPos);
@@ -447,9 +505,6 @@ public class PacketManager : MonoBehaviour
                 case ("Consumable"):
                     //Use the ItemManager to spawn the correct consumable pickup prefab into the game world
                     ItemManager.Instance.AddConsumable(ItemID, ItemName, ItemPosition);
-                    break;
-                case ("Weapon"):
-                    ItemManager.Instance.AddWeapon(ItemID, ItemName, ItemPosition);
                     break;
                 case ("Equipment"):
                     ItemManager.Instance.AddEquipment(ItemID, ItemName, ItemPosition);
