@@ -11,13 +11,13 @@ public class ItemList : MonoBehaviour
     public static ItemList Instance = null;
     private void Awake() { Instance = this; }
 
-    public Item[] GameItems;
-
-    public Item GetItem(int ItemID)
+    public ItemData[] GameItems;
+    
+    public ItemData GetItem(int ItemNumber)
     {
-        if (ItemID - 1 <= 0)
-            return null;
+        if (ItemNumber - 1 <= 0)
+            return new ItemData();
 
-        return GameItems[ItemID - 1];
+        return GameItems[ItemNumber - 1];
     }
 }

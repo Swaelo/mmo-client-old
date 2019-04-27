@@ -5,6 +5,7 @@
 
 public enum ItemType
 {
+    NULL,
     Consumable,
     Equipment
 }

@@ -5,11 +5,13 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class PlayerItemPickup : MonoBehaviour
 {
     public GameObject PlayerCamera;
     public GameObject PlayerPickupEffect;
+    public TextMeshPro ItemNameDisplay;
 
     public float MaxPickupDistance = 3f;
     private int NonPlayerLayerMask = ~(1 << 10);   //Layer 10 is the players layer, we want to cast a ray against all other layers
@@ -29,33 +31,42 @@ public class PlayerItemPickup : MonoBehaviour
         RaycastHit RayHit;
         if(Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.TransformDirection(Vector3.forward), out RayHit, Mathf.Infinity, NonPlayerLayerMask))
         {
-            //Now we know the world location where the player is looking, find the list of item pickups which are in range of this location
-            List<GameObject> ItemPickups = ItemManager.Instance.ActiveItems;
+            //Get the current list of item pickups active in the game world
+            List<GameObject> ItemPickups = ItemManager.Instance.GetActiveItems();
+
+            //Now create a new list, containing only the items that are within the players pickup range
             List<GameObject> ItemsInRange = new List<GameObject>();
             foreach(GameObject Item in ItemPickups)
             {
+                //Check the distance of each item from the current location where the player is aiming their camera
                 float ItemDistance = Vector3.Distance(RayHit.point, Item.transform.position);
+
+                //Any items that are close enough to be picked up by the player are added to list
                 if (ItemDistance <= MaxPickupDistance)
                     ItemsInRange.Add(Item);
             }
 
-            //If there are any pickup objects in range, allow the player to pickup which one is closest
+            //Now, if there are any pickup objects in range, allow the plaeyr to pickup whichever one is closest
             if(ItemsInRange.Count > 0)
             {
-                //Find which object is closest
+                //Find which item in the list is closest
                 GameObject ClosestItem = GameObjectFinder.FindClosest(RayHit.point, ItemsInRange);
-                //Enable the pickup sparkle effect and place it at the location of this item pickup
+
+                //Enable the item pickup sparkle effect, place it at this items location, then display the items name above it
                 PlayerPickupEffect.SetActive(true);
                 PlayerPickupEffect.transform.position = ClosestItem.transform.position;
-                //Remember this as the highlighed item so we can allow the player to pick it up
+                ItemNameDisplay.text = ClosestItem.GetComponent<Item>().Data.Name;
+
+                //Now remember that this is the current highlighted item, so we can then allow the player to pick it up
                 ItemHighlighted = true;
                 HighlightedItem = ClosestItem;
             }
+            //Otherwise, if there are no items in the players pickedup range, disable the pickup effect and note that nothing is highlighted
             else
             {
-                //If there are no items in range to be picked up disable the pickup effect and set that no item is highlighted
                 PlayerPickupEffect.SetActive(false);
                 ItemHighlighted = false;
+                HighlightedItem = null;
             }
         }
     }
@@ -66,10 +77,8 @@ public class PlayerItemPickup : MonoBehaviour
         if(ItemHighlighted && Input.GetKeyDown(KeyCode.E))
         {
             //Tell the game server we want to pick this item up
-            Pickup SelectedItem = HighlightedItem.GetComponent<Pickup>();
-            PacketManager.Instance.SendTakeItemRequest(PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterName, SelectedItem.ItemNumber, SelectedItem.ItemID);
-            ItemHighlighted = false;
-            PlayerPickupEffect.SetActive(false);
+            ItemData SelectedItem = HighlightedItem.GetComponent<Item>().Data;
+            PacketManager.Instance.SendTakeItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), SelectedItem);
         }
     }
 }

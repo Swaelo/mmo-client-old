@@ -5,6 +5,7 @@
 
 public enum EquipmentSlot
 {
+    NULL = 0,
     Head = 1,   //Helmets
     Back = 2,   //Cloaks/Backpacks
     Neck = 3,   //Necklaces/Amulets

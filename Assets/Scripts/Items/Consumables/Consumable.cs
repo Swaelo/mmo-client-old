@@ -7,7 +7,7 @@ using UnityEngine;
 
 //This next line of code allows us to create Consumables in the Inspector
 [CreateAssetMenu (fileName = "New Consumable", menuName = "Items/Consumable")]
-public class Consumable : Item
+public class Consumable : ItemData
 {
     public Consumable()
     {

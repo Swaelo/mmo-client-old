@@ -6,46 +6,65 @@ public class ItemManager : MonoBehaviour
     //item manager is a singleton class so it can easily be access wherever it needs to be used
     public static ItemManager Instance = null;
     private void Awake() { Instance = this; }
+    
+    //Keep a list of active item picks in a dictionary indexed by their unique network ID number
+    public Dictionary<int, GameObject> ActiveItems = new Dictionary<int, GameObject>();
 
-    //Keep a list of item pickups which are currently active in the game world
-    public List<GameObject> ActiveItems = new List<GameObject>();
+    //Returns all the active items in a list
+    public List<GameObject> GetActiveItems()
+    {
+        //Define the list to store all the active items
+        List<GameObject> ActiveItemList = new List<GameObject>();
+
+        //Grab each item from the dictionary and add it to the list
+        foreach (KeyValuePair<int, GameObject> ActiveItem in ActiveItems)
+            ActiveItemList.Add(ActiveItem.Value);
+
+        //Return the populated list of all the game objects
+        return ActiveItemList;
+    }
 
     //Functions for spawning new item pickups into the game world
-    public void AddConsumable(int ItemID, string ItemName, Vector3 ItemLocation)
+    public void AddConsumable(int ItemNumber, int ItemID, string ItemName, Vector3 ItemLocation)
     {
-        //Fetch the correct type of consumable prefab from the prefab list
+        //Fetch the correct type of consumable prefab from the prefab list and spawn one of them into the game world
         GameObject Prefab = ConsumablePrefabs.Instance.GetConsumablePrefab(ItemName);
-        //Spawn the consumable into the game world
         GameObject NewConsumable = Instantiate(Prefab, ItemLocation, Quaternion.identity);
-        //Assign the id number to the item
-        NewConsumable.GetComponent<Pickup>().ItemID = ItemID;
+
+        //Store all the items data inside it
+        ItemData NewItemData = NewConsumable.GetComponent<Item>().Data;
+        NewItemData.ItemNumber = ItemNumber;
+        NewItemData.ItemID = ItemID;
+        NewItemData.Type = ItemType.Consumable;
+        
         //Store it with the rest of the active pickup items
-        ActiveItems.Add(NewConsumable); 
+        ActiveItems.Add(ItemID, NewConsumable); 
     }
 
     //Adds a new piece of equipment into the game world
-    public void AddEquipment(int ItemID, string ItemName, Vector3 ItemLocation)
+    public void AddEquipment(int ItemNumber, int ItemID, string ItemName, Vector3 ItemLocation)
     {
-        GameObject Prefab = EquipmentPrefabs.Instance.GetEquipmentPrefab(ItemName);
+        //Grab the correct prefab and spawn one of those into the world
+        GameObject Prefab = PickupPrefabs.Instance.GetPickupPrefab(ItemName);
         GameObject NewEquipment = Instantiate(Prefab, ItemLocation, Quaternion.identity);
-        NewEquipment.GetComponent<Pickup>().ItemID = ItemID;
-        ActiveItems.Add(NewEquipment);
+
+        //Store all the items data inside it
+        ItemData NewItemData = NewEquipment.GetComponent<Item>().Data;
+        NewItemData.ItemNumber = ItemNumber;
+        NewItemData.ItemID = ItemID;
+        NewItemData.Type = ItemType.Equipment;
+
+        //Store this in the list with all the other active items
+        ActiveItems.Add(ItemID, NewEquipment);
     }
 
-    private GameObject GetItem(int ItemID)
-    {
-        foreach(GameObject Item in ActiveItems)
-        {
-            if (Item.GetComponent<Pickup>().ItemID == ItemID)
-                return Item;
-        }
-        return null;
-    }
-
+    //Removes an item pickup from the game world by its network ID number
     public void RemoveItem(int ItemID)
     {
-        GameObject OldItem = GetItem(ItemID);
-        ActiveItems.Remove(OldItem);
-        Destroy(OldItem);
+        //Fetch the item from the dictionary
+        GameObject OldItem = ActiveItems[ItemID];
+        //Remove it from the dictionary, then destroy the game object to remove it from the game world
+        ActiveItems.Remove(ItemID);
+        GameObject.Destroy(OldItem);
     }
 }

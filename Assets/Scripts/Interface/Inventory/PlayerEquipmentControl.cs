@@ -72,23 +72,11 @@ public class PlayerEquipmentControl : MonoBehaviour
 
     public void UnequipItem(string ItemSlotName)
     {
-        //First check to make sure the player has space in their inventory to store this item when they unequip it
-        if(PlayerInventoryControl.Instance.IsInventoryFull())
-        {
-            l.og("Cant unequip item, no inventory space left.");
+        //First check to make sure the player has space in their inventory to store the item after they unequip it
+        if (PlayerInventoryControl.Instance.IsInventoryFull())
             return;
-        }
-        else
-        {
-            //Fetch the equipment slot storing the item the player wants to unequip, aswell as the item within
-            EquipSlot EquipmentSlot = GetEquipmentPanel(ItemSlotName).GetComponent<EquipSlot>();
-            Item Equipment = EquipmentSlot.Item;
-            //Update the equipment UI so it no longer displays this item as being equipped on the player
-            EquipmentSlot.SetEmpty();
-            //Update the player character so it no longer displays any item being equipped in this slot
-            PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>().UnequipItem(EquipmentSlot.SlotType);
-            //Tell the server to move this item out of the players equipment and into their inventory
-            PacketManager.Instance.SendUnequipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), Equipment.ID, EquipmentSlot.SlotType);
-        }
+
+        //Send a request to the game server to have this item moved out of the players equipment and into their inventory
+        PacketManager.Instance.SendUnequipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), GetEquipmentPanel(ItemSlotName).GetComponent<EquipSlot>().GearSlotType);
     }
 }

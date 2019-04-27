@@ -6,7 +6,7 @@
 using UnityEngine;
 
 [CreateAssetMenu (fileName = "New Equipment", menuName = "Items/Equipment")]
-public class Equipment : Item
+public class Equipment : ItemData
 {
     public Equipment()
     {

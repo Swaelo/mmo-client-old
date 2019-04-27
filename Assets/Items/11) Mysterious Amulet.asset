@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
+  m_Name: 11) Mysterious Amulet
+  m_EditorClassIdentifier: 
+  Name: MysteriousAmulet
+  Type: 2
+  Slot: 3
+  Prefab: {fileID: 6583550784814268312, guid: 34d54af769cf7244c9b7d9c2189be767, type: 3}
+  Icon: {fileID: 21300000, guid: 14df53a295c787c4da4c72d0c7262a1b, type: 3}
+  ItemNumber: 11
+  ItemID: 0

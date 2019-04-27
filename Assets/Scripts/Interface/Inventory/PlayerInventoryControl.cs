@@ -31,7 +31,7 @@ public class PlayerInventoryControl : MonoBehaviour
     public bool IsInventoryFull()
     {
         for (int i = 0; i < InventorySlotPanels.Length; i++)
-            if (InventorySlotPanels[i].GetComponent<InventorySlot>().Item == null)
+            if (InventorySlotPanels[i].GetComponent<InventorySlot>().BagItemData == null)
                 return false;
         return true;
     }
@@ -42,10 +42,10 @@ public class PlayerInventoryControl : MonoBehaviour
         InventorySlot InventorySlot = InventorySlotPanels[ItemSlot - 1].GetComponent<InventorySlot>();
 
         //Check if there is an item in this slot
-        if (InventorySlot.Item)
+        if (InventorySlot.BagItemData)
         {
             //Find out what type of item this is
-            ItemType Type = InventorySlot.Item.Type;
+            ItemType Type = InventorySlot.BagItemData.Type;
 
             //Right Clicking items in the players inventory has different effects depending on what type of item it is
             switch (Type)
@@ -59,20 +59,17 @@ public class PlayerInventoryControl : MonoBehaviour
                 //Equipment items are equipped onto the player
                 case (ItemType.Equipment):
                     //Check which slot this item belongs to
-                    EquipmentSlot Slot = InventorySlot.Item.Slot;
+                    EquipmentSlot Slot = InventorySlot.BagItemData.Slot;
                     string SlotName = Slot.ToString() + " Slot";
                     //Make sure this gear slot is available for use
                     EquipSlot GearSlot = PlayerEquipmentControl.Instance.GetEquipmentPanel(Slot).GetComponent<EquipSlot>();
-                    bool SlotAvailable = GearSlot.SlotAvailable();
+                    bool SlotAvailable = GearSlot.EquippedItem == null;
                     if (SlotAvailable)
                     {
-                        //Tell the server to move this item from our inventory to our equipment screen
-                        PacketManager.Instance.SendEquipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), ItemSlot, InventorySlot.Item.ID, Slot);
-                        //Locally equip the item into the equipment screen
-                        Item EquippingItem = InventorySlot.Item;
-                        GearSlot.UpdateItem(EquippingItem);
+                        //Tell the server to remove this item from the players inventory, then add it to their equipped items
+                        PacketManager.Instance.SendEquipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), ItemSlot);
                         //Locally remove the item from the inventory
-                        InventorySlot.SetEmpty();
+                        InventorySlot.RemoveItem();
                     }
                     break;
             }

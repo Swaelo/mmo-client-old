@@ -8,56 +8,44 @@ using UnityEngine.UI;
 
 public class EquipSlot : MonoBehaviour
 {
-    public GameObject IconObject;
-    
-    private Image ItemIcon;
-    public Item Item = null;
-    public EquipmentSlot SlotType;
+    //Components to display the item equipped in this slot to the user interface
+    public Image ItemIcon;
+    public Text ItemName;
+    //Define the types of items that are allowed to be equipped to this gear slot
+    public EquipmentSlot GearSlotType = EquipmentSlot.NULL;
+    //and detail everything about items that are equipped in the slot currently
+    public ItemData EquippedItem = null;
 
-    //Checks if there is any item currently equipped in this slot
-    public bool SlotAvailable()
+    //Takes an item and equips it into this gear slot
+    public void EquipItem(ItemData NewItem)
     {
-        return Item == null;
-    }
-
-    //Assigns the item icon references and updates the sprite icon display
-    private void Start()
-    {
-        ItemIcon = IconObject.GetComponent<Image>();
+        //NewItem.ItemNumber == 0 means there is no item equipped in this gear slot
+        if (NewItem.ItemNumber == 0)
+            EquippedItem = null;
+        else
+            EquippedItem = NewItem;
+        
         UpdateDisplay();
     }
 
-    //Updates the icon display
-    public void UpdateDisplay()
+    //Takes off whatever piece of equipment is in this slot and places it back into the players inventory
+    public void RemoveItem()
     {
-        ItemIcon.sprite = Item ? Item.Icon : null;
-        ItemIcon.color = Item ? Color.white : Color.clear;
-    }
-
-    //Stores a new item in the slot
-    public void UpdateItem(Item NewItem)
-    {
-        if (NewItem == null)
-            return;
-
-        //Display the item on the player character
-        PlayerItemEquip Equipment = PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>();
-        Equipment.EquipItem(NewItem.Slot, NewItem.Name);
-
-        Item = NewItem;
+        EquippedItem = null;
         UpdateDisplay();
     }
 
-    //Removes any currently equipped item from the slot
-    public void SetEmpty()
+    //Updates the UI to show what is being equipped in this slot currently
+    private void UpdateDisplay()
     {
-        Item = null;
-        UpdateDisplay();
+        ItemIcon.sprite = EquippedItem ? EquippedItem.Icon : null;
+        ItemIcon.color = EquippedItem ? Color.white : Color.clear;
+        ItemName.text = EquippedItem ? EquippedItem.Name : "";
     }
 
     //Items are unequipped when they are right clicked from the equipment screen
     public void Use()
     {
-        
+
     }
 }

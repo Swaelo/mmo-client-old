@@ -8,45 +8,38 @@ using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
 {
-    //Child objects containing the Icon Image and Name Text components
-    public GameObject IconObject;
-    public GameObject TextObject;
-    private Image ItemIcon;
-    private Text ItemName;
-    //The item object itself
-    public Item Item;
+    //Components to display the item in this bag slot to the user interface
+    public Image ItemIcon;
+    public Text ItemName;
+    //Data about what item is being held in this bag slot and how to render it to the UI and in the game world
+    public ItemData BagItemData = null;
 
-    private void Start()
+    //Takes an item and starts storing it in this inventory slot
+    public void StoreItem(ItemData NewItem)
     {
-        //Grab the components used to display this item in the bag then update its display
-        ItemIcon = IconObject.GetComponent<Image>();
-        ItemName = TextObject.GetComponent<Text>();
-        UpdateDisplay();
+        BagItemData = NewItem;
+        UpdateUIDisplay();
     }
 
-    public void UpdateDisplay()
+    //Removes whatever item is being stored in this inventory slot
+    public void RemoveItem()
     {
-        ItemIcon.sprite = Item ? Item.Icon : null;
-        ItemIcon.color = Item ? Color.white : Color.clear;
-        ItemName.text = Item ? Item.Name : "";
+        BagItemData = null;
+        UpdateUIDisplay();
     }
 
-    public void UpdateItem(Item NewItem)
+    //Updates the UI display of the players inventory screen
+    private void UpdateUIDisplay()
     {
-        Item = NewItem;
-        UpdateDisplay();
+        ItemIcon.sprite = BagItemData ? BagItemData.Icon : null;
+        ItemIcon.color = BagItemData ? Color.white : Color.clear;
+        ItemName.text = BagItemData ? ItemName.text : "";
     }
 
-    public void SetEmpty()
-    {
-        Item = null;
-        UpdateDisplay();
-    }
-
-    //Items are used when they are right clicked from the inventory
+    //Items are used when they are right clicked on from the inventory UI
     public void Use()
     {
-        if(Item)
-            Item.Use();
+        if(BagItemData)
+            BagItemData.Use();
     }
 }
