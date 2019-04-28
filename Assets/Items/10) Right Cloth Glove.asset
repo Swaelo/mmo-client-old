@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 10) Right Cloth Glove
   m_EditorClassIdentifier: 
   Name: RightClothGlove
+  DisplayName: Right Cloth Glove
   Type: 2
   Slot: 8
   Prefab: {fileID: 8411546851721182237, guid: 1babc72f56312a5419588077b61fd1c1, type: 3}
   Icon: {fileID: 21300000, guid: 947f36568bb36c1479522e0036f0b8ad, type: 3}
   ItemNumber: 10
-  ItemID: 0
+  ItemID: 11

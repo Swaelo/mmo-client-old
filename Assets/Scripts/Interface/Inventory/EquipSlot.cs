@@ -20,7 +20,7 @@ public class EquipSlot : MonoBehaviour
     public void EquipItem(ItemData NewItem)
     {
         //NewItem.ItemNumber == 0 means there is no item equipped in this gear slot
-        if (NewItem.ItemNumber == 0)
+        if (NewItem == null || NewItem.ItemNumber == 0)
             EquippedItem = null;
         else
             EquippedItem = NewItem;
@@ -40,12 +40,5 @@ public class EquipSlot : MonoBehaviour
     {
         ItemIcon.sprite = EquippedItem ? EquippedItem.Icon : null;
         ItemIcon.color = EquippedItem ? Color.white : Color.clear;
-        ItemName.text = EquippedItem ? EquippedItem.Name : "";
-    }
-
-    //Items are unequipped when they are right clicked from the equipment screen
-    public void Use()
-    {
-
     }
 }

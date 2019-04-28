@@ -133,9 +133,6 @@ public class PlayerItemEquip : MonoBehaviour
     //Equips the given item to the specified equipment slot
     public void EquipItem(EquipmentSlot EquipSlot, string ItemName)
     {
-        //Instantiate the new equipment item that is being equipped onto the character
-        //GameObject NewEquipment = Instantiate(EquippablePrefabs.Instance.GetEquippablePrefab(ItemName));
-
         //Figure out where this item is supposed to be equipped to on the player
         switch (EquipSlot)
         {

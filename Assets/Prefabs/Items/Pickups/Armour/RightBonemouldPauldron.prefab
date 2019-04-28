@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6870855109505821676}
   - component: {fileID: 6870855109506820396}
   - component: {fileID: 6870855109509019631}
-  - component: {fileID: 1567663622612455601}
   - component: {fileID: 7325444045564969414}
   m_Layer: 0
   m_Name: RightBonemouldPauldron
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: ef66e927368d66f43b07df7fa987adb4, type: 2}
---- !u!114 &1567663622612455601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6870855109509019628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &7325444045564969414
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8411546851720208413}
   - component: {fileID: 8411546851719242461}
   - component: {fileID: 8411546851721182242}
-  - component: {fileID: 3785311186512294181}
   - component: {fileID: 699161981578057972}
   m_Layer: 0
   m_Name: RightClothGlove
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 1233689de29d45b47a8f695a4c5ab6cd, type: 2}
---- !u!114 &3785311186512294181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8411546851721182237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &699161981578057972
 BoxCollider:
   m_ObjectHideFlags: 0

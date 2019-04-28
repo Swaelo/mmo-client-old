@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4990733452219702003}
   - component: {fileID: 4990733452218701875}
   - component: {fileID: 4990733452216436428}
-  - component: {fileID: 4921681590572861690}
   - component: {fileID: 3830548738868077745}
   m_Layer: 0
   m_Name: OldPants
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 6763fca98a861264f8fb109e8ba8c725, type: 2}
---- !u!114 &4921681590572861690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4990733452216436467}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &3830548738868077745
 BoxCollider:
   m_ObjectHideFlags: 0

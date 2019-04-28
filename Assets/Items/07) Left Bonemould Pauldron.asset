@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 07) Left Bonemould Pauldron
   m_EditorClassIdentifier: 
   Name: LeftBonemouldPauldron
+  DisplayName: Left Bonemould Pauldron
   Type: 2
   Slot: 4
   Prefab: {fileID: 5902385251836475936, guid: 4fedb22538fb46a438d06e2dd60cae9b, type: 3}
   Icon: {fileID: 21300000, guid: 21d017f5531e6a64996939b68fda96c0, type: 3}
   ItemNumber: 7
-  ItemID: 0
+  ItemID: 8

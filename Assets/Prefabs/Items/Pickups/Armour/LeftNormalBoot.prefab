@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4656017100153134580}
   - component: {fileID: 4656017100154134324}
   - component: {fileID: 4656017100156322185}
-  - component: {fileID: 2336804449516195692}
   - component: {fileID: 7590951399790671146}
   m_Layer: 0
   m_Name: LeftNormalBoot
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 483cd540140519f4687c6eeee83ca5bd, type: 2}
---- !u!114 &2336804449516195692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4656017100156322292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &7590951399790671146
 BoxCollider:
   m_ObjectHideFlags: 0

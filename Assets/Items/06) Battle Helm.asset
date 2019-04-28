@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 06) Battle Helm
   m_EditorClassIdentifier: 
   Name: BattleHelm
+  DisplayName: Battle Helm
   Type: 2
   Slot: 1
   Prefab: {fileID: 2429439195819100383, guid: 0a333da507d9746409b8ce4978062834, type: 3}

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 02) Mana Potion
   m_EditorClassIdentifier: 
   Name: ManaPotion
+  DisplayName: Mana Potion
   Type: 1
   Slot: 0
   Prefab: {fileID: 8801300256543566189, guid: 81e07fd831cce60409df47f1ebf08c79, type: 3}
   Icon: {fileID: 21300000, guid: 447ef710ef97cff4caecb08c37b0bac4, type: 3}
   ItemNumber: 2
-  ItemID: 0
+  ItemID: 51

@@ -8,52 +8,39 @@ using UnityEngine.UI;
 
 public class LoadingAnimation : MonoBehaviour
 {
-    private Image Sprite;   //Image component which we will change the sprites of to create the animation
-    public float FrameTimer = 0.25f;        //How often the frame changes
-    private float NextFrame;    //How long until the next frame is show
-    private int CurrentFrame = 1;   //The current frame of the animation
-    public Sprite AnimationFrame1;  //Each frame of the animation
-    public Sprite AnimationFrame2;
-    public Sprite AnimationFrame3;
-    public Sprite AnimationFrame4;
+    private Image ImageComponent;   //UI Image Component used to render sprites on the UI
+    public float AnimationSpeed = 0.25f;    //How long each frame of the animation is viewed for
+    private float NextFrameTime;    //How long until the next frame of the animation is displayed
+
+    public Sprite[] AnimationFrames;
+    private int CurrentFrame = 1;
+    private int FrameCount;
 
     private void Awake()
     {
-        //Set the time until the next frame is shown to the animation speed value
-        NextFrame = FrameTimer;
-        //Store the reference to the image component we will be applying the new sprites to through the animation
-        Sprite = GetComponent<Image>();
+        ImageComponent = GetComponent<Image>(); //Store reference to the Image component on this GameObject
+        NextFrameTime = AnimationSpeed; //Set the timer for moving onto the next frame of the animation
+        FrameCount = AnimationFrames.Length;    //Read in how many frames of animation there are
     }
 
-    public void Update()
+    private void Update()
     {
-        //Count down the time until the next frame needs to be shown
-        NextFrame -= Time.deltaTime;
-        //Check if its time now to view the next frame
-        if(NextFrame <= 0.0f)
+        //Count down the timer until the next frame of the animation needs to be displayed
+        NextFrameTime -= Time.deltaTime;
+
+        //Check if its time to view the next frame of the animation
+        if(NextFrameTime <= 0f)
         {
-            //Reset the frame timer
-            NextFrame = FrameTimer;
-            //Update the image with the next frame of the animation
-            switch(CurrentFrame)
-            {
-                case 1:
-                    CurrentFrame = 2;
-                    Sprite.sprite = AnimationFrame2;
-                    break;
-                case 2:
-                    CurrentFrame = 3;
-                    Sprite.sprite = AnimationFrame3;
-                    break;
-                case 3:
-                    CurrentFrame = 4;
-                    Sprite.sprite = AnimationFrame4;
-                    break;
-                case 4:
-                    CurrentFrame = 1;
-                    Sprite.sprite = AnimationFrame1;
-                    break;
-            }
+            //Reset the timer for the next frame display
+            NextFrameTime = AnimationSpeed;
+
+            //Increment the current frame counter for which frame of the animation should be displayed
+            CurrentFrame++;
+            if (CurrentFrame > FrameCount)
+                CurrentFrame = 1;
+
+            //Update the Image component to view the next frame of the animation
+            ImageComponent.sprite = AnimationFrames[CurrentFrame - 1];
         }
     }
 }

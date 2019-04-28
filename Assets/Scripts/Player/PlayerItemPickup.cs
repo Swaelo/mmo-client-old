@@ -55,7 +55,7 @@ public class PlayerItemPickup : MonoBehaviour
                 //Enable the item pickup sparkle effect, place it at this items location, then display the items name above it
                 PlayerPickupEffect.SetActive(true);
                 PlayerPickupEffect.transform.position = ClosestItem.transform.position;
-                ItemNameDisplay.text = ClosestItem.GetComponent<Item>().Data.Name;
+                ItemNameDisplay.text = ClosestItem.GetComponent<Item>().Data.DisplayName;
 
                 //Now remember that this is the current highlighted item, so we can then allow the player to pick it up
                 ItemHighlighted = true;

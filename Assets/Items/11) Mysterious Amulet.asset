@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 11) Mysterious Amulet
   m_EditorClassIdentifier: 
   Name: MysteriousAmulet
+  DisplayName: Mysterious Amulet
   Type: 2
   Slot: 3
   Prefab: {fileID: 6583550784814268312, guid: 34d54af769cf7244c9b7d9c2189be767, type: 3}
   Icon: {fileID: 21300000, guid: 14df53a295c787c4da4c72d0c7262a1b, type: 3}
   ItemNumber: 11
-  ItemID: 0
+  ItemID: 12

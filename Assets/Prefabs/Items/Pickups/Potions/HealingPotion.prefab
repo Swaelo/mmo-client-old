@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3285898004496705445}
   - component: {fileID: 3285898004495705445}
   - component: {fileID: 3285898004493712288}
-  - component: {fileID: 6555792391096634915}
   - component: {fileID: 4038261584374329562}
   m_Layer: 0
   m_Name: HealingPotion
@@ -30,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 3285898004493712293}
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: -4.052, y: 1.038, z: 2.354}
-  m_LocalScale: {x: 9.017121, y: 9.017121, z: 9.017121}
+  m_LocalScale: {x: 9.017121, y: 9.017125, z: 9.017125}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 92ff8c83a4bbaaf4cb035bb69d299d0f, type: 2}
---- !u!114 &6555792391096634915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3285898004493712293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &4038261584374329562
 BoxCollider:
   m_ObjectHideFlags: 0

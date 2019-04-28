@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1285659778038444830}
   - component: {fileID: 1285659778037346782}
   - component: {fileID: 1285659778035412753}
-  - component: {fileID: 6960250321421436829}
   - component: {fileID: 1709720401303942061}
   m_Layer: 0
   m_Name: CrusadersShield
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 4c3af9450b0b394409165f5d2d5c0a37, type: 2}
---- !u!114 &6960250321421436829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1285659778035412766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &1709720401303942061
 BoxCollider:
   m_ObjectHideFlags: 0

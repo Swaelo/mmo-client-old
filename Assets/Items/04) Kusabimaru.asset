@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 04) Kusabimaru
   m_EditorClassIdentifier: 
   Name: Kusabimaru
+  DisplayName: Kusabimaru
   Type: 2
   Slot: 11
   Prefab: {fileID: 2818180113589903914, guid: f2bf91a517e9a154599c1983bfad2d3c, type: 3}
   Icon: {fileID: 21300000, guid: 0c6dcff61747c704c97f067cb5ed22f9, type: 3}
   ItemNumber: 4
-  ItemID: 0
+  ItemID: 53

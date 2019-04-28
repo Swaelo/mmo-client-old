@@ -11,6 +11,7 @@ using UnityEngine.UI;
 public class ItemData : ScriptableObject
 {
     public string Name = "";
+    public string DisplayName = "";
     public ItemType Type = ItemType.NULL;
     public EquipmentSlot Slot = EquipmentSlot.NULL;
     public GameObject Prefab = null;

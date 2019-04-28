@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 14) Old Pants
   m_EditorClassIdentifier: 
   Name: OldPants
+  DisplayName: Old Pants
   Type: 2
   Slot: 9
   Prefab: {fileID: 4990733452216436467, guid: 50e4e75dbf2400c498d41bc626160ad0, type: 3}
   Icon: {fileID: 21300000, guid: f73908e56503f4e46a94185d9343543a, type: 3}
   ItemNumber: 14
-  ItemID: 0
+  ItemID: 15

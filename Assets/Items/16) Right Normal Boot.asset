@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 16) Right Normal Boot
   m_EditorClassIdentifier: 
   Name: RightNormalBoot
+  DisplayName: Right Normal Boot
   Type: 2
   Slot: 13
   Prefab: {fileID: 5907866506415760091, guid: c2dec6d72dc7b7c4999ae1647cf72822, type: 3}
   Icon: {fileID: 21300000, guid: 71cb46bbea0e7a248b2baa9e0fe4b729, type: 3}
   ItemNumber: 16
-  ItemID: 0
+  ItemID: 17

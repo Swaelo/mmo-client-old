@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ConnectionManager : MonoBehaviour
@@ -8,16 +7,20 @@ public class ConnectionManager : MonoBehaviour
     //Singleton Instance
     public static ConnectionManager Instance = null;
     private void Awake() { Instance = this; }
+
     //Server Connection Configuration
     public string ServerIP = "192.168.0.8";
     public int ServerPort = 5500;
+
     //Active Connection Objects
     private TcpClient ClientSocket = null;
     public NetworkStream ClientStream = null;
+
     //Packet Data Buffer Storage
     private byte[] ASyncBuffer;
     private byte[] PacketBuffer;
     private bool ShouldHandleData = false;
+
     //Current Connection Status
     public bool IsConnected = false;
     private float ConnectionTimeout = 3f;
@@ -45,7 +48,7 @@ public class ConnectionManager : MonoBehaviour
             TryConnect();
 
         //If we are still waiting for establish a connection to the server, check if its been done yet or not
-        if(TryingToConnect && IsConnected)
+        if (TryingToConnect && IsConnected)
         {
             //Enable the main menu display once the server has been connected to
             MenuPanelDisplayManager.Instance.DisplayPanel("Main Menu Panel");
@@ -54,10 +57,10 @@ public class ConnectionManager : MonoBehaviour
         }
 
         //Wait for connection timeout if the connection hasnt been made yet
-        if(TryingToConnect && !IsConnected)
+        if (TryingToConnect && !IsConnected)
         {
             ConnectionTimeout -= Time.deltaTime;
-            if(ConnectionTimeout <= 0f)
+            if (ConnectionTimeout <= 0f)
             {
                 //When the timer expires reset it and try connecting to the server again
                 l.og("Server connection timed out, trying again.");
@@ -67,30 +70,33 @@ public class ConnectionManager : MonoBehaviour
         }
 
         //Receive data from the server while the connection is active and send data to the PacketManager to be handled accordingly
-        if(IsConnected && ShouldHandleData)
+        if (IsConnected && ShouldHandleData)
         {
             PacketManager.Instance.HandlePacket(PacketBuffer);
             ShouldHandleData = false;
         }
     }
-
+    
     //Callback Event triggered when trying to establish a new connection to the server
     private void ConnectionResult(IAsyncResult Result)
     {
         //If the socket object doesnt exist then something is seriously wrong
-        if(ClientSocket != null)
+        if (ClientSocket != null)
         {
             //End the ongoing connection request now that we have connected to the game server
             ClientSocket.EndConnect(Result);
+
             //Double check the connection hasnt been dropped yet for some reason
-            if(!ClientSocket.Connected)
+            if (!ClientSocket.Connected)
             {
                 IsConnected = false;
                 return;
             }
+
             //Confirm the connection has been established
             IsConnected = true;
             ClientSocket.NoDelay = true;
+
             //Start handling packets sent to us from the server
             ClientStream = ClientSocket.GetStream();
             ClientStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
@@ -114,13 +120,13 @@ public class ConnectionManager : MonoBehaviour
         Buffer.BlockCopy(ASyncBuffer, 0, PacketBuffer, 0, PacketSize);
 
         //Make sure no packets are received with a size of 0, this usually means the connection to the server has been lost for some reason
-        if(PacketSize == 0)
+        if (PacketSize == 0)
         {
             CloseConnection("Received network packet of size 0");
             return;
         }
 
-        //Start listening to data sent to us from the game server
+        //Start listening to data sent to us from the game server again
         ShouldHandleData = true;
         ClientStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
     }

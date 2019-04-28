@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2818180113591139882}
   - component: {fileID: 2818180113592106218}
   - component: {fileID: 2818180113589903917}
-  - component: {fileID: 6120085904769961230}
   - component: {fileID: 2444600319950561264}
   m_Layer: 0
   m_Name: Kusabimaru
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 2c42520e70b1a5c45b41c732a2d38195, type: 2}
---- !u!114 &6120085904769961230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2818180113589903914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &2444600319950561264
 BoxCollider:
   m_ObjectHideFlags: 0

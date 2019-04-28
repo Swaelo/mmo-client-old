@@ -17,6 +17,7 @@ public class InventorySlot : MonoBehaviour
     //Takes an item and starts storing it in this inventory slot
     public void StoreItem(ItemData NewItem)
     {
+        l.og("Store Item: " + NewItem.DisplayName);
         BagItemData = NewItem;
         UpdateUIDisplay();
     }
@@ -33,7 +34,7 @@ public class InventorySlot : MonoBehaviour
     {
         ItemIcon.sprite = BagItemData ? BagItemData.Icon : null;
         ItemIcon.color = BagItemData ? Color.white : Color.clear;
-        ItemName.text = BagItemData ? ItemName.text : "";
+        ItemName.text = BagItemData ? BagItemData.DisplayName : "";
     }
 
     //Items are used when they are right clicked on from the inventory UI

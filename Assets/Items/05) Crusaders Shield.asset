@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 05) Crusaders Shield
   m_EditorClassIdentifier: 
   Name: CrusadersShield
+  DisplayName: Crusader's Shield
   Type: 2
   Slot: 10
   Prefab: {fileID: 1285659778035412766, guid: bc2b1f708bbf8d540a011dd59891374f, type: 3}
   Icon: {fileID: 21300000, guid: 3a321c1af4eda5d43a61202cfcf8856c, type: 3}
   ItemNumber: 5
-  ItemID: 0
+  ItemID: 6

@@ -12,6 +12,18 @@ public class PacketReader
     byte[] PacketData;  //All of the packet data
     int PacketPosition; //Current position reading through all the data in the packet
 
+    //Checks if we have finished reading all the information stored within the packet yet or not
+    public bool FinishedReading()
+    {
+        return (PacketPosition >= PacketData.Length);
+    }
+
+    //Checks how many more bytes of information are left to read from this packet
+    public int BytesLeft()
+    {
+        return PacketData.Length - PacketPosition;
+    }
+
     public PacketReader(byte[] PacketData)
     {
         //Copy all the packet data into the class member

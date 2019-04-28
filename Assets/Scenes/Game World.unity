@@ -1336,8 +1336,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1567663622612455601, guid: f59ec1b2921ce2f4cbbf96eb9613495e, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f59ec1b2921ce2f4cbbf96eb9613495e, type: 3}
 --- !u!4 &92606885 stripped
 Transform:
@@ -1506,8 +1505,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8219751389585982973, guid: c2dec6d72dc7b7c4999ae1647cf72822, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2dec6d72dc7b7c4999ae1647cf72822, type: 3}
 --- !u!4 &124823028 stripped
 Transform:
@@ -1522,11 +1520,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1631,6 +1624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -1952,11 +1950,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2061,6 +2054,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -2356,7 +2354,7 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 7
     m_AlignByGeometry: 0
@@ -2889,11 +2887,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (9)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2998,6 +2991,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -3424,8 +3422,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2336804449516195692, guid: 8acc5b1a8caf1f74d9bb770554bee81b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8acc5b1a8caf1f74d9bb770554bee81b, type: 3}
 --- !u!4 &248133100 stripped
 Transform:
@@ -3588,11 +3585,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3697,6 +3689,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -4306,11 +4303,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (14)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4415,6 +4407,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (14)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -6197,8 +6194,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -181.204
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7505310477661004077, guid: 0a333da507d9746409b8ce4978062834, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a333da507d9746409b8ce4978062834, type: 3}
 --- !u!4 &494547472 stripped
 Transform:
@@ -6508,11 +6504,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6618,6 +6609,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (1)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
 --- !u!1001 &531406719
@@ -6687,8 +6683,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -169.802
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1148909715497629011, guid: 142e0fac92ec4bf4cae1b69df5bf47d4, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 142e0fac92ec4bf4cae1b69df5bf47d4, type: 3}
 --- !u!4 &531406720 stripped
 Transform:
@@ -8384,8 +8379,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6371300147364155052, guid: bff5b4dd8c702ae48bd08b41fc445621, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bff5b4dd8c702ae48bd08b41fc445621, type: 3}
 --- !u!4 &707211806 stripped
 Transform:
@@ -9034,11 +9028,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (12)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9143,6 +9132,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -9436,7 +9430,7 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
+    m_MinSize: 4
     m_MaxSize: 40
     m_Alignment: 7
     m_AlignByGeometry: 0
@@ -11089,7 +11083,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1937202573}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11520,8 +11514,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1953476397778230191, guid: 4fedb22538fb46a438d06e2dd60cae9b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fedb22538fb46a438d06e2dd60cae9b, type: 3}
 --- !u!4 &962680760 stripped
 Transform:
@@ -12812,11 +12805,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12921,6 +12909,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -13070,8 +13063,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -182.326
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7012930779705382310, guid: 47528fcd75d2872408a1382bbdcda21a, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47528fcd75d2872408a1382bbdcda21a, type: 3}
 --- !u!4 &1129903128 stripped
 Transform:
@@ -13307,11 +13299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075c3a704ae851748b24170bfae66f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrameTimer: 0.25
-  AnimationFrame1: {fileID: 21300000, guid: 3c76abda1b5478f4e8d82b9478e882d1, type: 3}
-  AnimationFrame2: {fileID: 21300000, guid: aa9e73ab69e53224088dbaf0dfccd48a, type: 3}
-  AnimationFrame3: {fileID: 21300000, guid: ddb172a4686c13d48bc9fba845fdfb27, type: 3}
-  AnimationFrame4: {fileID: 21300000, guid: af2e45bd7cd7581499d9a24761fcfc58, type: 3}
+  AnimationSpeed: 0.25
+  AnimationFrames:
+  - {fileID: 21300000, guid: 3c76abda1b5478f4e8d82b9478e882d1, type: 3}
+  - {fileID: 21300000, guid: aa9e73ab69e53224088dbaf0dfccd48a, type: 3}
+  - {fileID: 21300000, guid: ddb172a4686c13d48bc9fba845fdfb27, type: 3}
+  - {fileID: 21300000, guid: af2e45bd7cd7581499d9a24761fcfc58, type: 3}
 --- !u!114 &1163209007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13715,7 +13708,7 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 8
     m_AlignByGeometry: 0
@@ -13767,12 +13760,12 @@ PrefabInstance:
     - target: {fileID: 3285898004493805445, guid: fac00f8ce2ebc904cb4f1e176ee6f663,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3285898004493805445, guid: fac00f8ce2ebc904cb4f1e176ee6f663,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3285898004493805445, guid: fac00f8ce2ebc904cb4f1e176ee6f663,
         type: 3}
@@ -13799,8 +13792,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6555792391096634915, guid: fac00f8ce2ebc904cb4f1e176ee6f663, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fac00f8ce2ebc904cb4f1e176ee6f663, type: 3}
 --- !u!4 &1191964797 stripped
 Transform:
@@ -14102,11 +14094,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14211,6 +14198,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -14683,11 +14675,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (7)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14792,6 +14779,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -14920,8 +14912,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3094448981413776199, guid: 34d54af769cf7244c9b7d9c2189be767, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34d54af769cf7244c9b7d9c2189be767, type: 3}
 --- !u!4 &1281114633 stripped
 Transform:
@@ -15705,8 +15696,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.000015258789
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6960250321421436829, guid: bc2b1f708bbf8d540a011dd59891374f, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc2b1f708bbf8d540a011dd59891374f, type: 3}
 --- !u!4 &1361885010 stripped
 Transform:
@@ -16340,8 +16330,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 89.867004
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3785311186512294181, guid: 1babc72f56312a5419588077b61fd1c1, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1babc72f56312a5419588077b61fd1c1, type: 3}
 --- !u!4 &1414492217 stripped
 Transform:
@@ -16503,7 +16492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1427901293}
   - component: {fileID: 1427901296}
-  - component: {fileID: 1427901295}
+  - component: {fileID: 1427901294}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -16525,7 +16514,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1427901295
+--- !u!114 &1427901294
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16640,8 +16629,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 88.463005
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6120085904769961230, guid: f2bf91a517e9a154599c1983bfad2d3c, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2bf91a517e9a154599c1983bfad2d3c, type: 3}
 --- !u!4 &1433483280 stripped
 Transform:
@@ -17169,7 +17157,7 @@ MonoBehaviour:
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 6
     m_AlignByGeometry: 0
@@ -18450,8 +18438,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 6.373
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4921681590572861690, guid: 50e4e75dbf2400c498d41bc626160ad0, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50e4e75dbf2400c498d41bc626160ad0, type: 3}
 --- !u!4 &1595370899 stripped
 Transform:
@@ -19515,8 +19502,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 267.142
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5486951685782057067, guid: 5f1ed4b2d4ef9eb429e51bf0f3d7fa1d, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f1ed4b2d4ef9eb429e51bf0f3d7fa1d, type: 3}
 --- !u!4 &1693077615 stripped
 Transform:
@@ -19531,11 +19517,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19640,6 +19621,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -20031,8 +20017,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2523311255858344852, guid: 81e07fd831cce60409df47f1ebf08c79, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81e07fd831cce60409df47f1ebf08c79, type: 3}
 --- !u!4 &1718119919 stripped
 Transform:
@@ -21232,11 +21217,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (13)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21341,6 +21321,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -21557,11 +21542,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21666,6 +21646,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -23303,11 +23288,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message (8)
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23412,6 +23392,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}
@@ -26304,11 +26289,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1251396471}
     m_Modifications:
-    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
-        type: 3}
-      propertyPath: m_Name
-      value: Chat Message
-      objectReference: {fileID: 0}
     - target: {fileID: 555849473647411980, guid: 81bace27c1d7d2c469b40f9af87fddad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26413,6 +26393,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 555849473647411979, guid: 81bace27c1d7d2c469b40f9af87fddad,
+        type: 3}
+      propertyPath: m_Name
+      value: Chat Message
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bace27c1d7d2c469b40f9af87fddad, type: 3}

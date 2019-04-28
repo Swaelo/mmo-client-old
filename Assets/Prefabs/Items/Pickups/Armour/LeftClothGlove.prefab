@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7042826813174351734}
   - component: {fileID: 7042826813173384630}
   - component: {fileID: 7042826813175323509}
-  - component: {fileID: 5486951685782057067}
   - component: {fileID: 26198795819280783}
   m_Layer: 0
   m_Name: LeftClothGlove
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 97ed3fe1ae7c9114d970f823e9ade012, type: 2}
---- !u!114 &5486951685782057067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7042826813175323510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &26198795819280783
 BoxCollider:
   m_ObjectHideFlags: 0

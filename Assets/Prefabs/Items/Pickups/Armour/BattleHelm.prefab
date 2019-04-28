@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 2429439195816039647}
   - component: {fileID: 2429439195817170463}
   - component: {fileID: 2429439195819100380}
-  - component: {fileID: 7505310477661004077}
   - component: {fileID: 3630127236449003336}
   m_Layer: 0
-  m_Name: BattleHelmet
+  m_Name: BattleHelm
   m_TagString: ItemPickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,21 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Data: {fileID: 11400000, guid: 01f64e9872a0e4f42b9d13d7f2c8f176, type: 2}
---- !u!114 &7505310477661004077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2429439195819100383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d502656a019cf4ebac9a5e050a0b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemType: 
-  ItemID: 0
-  ItemNumber: 0
 --- !u!65 &3630127236449003336
 BoxCollider:
   m_ObjectHideFlags: 0
