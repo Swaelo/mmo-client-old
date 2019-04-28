@@ -1,6 +1,6 @@
 ﻿// ================================================================================================================================
 // File:        EquipSlot.cs
-// Description: 
+// Description: Handles everything and stores all the relevant information for a piece of equipment worn on the character
 // ================================================================================================================================
 
 using UnityEngine;

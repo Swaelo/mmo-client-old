@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: EpicPurpleShirt
   DisplayName: Epic Purple Shirt
+  Description: It is thought to have once been the skirt of a maiden, but its true
+    origin is lost in patches of blood. Perhaps its former wearer was maimed to prevent
+    escape?
   Type: 2
   Slot: 6
   Prefab: {fileID: 4832489828086679571, guid: bff5b4dd8c702ae48bd08b41fc445621, type: 3}
   Icon: {fileID: 21300000, guid: 62253fc5926b87f48befa8cdf8ebf025, type: 3}
   ItemNumber: 13
   ItemID: 14
+  Rarity: 1

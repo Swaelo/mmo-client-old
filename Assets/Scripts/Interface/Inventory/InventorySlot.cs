@@ -1,6 +1,6 @@
 ﻿// ================================================================================================================================
 // File:        InventorySlot.cs
-// Description:
+// Description: Tracks all the information about what item is currently being stored in this inventory slot, updates the UI to show it
 // ================================================================================================================================
 
 using UnityEngine;
@@ -17,7 +17,6 @@ public class InventorySlot : MonoBehaviour
     //Takes an item and starts storing it in this inventory slot
     public void StoreItem(ItemData NewItem)
     {
-        l.og("Store Item: " + NewItem.DisplayName);
         BagItemData = NewItem;
         UpdateUIDisplay();
     }

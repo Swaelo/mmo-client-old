@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: CrusadersShield
   DisplayName: Crusader's Shield
+  Description: With the first hammer fall, rivers of magma spilled from the icy mountains.
+    With the second, the sky howled and lightning set the heaves aflame. With the
+    third, a single ray of sunlighht pierced the storm clouds and whispered over the
+    surface.
   Type: 2
   Slot: 10
   Prefab: {fileID: 1285659778035412766, guid: bc2b1f708bbf8d540a011dd59891374f, type: 3}
   Icon: {fileID: 21300000, guid: 3a321c1af4eda5d43a61202cfcf8856c, type: 3}
   ItemNumber: 5
   ItemID: 6
+  Rarity: 1

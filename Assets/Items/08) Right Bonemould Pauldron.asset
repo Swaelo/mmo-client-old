@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: RightBonemouldPauldron
   DisplayName: Right Bonemould Pauldron
+  Description: Armor of the Knights of Nerevar, known for their heavy armaments and
+    armor. Countless Knights of Nerevar, once extoiled as the mightiest of mighty,
+    became UNdead and ventured to Morrowind. But their journey was for naught, as
+    they went Hollow, and become a thread to all Undead.
   Type: 2
   Slot: 5
   Prefab: {fileID: 6870855109509019628, guid: f59ec1b2921ce2f4cbbf96eb9613495e, type: 3}
   Icon: {fileID: 21300000, guid: 4d101cfc37ad76044adc80bdbb265443, type: 3}
   ItemNumber: 8
-  ItemID: 9
+  ItemID: 73
+  Rarity: 1

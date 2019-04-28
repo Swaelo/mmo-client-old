@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: BattleHelm
   DisplayName: Battle Helm
+  Description: A sturdy helm made of iron with armor made of thick leather. Very common
+    type of protective gear, it provides a sound level of defense. It is wise to wear
+    a sturdy form of head protection against arrows and other physical threats.
   Type: 2
   Slot: 1
   Prefab: {fileID: 2429439195819100383, guid: 0a333da507d9746409b8ce4978062834, type: 3}
   Icon: {fileID: 21300000, guid: 19a684a8da6eeee43b6587e681b4095d, type: 3}
   ItemNumber: 6
   ItemID: 7
+  Rarity: 1

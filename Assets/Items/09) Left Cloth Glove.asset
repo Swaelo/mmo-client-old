@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: LeftClothGlove
   DisplayName: Left Cloth Glove
+  Description: A glove of the Dark Sun Snake, protector of the forsaken city of Dooms
+    Watch. The alignment of the moon has mysterious effects.
   Type: 2
   Slot: 7
   Prefab: {fileID: 7042826813175323510, guid: 5f1ed4b2d4ef9eb429e51bf0f3d7fa1d, type: 3}
   Icon: {fileID: 21300000, guid: 947f36568bb36c1479522e0036f0b8ad, type: 3}
   ItemNumber: 9
-  ItemID: 10
+  ItemID: 74
+  Rarity: 1

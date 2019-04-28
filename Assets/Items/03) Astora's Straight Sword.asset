@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: AstorasStraightSword
   DisplayName: Astora's Straight Sword
+  Description: Straight sword of an unknown knight, likely one of Astora's superiors.
+    High-quality weapon with a powerful blessing.
   Type: 2
   Slot: 11
   Prefab: {fileID: 7710094103216958809, guid: 142e0fac92ec4bf4cae1b69df5bf47d4, type: 3}
   Icon: {fileID: 21300000, guid: b42c2795dbf630142b3070758ee32825, type: 3}
   ItemNumber: 3
   ItemID: 4
+  Rarity: 1

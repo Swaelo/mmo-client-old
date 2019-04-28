@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
-  m_Name: 04) Kusabimaru
+  m_Name: 20) Right Manna Sandal
   m_EditorClassIdentifier: 
-  Name: Kusabimaru
-  DisplayName: Kusabimaru
-  Description: A katana given by Kuro, the Divine Heir. An heirloom of the Hirata
-    family, a cadet branch descended from Ashina.
+  Name: RightMannaSandal
+  DisplayName: Right Manna Sandal
+  Description: These sandals are indistinguishable from the ordinary kind worn by
+    travelers.
   Type: 2
-  Slot: 11
-  Prefab: {fileID: 2818180113589903914, guid: f2bf91a517e9a154599c1983bfad2d3c, type: 3}
-  Icon: {fileID: 21300000, guid: 0c6dcff61747c704c97f067cb5ed22f9, type: 3}
-  ItemNumber: 4
+  Slot: 13
+  Prefab: {fileID: 1625769452220976240, guid: 0fb7904d45ee5954a888601e36571980, type: 3}
+  Icon: {fileID: 21300000, guid: 3f5aeb5c918ab6042b56e620ce1154be, type: 3}
+  ItemNumber: 20
   ItemID: 69
   Rarity: 1

@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: HealingPotion
   DisplayName: Healing Potion
+  Description: A potion filled with Health-restoring medicine.
   Type: 1
   Slot: 0
   Prefab: {fileID: 3285898004493712293, guid: fac00f8ce2ebc904cb4f1e176ee6f663, type: 3}
   Icon: {fileID: 21300000, guid: 62583b951c7cc214eb13cf23d146c642, type: 3}
   ItemNumber: 1
-  ItemID: 50
+  ItemID: 66
+  Rarity: 1

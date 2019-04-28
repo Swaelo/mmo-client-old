@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: LeatherCloak
   DisplayName: Leather Cloak
+  Description: Cloak worn by the secret sorcerers at the Destruction Magic School.
+    They secretly share in some Necromancy based spells to those they trust the most,
+    never revealing themselves to strangers.
   Type: 2
   Slot: 2
   Prefab: {fileID: 3286625730905775968, guid: 47528fcd75d2872408a1382bbdcda21a, type: 3}
   Icon: {fileID: 21300000, guid: b5efa0397c3871545bc2b7817c8e2c53, type: 3}
   ItemNumber: 12
   ItemID: 13
+  Rarity: 1
