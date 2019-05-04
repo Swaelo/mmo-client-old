@@ -4,6 +4,7 @@
 // ================================================================================================================================
 
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TooltipDisplay : MonoBehaviour
@@ -30,5 +31,13 @@ public class TooltipDisplay : MonoBehaviour
         //Only update the details if we have a refernce to its object
         if (TooltipItemDetailObject != null)
             TooltipItemDetailObject.GetComponent<TextMeshProUGUI>().text = NewDetails;
+    }
+
+    //Toggles the visibility of the tooltip display object
+    public void SetVisibility(bool Visible)
+    {
+        TooltipItemNameObject.SetActive(Visible);
+        TooltipItemDetailObject.SetActive(Visible);
+        GetComponent<Image>().color = Visible ? Color.white : Color.clear;
     }
 }

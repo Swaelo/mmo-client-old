@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
+  m_Name: OldPants
+  m_EditorClassIdentifier: 
+  Name: OldPants
+  DisplayName: Old Pants
+  Description: Cloak worn by the secret sorcerers at the Destruction Magic School.
+    They secretly share in some Necromancy based spells to those they trust the most,
+    never revealing themselves to strangers.
+  Type: 2
+  Slot: 9
+  Prefab: {fileID: 4990733452216436467, guid: 50e4e75dbf2400c498d41bc626160ad0, type: 3}
+  Icon: {fileID: 21300000, guid: f73908e56503f4e46a94185d9343543a, type: 3}
+  ItemNumber: 0
+  Rarity: 1
+  ConsumableEffect: {fileID: 0}

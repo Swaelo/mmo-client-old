@@ -1,6 +1,6 @@
 ﻿// ================================================================================================================================
 // File:        PlayerItemPickup.cs
-// Description: 
+// Description: Allows the player to pick up items off the ground, placing them into the characters inventory
 // ================================================================================================================================
 
 using UnityEngine;
@@ -78,7 +78,7 @@ public class PlayerItemPickup : MonoBehaviour
         {
             //Tell the game server we want to pick this item up
             ItemData SelectedItem = HighlightedItem.GetComponent<Item>().Data;
-            PacketManager.Instance.SendTakeItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), SelectedItem);
+            PacketManager.Instance.SendTakeItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), SelectedItem, HighlightedItem.GetComponent<Item>().ItemID);
         }
     }
 }

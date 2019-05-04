@@ -1,70 +1,57 @@
-﻿using UnityEngine;
+﻿// ================================================================================================================================
+// File:        ItemManager.cs
+// Description: Keeps track of all the active item pickup objects currently active in the game world
+// ================================================================================================================================
+
+using UnityEngine;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour
 {
-    //item manager is a singleton class so it can easily be access wherever it needs to be used
+    //Singleton class so it can be easily accessed anywhere in the codebase
     public static ItemManager Instance = null;
     private void Awake() { Instance = this; }
-    
-    //Keep a list of active item picks in a dictionary indexed by their unique network ID number
-    public Dictionary<int, GameObject> ActiveItems = new Dictionary<int, GameObject>();
 
-    //Returns all the active items in a list
+    //Store all the games active item pickups in a dictionary indexed by their unique network ID number
+    public Dictionary<int, GameObject> ActiveItemDictionary = new Dictionary<int, GameObject>();
+
+    //Returns all the active item pickups in a list
     public List<GameObject> GetActiveItems()
     {
-        //Define the list to store all the active items
-        List<GameObject> ActiveItemList = new List<GameObject>();
+        //Create a new list to store all the active items
+        List<GameObject> ActiveItems = new List<GameObject>();
 
-        //Grab each item from the dictionary and add it to the list
-        foreach (KeyValuePair<int, GameObject> ActiveItem in ActiveItems)
-            ActiveItemList.Add(ActiveItem.Value);
+        //Loop through every value in the item dictionary, adding each object into the active item list
+        foreach (KeyValuePair<int, GameObject> ActiveItem in ActiveItemDictionary)
+            ActiveItems.Add(ActiveItem.Value);
 
-        //Return the populated list of all the game objects
-        return ActiveItemList;
+        //Return the final list of all the active item pickups
+        return ActiveItems;
     }
 
-    //Functions for spawning new item pickups into the game world
-    public void AddConsumable(int ItemNumber, int ItemID, string ItemName, Vector3 ItemLocation)
+    //Adds a new pickup item into the game world
+    public void AddItemPickup(int ItemNumber, int ItemID, Vector3 ItemLocation)
     {
-        //Fetch the correct type of consumable prefab from the prefab list and spawn one of them into the game world
-        GameObject Prefab = ConsumablePrefabs.Instance.GetConsumablePrefab(ItemName);
-        GameObject NewConsumable = Instantiate(Prefab, ItemLocation, Quaternion.identity);
+        //Fetch the pickup prefab for the new pickup object being added, then use it to spawn a new item pickup object into the game world
+        GameObject PickupPrefab = PickupPrefabs.Instance.GetPickupPrefab(ItemList.Instance.GetItemName(ItemNumber));
+        GameObject NewItemPickup = Instantiate(PickupPrefab, ItemLocation, Quaternion.identity);
 
-        //Store all the items data inside it
-        ItemData NewItemData = NewConsumable.GetComponent<Item>().Data;
-        NewItemData.ItemNumber = ItemNumber;
+        //Store all the important item data inside the new pickups Item component
+        Item NewItemData = NewItemPickup.GetComponent<Item>();
         NewItemData.ItemID = ItemID;
-        NewItemData.Type = ItemType.Consumable;
-        
-        //Store it with the rest of the active pickup items
-        ActiveItems.Add(ItemID, NewConsumable); 
+
+        //Keep the new item pickup in a list with all the other pickup objects
+        ActiveItemDictionary.Add(ItemID, NewItemPickup);
     }
 
-    //Adds a new piece of equipment into the game world
-    public void AddEquipment(int ItemNumber, int ItemID, string ItemName, Vector3 ItemLocation)
+    //Removes one of the current pickup items from the game world
+    public void RemoveItemPickup(int ItemID)
     {
-        //Grab the correct prefab and spawn one of those into the world
-        GameObject Prefab = PickupPrefabs.Instance.GetPickupPrefab(ItemName);
-        GameObject NewEquipment = Instantiate(Prefab, ItemLocation, Quaternion.identity);
+        //Fetch the game object from the dictionary
+        GameObject ItemPickup = ActiveItemDictionary[ItemID];
 
-        //Store all the items data inside it
-        ItemData NewItemData = NewEquipment.GetComponent<Item>().Data;
-        NewItemData.ItemNumber = ItemNumber;
-        NewItemData.ItemID = ItemID;
-        NewItemData.Type = ItemType.Equipment;
-
-        //Store this in the list with all the other active items
-        ActiveItems.Add(ItemID, NewEquipment);
-    }
-
-    //Removes an item pickup from the game world by its network ID number
-    public void RemoveItem(int ItemID)
-    {
-        //Fetch the item from the dictionary
-        GameObject OldItem = ActiveItems[ItemID];
-        //Remove it from the dictionary, then destroy the game object to remove it from the game world
-        ActiveItems.Remove(ItemID);
-        GameObject.Destroy(OldItem);
+        //Remove it from the dictionary list and destroy it
+        ActiveItemDictionary.Remove(ItemID);
+        GameObject.Destroy(ItemPickup);
     }
 }

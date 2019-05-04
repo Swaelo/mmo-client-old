@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
+  m_Name: StaminaPotion
+  m_EditorClassIdentifier: 
+  Name: StaminaPotion
+  DisplayName: Stamina Potion
+  Description: A magical potion with energy rejuvination effects.
+  Type: 1
+  Slot: 0
+  Prefab: {fileID: 3823471404829466747, guid: b4b2baadf46571a44a5a6a3060dbf5cb, type: 3}
+  Icon: {fileID: 21300000, guid: 01114459a43266c4a952c93fe562975f, type: 3}
+  ItemNumber: 0
+  Rarity: 1
+  ConsumableEffect: {fileID: 11400000, guid: a113406b9d8cb314098a347fd0b5af16, type: 2}

@@ -5,7 +5,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum ClientPacketType
 {
@@ -25,12 +24,24 @@ public enum ClientPacketType
 
     PlayerInventoryRequest = 14,
     PlayerEquipmentRequest = 15,
-    PlayerTakeItemRequest = 16,
-    RemoveInventoryItem = 17,
-    EquipInventoryItem = 18,
-    UnequipItem = 19,
+    PlayerActionBarRequest = 16,
+    PlayerTakeItemRequest = 17,
+    RemoveInventoryItem = 18,
+    EquipInventoryItem = 19,
+    UnequipItem = 20,
 
-    NetworkTest = 20
+    PlayerMoveInventoryItem = 21,
+    PlayerSwapInventoryItems = 22,
+    PlayerSwapEquipmentItem = 23,
+    PlayerDropItem = 24,
+    PlayerEquipAbility = 25,
+    PlayerSwapEquipAbility = 26,
+    PlayerUnequipAbility = 27,
+    PlayerSwapAbilities = 28,
+    PlayerMoveAbility = 29,
+    PlayerDropAbility = 30,
+
+    PlayerPurgeItems = 31
 }
 public enum ServerPacketType
 {
@@ -55,9 +66,8 @@ public enum ServerPacketType
 
     PlayerInventoryItems = 16,
     PlayerEquipmentItems = 17,
-    PlayerInventoryGearUpdate = 18,
-
-    NetworkTest = 19
+    PlayerActionBarAbilities = 18,
+    PlayerTotalItemUpdate = 19
 }
 
 public class PacketManager : MonoBehaviour
@@ -97,23 +107,98 @@ public class PacketManager : MonoBehaviour
 
         Packets.Add((int)ServerPacketType.PlayerInventoryItems, HandlePlayerInventory);
         Packets.Add((int)ServerPacketType.PlayerEquipmentItems, HandlePlayerEquipment);
-        Packets.Add((int)ServerPacketType.PlayerInventoryGearUpdate, HandlePlayerInventoryGearUpdate);
-
-        Packets.Add((int)ServerPacketType.NetworkTest, HandleNetworkTest);
+        Packets.Add((int)ServerPacketType.PlayerActionBarAbilities, HandlePlayerActionBar);
+        Packets.Add((int)ServerPacketType.PlayerTotalItemUpdate, HandlePlayerTotalItemUpdate);
     }
 
-    private void HandleNetworkTest(byte[] PacketData)
+    //Tell the server this character wants to have every single item, piece of equipment and ability bar object removed from their character
+    public void SendPlayerPurgeItems(string CharacterName)
     {
-        PacketReader Reader = new PacketReader(PacketData);
-        int PacketType = Reader.ReadInt();
-        int NetworkTestNumber = Reader.ReadInt();
-        l.og("Network Test #" + NetworkTestNumber);
+        //Start a new network packet
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerPurgeItems);
+        //Write character name and send the packet to the server
+        Writer.WriteString(CharacterName);
+        SendPacket(Writer);
+    }
+    
+    //Tell the server the player wants to drop one of the items from their inventory
+    //Inside item drop client packets, the 2nd int value represents the source where the item is being dropped from 1 = Inventory, 2 = Equipment, 3 = ActionBar
+    public void SendDropInventoryItem(string PlayerName, int BagSlotNumber, Vector3 DropLocation)
+    {
+        //Create packet and write the packet type
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerDropItem);
+        //Write in the location where the item is being dropped from
+        Writer.WriteInt(1); //1 = dropped from inventory
+        //Now write the players name and the bag slot number of the item that is being dropped, and where they are dropping it
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt(BagSlotNumber);
+        Writer.WriteVector3(DropLocation);
+        //Send the packet to the game server
+        SendPacket(Writer);
+    }
+    //Tell the server the player wants to drop one of the items from their equipment screen
+    public void SendDropEquipmentItem(string PlayerName, EquipmentSlot EquipmentSlot, Vector3 DropLocation)
+    {
+        //Create packet and write the packet type
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerDropItem);
+        //Write in the location where the item is being dropped from
+        Writer.WriteInt(2); //2 = dropped from equipment
+        //write the rest of the data and send the packet to the server
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt((int)EquipmentSlot);
+        Writer.WriteVector3(DropLocation);
+        //Send the packet to the server
+        SendPacket(Writer);
+    }
+    //Tell the server the players wants to drop one of the ability gems from their action bar onto the ground
+    public void SendDropActionBarItem(string PlayerName, int ActionBarSlotNumber, Vector3 DropLocation)
+    {
+        //Create packet and write the packet type
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerDropItem);
+        //Write in the location where the item is being dropped from
+        Writer.WriteInt(3); //3 = dropped from action bar
+        //write the rest of the data and send it
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt(ActionBarSlotNumber);
+        Writer.WriteVector3(DropLocation);
+        //Send the packet to the game server
+        SendPacket(Writer);
     }
 
-    public void StartNetworkTest()
+    //Tell the server the players wants to move the position of one of the items in their inventory
+    public void SendMoveInventoryItem(string PlayerName, int OriginalBagSlot, int DestinationBagSlot)
     {
         PacketWriter Writer = new PacketWriter();
-        Writer.WriteInt((int)ClientPacketType.NetworkTest);
+        Writer.WriteInt((int)ClientPacketType.PlayerMoveInventoryItem);
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt(OriginalBagSlot);
+        Writer.WriteInt(DestinationBagSlot);
+        SendPacket(Writer);
+    }
+
+    //Tell the server the player wants to swap the positions of two of the items in their inventory
+    public void SendSwapInventoryItem(string PlayerName, int FirstBagSlot, int SecondBagSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerSwapInventoryItems);
+        Writer.WriteString(PlayerName);
+        Writer.WriteInt(FirstBagSlot);
+        Writer.WriteInt(SecondBagSlot);
+        SendPacket(Writer);
+    }
+
+    //Tell the server the player wants to swap the piece of equipment with one in their inventory
+    public void SendPlayerSwapEquipmentItem(string PlayerName, int ItemBagSlot, EquipmentSlot ItemEquipmentSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerSwapEquipmentItem); //Packet type
+        Writer.WriteString(PlayerName); //Who is swapping items around their inventory/equipment
+        Writer.WriteInt(ItemBagSlot);   //What bag slot stores the item to newly be equipped, where the previously equipped item will now be stored
+        Writer.WriteInt((int)ItemEquipmentSlot);    //The type of equipment slot being dealt with
         SendPacket(Writer);
     }
 
@@ -127,6 +212,69 @@ public class PacketManager : MonoBehaviour
         SendPacket(Writer);
     }
 
+    //Tells the server to equip an ability gem from the characters inventory
+    public void SendCharacterEquipAbility(string CharacterName, int AbilityGemBagSlot, int ActionBarEquipSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerEquipAbility);
+        Writer.WriteString(CharacterName);
+        Writer.WriteInt(AbilityGemBagSlot);
+        Writer.WriteInt(ActionBarEquipSlot);
+        SendPacket(Writer);
+    }
+
+    //Tells the server to unequip an ability into the characters inventory
+    public void SendCharacterUnequipAbility(string CharacterName, int BagSlot, int ActionBarSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerUnequipAbility);
+        Writer.WriteString(CharacterName);
+        Writer.WriteInt(BagSlot);
+        Writer.WriteInt(ActionBarSlot);
+        SendPacket(Writer);
+    }
+
+    //Tells the server to swap the positions of two of the characters currently equipped ability gems
+    public void SendCharacterSwapAbilities(string CharacterName, int FirstActionBarSlot, int SecondActionBarSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerSwapAbilities);
+        Writer.WriteString(CharacterName);
+        Writer.WriteInt(FirstActionBarSlot);
+        Writer.WriteInt(SecondActionBarSlot);
+        SendPacket(Writer);
+    }
+
+    //Tells the server to move an ability on the action bar to one of the other slots
+    public void SendCharacterMoveAbility(string CharacterName, int ActionBarSlot, int DestinationActionBarSlot)
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerMoveAbility);
+
+        Writer.WriteString(CharacterName);
+        Writer.WriteInt(ActionBarSlot);
+        Writer.WriteInt(DestinationActionBarSlot);
+
+        SendPacket(Writer);
+    }
+
+    //Tells the server to swap one of the equipped ability gems with another from the characters inventory
+    public void SendCharacterSwapEquipAbility(string CharacterName, int BagSlot, int ActionBarSlot)
+    {
+        //Define a new packet to send
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerSwapEquipAbility);
+
+        //Fill it with the right data
+        Writer.WriteString(CharacterName);
+        Writer.WriteInt(BagSlot);
+        Writer.WriteInt(ActionBarSlot);
+
+        //Send it to the game server
+        SendPacket(Writer);
+    }
+
+    //Requests from a server up to date information on all entities currently active in the game world
     public void SendActiveEntityRequest()
     {
         PacketWriter Writer = new PacketWriter();
@@ -178,34 +326,43 @@ public class PacketManager : MonoBehaviour
         SendPacket(Writer);
     }
 
-    //Recieves a list of all the items in the players inventory
+    //Read and update the contents of the players inventory
     private void HandlePlayerInventory(byte[] PacketData)
     {
-        //Open the network packet
+        //Open a new network packet
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
 
-        //Read and update the conents of the players inventory
-        GameObject[] InventoryPanels = PlayerInventoryControl.Instance.InventorySlotPanels;
-        for(int i = 0; i < 9; i++)
+        //Grab all the inventory slot UI components from the scene
+        DraggableUIComponent[] ItemSlots = DraggableUIControl.Instance.InventorySlots;
+        //Loop through reading the data for each item in the characters inventory, updating the item slots where nessacery
+        for (int i = 0; i < 9; i++)
         {
+            //Read each slots values
             int ItemNumber = Reader.ReadInt();
             int ItemID = Reader.ReadInt();
 
+            //Empty the slots with nothing in them
             if (ItemNumber == 0)
-                InventoryPanels[i].GetComponent<InventorySlot>().RemoveItem();
+            {
+                ItemSlots[i].ItemData = null;
+                ItemSlots[i].UpdateUIDisplay();
+            }
+            //Display the slots that arent empty
             else
             {
-                ItemData ItemData = ItemList.Instance.GetItem(ItemNumber);
-                ItemData.ItemID = ItemID;
-                InventoryPanels[i].GetComponent<InventorySlot>().StoreItem(ItemData);
+                ItemSlots[i].ItemData = ItemList.Instance.GetItemData(ItemNumber);
+                ItemSlots[i].EquipSlotType = ItemSlots[i].ItemData.Slot;
+                ItemSlots[i].ItemID = ItemID;
+                ItemSlots[i].UpdateUIDisplay();
             }
         }
 
-        //Now request to know what equipment this character is wearing
+        //Inventory updated, now request the characters equipment information
         SendPlayerEquipmentRequest();
     }
 
+    //Sends a request to the game server to send us our characters current equipment screen status
     private void SendPlayerEquipmentRequest()
     {
         PacketWriter Writer = new PacketWriter();
@@ -213,80 +370,169 @@ public class PacketManager : MonoBehaviour
         Writer.WriteString(PlayerManager.Instance.GetCurrentPlayerName());
         SendPacket(Writer);
     }
-    
-    //Gets new state of the players inventory and equiped items from the server
-    private void HandlePlayerInventoryGearUpdate(byte[] PacketData)
-    {
-        //Open the network packet
-        PacketReader Reader = new PacketReader(PacketData);
-        int PacketType = Reader.ReadInt();
-
-        //Read and update the contents of the players inventory
-        GameObject[] InventoryPanels = PlayerInventoryControl.Instance.InventorySlotPanels;
-        for(int i = 0; i < 9; i++)
-        {
-            //Read this slots item information
-            int ItemNumber = Reader.ReadInt();
-            int ItemID = Reader.ReadInt();
-
-            //Item Number 0 means this bag slot is empty
-            if(ItemNumber == 0)
-                InventoryPanels[i].GetComponent<InventorySlot>().RemoveItem();
-            else
-            {
-                //Search up this items data and use that to update the UI
-                ItemData ItemData = ItemList.Instance.GetItem(ItemNumber);
-                ItemData.ItemID = ItemID;
-                InventoryPanels[i].GetComponent<InventorySlot>().StoreItem(ItemData);
-            }
-        }
-
-        //Read and update the contents of the players equipment
-        for(int i = 0; i < 13; i++)
-        {
-            EquipmentSlot ItemSlot = (EquipmentSlot)Reader.ReadInt();
-            int ItemNumber = Reader.ReadInt();
-            int ItemID = Reader.ReadInt();
-
-            if(ItemNumber == 0)
-            {
-                PlayerEquipmentControl.Instance.GetEquipmentPanel(ItemSlot).GetComponent<EquipSlot>().RemoveItem();
-                PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>().UnequipItem(ItemSlot);
-            }
-            else
-            {
-                PlayerEquipmentControl.Instance.GetEquipmentPanel(ItemSlot).GetComponent<EquipSlot>().EquipItem(ItemList.Instance.GetItem(ItemNumber));
-                PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>().EquipItem(ItemSlot, ItemList.Instance.GetItem(ItemNumber).Name);
-            }
-        }
-    }
 
     //Recieves a list of all the items equipped to the players characters
     private void HandlePlayerEquipment(byte[] PacketData)
     {
+        //Open a new network packet
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
 
+        //Loop through and read the info about any items in the players equipment slots
         for(int i = 0; i < 13; i++)
         {
-            EquipmentSlot ItemSlot = (EquipmentSlot)Reader.ReadInt();
+            //Read the initial item values from the packet data
             int ItemNumber = Reader.ReadInt();
             int ItemID = Reader.ReadInt();
 
+            //Skip past the empty equipment slots
             if (ItemNumber == 0)
+                continue;
+
+            //Get the rest of the items data from the master item list
+            ItemData ItemData = ItemList.Instance.GetItemData(ItemNumber);
+
+            //Update the UI and character model to show the piece of gear being worn here
+            DraggableUIComponent GearSlot = DraggableUIControl.Instance.GetEquipmentSlot(ItemData.Slot);
+            GearSlot.ItemData = ItemData;
+            GearSlot.ItemID = ItemID;
+            GearSlot.UpdateUIDisplay();
+            PlayerManager.Instance.GetCurrentCharacterObject().GetComponent<PlayerItemEquip>().EquipItem(ItemData.Slot, ItemData.Name);
+        }
+
+        //Characters equipment has been handled, now ask for the action bar status
+        SendPlayerActionBarRequest();
+    }
+
+    //Receives a list of all the abilities equipped onto the characters action bar
+    private void HandlePlayerActionBar(byte[] PacketData)
+    {
+        //Open a new network packet
+        PacketReader Reader = new PacketReader(PacketData);
+        int PacketType = Reader.ReadInt();
+
+        //Grab all the action bar slot UI components from the scene
+        DraggableUIComponent[] ActionBarSlots = DraggableUIControl.Instance.ActionBarSlots;
+        //Loop through reading in each action bar items data, updating the slots as needed
+        for(int i = 0; i < 5; i++)
+        {
+            //Read each slots values
+            int ItemNumber = Reader.ReadInt();
+            int ItemID = Reader.ReadInt();
+
+            //Empty the action bar slots with nothing within them
+            if(ItemNumber == 0)
             {
-                PlayerEquipmentControl.Instance.GetEquipmentPanel(ItemSlot).GetComponent<EquipSlot>().RemoveItem();
-                PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>().UnequipItem(ItemSlot);
+                ActionBarSlots[i].ItemData = null;
+                ActionBarSlots[i].UpdateUIDisplay();
             }
             else
+            //Display action bar slots with abilities within them
             {
-                PlayerEquipmentControl.Instance.GetEquipmentPanel(ItemSlot).GetComponent<EquipSlot>().EquipItem(ItemList.Instance.GetItem(ItemNumber));
-                PlayerManager.Instance.LocalPlayer.CurrentCharacter.CharacterObject.GetComponent<PlayerItemEquip>().EquipItem(ItemSlot, ItemList.Instance.GetItem(ItemNumber).Name);
+                ActionBarSlots[i].ItemData = ItemList.Instance.GetItemData(ItemNumber);
+                ActionBarSlots[i].ItemID = ItemID;
+                ActionBarSlots[i].UpdateUIDisplay();
             }
         }
 
-        //Now everything is ready, tell the server we have finished loading in successfully
+        //Now everything is ready and set up correctly, tell the server we have finished loading into the game successfully
         SendNewPlayerReadyNotification();
+    }
+
+    //Gets new state of the entire set of a players inventory, equipment and action bar
+    private void HandlePlayerTotalItemUpdate(byte[] PacketData)
+    {
+        //Open a new network packet
+        PacketReader Reader = new PacketReader(PacketData);
+        int PacketType = Reader.ReadInt();
+
+        //Read and update the contents of the characters inventory
+        DraggableUIComponent[] ItemSlots = DraggableUIControl.Instance.InventorySlots;
+        for(int i = 0; i < 9; i++)
+        {
+            //Read the values of the item in each inventory slot
+            int ItemNumber = Reader.ReadInt();
+            int ItemID = Reader.ReadInt();
+
+            //Empty the slots with nothing in them
+            if(ItemNumber == 0)
+            {
+                ItemSlots[i].ItemData = null;
+                ItemSlots[i].UpdateUIDisplay();
+            }
+            else
+            //Display the slots with items in them
+            {
+                ItemSlots[i].ItemData = ItemList.Instance.GetItemData(ItemNumber);
+                ItemSlots[i].EquipSlotType = ItemSlots[i].ItemData.Slot;
+                ItemSlots[i].ItemID = ItemID;
+                ItemSlots[i].UpdateUIDisplay();
+            }
+        }
+
+        //Loop through the characters equipment slots, updating the UI / character model as we go along
+        for(int i = 0; i < 13; i++)
+        {
+            //Read the initial item values from the packet data
+            EquipmentSlot GearSlot = (EquipmentSlot)Reader.ReadInt();
+            int ItemNumber = Reader.ReadInt();
+            int ItemID = Reader.ReadInt();
+
+            //Empty UI slots / remove equipment from the player with empty equipment slots
+            if(ItemNumber == 0)
+            {
+                //Update the UI
+                DraggableUIComponent EquipmentSlot = DraggableUIControl.Instance.GetEquipmentSlot(GearSlot);
+                EquipmentSlot.ItemData = null;
+                EquipmentSlot.UpdateUIDisplay();
+                //Remove gear from the character
+                PlayerManager.Instance.GetCurrentCharacterObject().GetComponent<PlayerItemEquip>().UnequipItem(GearSlot);
+            }
+            //Update UI slots / add equipment to the player with filled equipment slots
+            else
+            {
+                //Get the rest of the items data
+                ItemData ItemData = ItemList.Instance.GetItemData(ItemNumber);
+                //Update the UI
+                DraggableUIComponent EquipmentSlot = DraggableUIControl.Instance.GetEquipmentSlot(GearSlot);
+                EquipmentSlot.ItemData = ItemData;
+                EquipmentSlot.ItemID = ItemID;
+                EquipmentSlot.UpdateUIDisplay();
+                //Equip the gear onto the character model
+                PlayerManager.Instance.GetCurrentCharacterObject().GetComponent<PlayerItemEquip>().EquipItem(GearSlot, ItemData.Name);
+            }
+        }
+
+        //Read and update the contents of the characters action bar
+        DraggableUIComponent[] AbilitySlots = DraggableUIControl.Instance.ActionBarSlots;
+        for(int i = 0; i < 5; i++)
+        {
+            //read each items values
+            int ItemNumber = Reader.ReadInt();
+            int ItemID = Reader.ReadInt();
+
+            //Empty slots
+            if(ItemNumber == 0)
+            {
+                AbilitySlots[i].ItemData = null;
+                AbilitySlots[i].UpdateUIDisplay();
+            }
+            //Filled Slots
+            else
+            {
+                AbilitySlots[i].ItemData = ItemList.Instance.GetItemData(ItemNumber);
+                AbilitySlots[i].ItemID = ItemID;
+                AbilitySlots[i].UpdateUIDisplay();
+            }
+        }
+    }
+
+    private void SendPlayerActionBarRequest()
+    {
+        PacketWriter Writer = new PacketWriter();
+        Writer.WriteInt((int)ClientPacketType.PlayerActionBarRequest);
+        Writer.WriteString(PlayerManager.Instance.GetCurrentPlayerName());
+        SendPacket(Writer);
     }
 
     private void SendNewPlayerReadyNotification()
@@ -296,38 +542,41 @@ public class PacketManager : MonoBehaviour
         SendPacket(Writer);
     }
 
-    //Sends a request to the game server that the player wants to unequip whatever item is in this equipment slot, then move it into their inventory
-    public void SendUnequipItemRequest(string CharacterName, EquipmentSlot EquipmentSlot)
+    //Sends a request to the game server that the player wants to unequip whatever item is in this equipment slot, then move it into their first available inventory spot
+    //NOTE: Assumes the player has some available space in their inventory
+    public void SendUnequipItemRequest(string CharacterName, EquipmentSlot EquipmentSlot, int BagSlot)
     {
-        //Define the new packet with the correct packet type
+        //Start the packet writer
         PacketWriter Writer = new PacketWriter();
         Writer.WriteInt((int)ClientPacketType.UnequipItem);
 
-        //Write the characters name and the equipment slot they want to remove the item from
+        //Write in who is unequipping the item, what slot they are unequipping from, and what inventory slot the item wants to be placed into (default -1 value places the item into the first available inventory slot)
         Writer.WriteString(CharacterName);
         Writer.WriteInt((int)EquipmentSlot);
+        Writer.WriteInt(BagSlot);
 
-        //Send the request to the game server
+        //Send the packet to the game server so the request can be processed
         SendPacket(Writer);
     }
 
     //Sends a request to the game server that the players wants to equip one of the items from the inventory
-    public void SendEquipItemRequest(string CharacterName, int BagSlot)
+    public void SendEquipItemRequest(string CharacterName, int BagSlot, EquipmentSlot GearSlot)
     {
         //Define the new packet to send
         PacketWriter Writer = new PacketWriter();
         Writer.WriteInt((int)ClientPacketType.EquipInventoryItem);
 
-        //Write the characters name and the bag slot number containing the item they want to equip
+        //Write the characters name, the bag slot number where the item is and the equipment slot type where they are going to equip the item to
         Writer.WriteString(CharacterName);
         Writer.WriteInt(BagSlot);
+        Writer.WriteInt((int)GearSlot);
 
         //Send the request to the game server
         SendPacket(Writer);
     }
 
     //Sends a request to the game server that the player wants to pick up an item from the ground
-    public void SendTakeItemRequest(string CharacterName, ItemData ItemData)
+    public void SendTakeItemRequest(string CharacterName, ItemData ItemData, int ItemID)
     {
         //Create the new packet to send to the server
         PacketWriter Writer = new PacketWriter();
@@ -336,45 +585,38 @@ public class PacketManager : MonoBehaviour
         //Write the characters name and the items data into the network packet
         Writer.WriteString(CharacterName);
         Writer.WriteInt(ItemData.ItemNumber);
-        Writer.WriteInt(ItemData.ItemID);
+        Writer.WriteInt(ItemID);
 
         //Send the packet to the game server
         SendPacket(Writer);
     }
 
+    //Spawns a new item pickup into the game world
     private void HandleSpawnItem(byte[] PacketData)
     {
-        //Read in the packet data to find out what item is being spawned into the game world
+        //Open the network packet
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
 
-        //Read in the items Type, Name, Number, ID and Position
-        string ItemType = Reader.ReadString();
-        string ItemName = Reader.ReadString();
+        //Read in the items information values
         int ItemNumber = Reader.ReadInt();
         int ItemID = Reader.ReadInt();
-        Vector3 ItemPos = Reader.ReadVector3();
+        Vector3 ItemLocation = Reader.ReadVector3();
 
-        //Sort by item type what item is being added into the game world
-        switch (ItemType)
-        {
-            //First check for consumable items
-            case ("Consumable"):
-                //Use the ItemManager to spawn the correct consumable pickup prefab into the game world
-                ItemManager.Instance.AddConsumable(ItemNumber, ItemID, ItemName, ItemPos);
-                break;
-            case ("Equipment"):
-                ItemManager.Instance.AddEquipment(ItemNumber, ItemID, ItemName, ItemPos);
-                break;
-        }
+        //Use the ItemManager class to add this object into the game world as a new pickup object
+        ItemManager.Instance.AddItemPickup(ItemNumber, ItemID, ItemLocation);
     }
 
+    //Removes an existing item pickup from the game world
     private void HandleRemoveItem(byte[] PacketData)
     {
+        //Open the network packet
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
+
+        //Get the universal ItemID of the item thats being removed, then use that to tell the ItemManager to remove it from the game world
         int ItemID = Reader.ReadInt();
-        ItemManager.Instance.RemoveItem(ItemID);
+        ItemManager.Instance.RemoveItemPickup(ItemID);
     }
 
     //Receives another players chat message from the server to be displayed in our chat window
@@ -436,7 +678,7 @@ public class PacketManager : MonoBehaviour
         int PacketType = Reader.ReadInt();
         bool LoginSuccess = Reader.ReadInt() == 1;
         string ReplyMessage = Reader.ReadString();
-        if(LoginSuccess)
+        if (LoginSuccess)
         {
             //Move to character selection screen when logging in sucessfully
             MenuPanelDisplayManager.Instance.DisplayPanel("Character Selection Panel");
@@ -501,7 +743,7 @@ public class PacketManager : MonoBehaviour
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
         int ActivePlayerCount = Reader.ReadInt();
-        for(int i = 0; i < ActivePlayerCount; i++)
+        for (int i = 0; i < ActivePlayerCount; i++)
         {
             //Extract each player characters information as we loop through the packet data
             string PlayerName = Reader.ReadString();
@@ -530,7 +772,7 @@ public class PacketManager : MonoBehaviour
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
         int EntityCount = Reader.ReadInt();
-        for(int i = 0; i < EntityCount; i++)
+        for (int i = 0; i < EntityCount; i++)
         {
             //Extract each entities information as we loop through the packet data
             string EntityType = Reader.ReadString();
@@ -552,6 +794,7 @@ public class PacketManager : MonoBehaviour
         SendActiveItemRequest();
     }
 
+    //Sends a request to the game server to recieve a complete list of all the currently active item drops in the game world
     private void SendActiveItemRequest()
     {
         PacketWriter Writer = new PacketWriter();
@@ -562,46 +805,33 @@ public class PacketManager : MonoBehaviour
     //Receives from the server the initial set of active item drops when first entering into the game world
     private void HandleActiveItemList(byte[] PacketData)
     {
-        //Read in how many items there are to be added into the game
+        //Open the network packet
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
-        int ItemCount = Reader.ReadInt();
-        
-        for(int i = 0; i < ItemCount; i++)
+
+        //Read the amount of item pickups that need exist, then loop through and do each one of them
+        int ItemPickups = Reader.ReadInt();
+        l.og(ItemPickups + " item pickups to handle.");
+        for(int i = 0; i < ItemPickups; i++)
         {
-            //Extract each items Name, Type, Item Number, Item ID, and Position
-            string ItemName = Reader.ReadString();
-            string ItemType = Reader.ReadString();
+            //Extract each items values from the packet
             int ItemNumber = Reader.ReadInt();
             int ItemID = Reader.ReadInt();
-            Vector3 ItemPosition = Reader.ReadVector3();
+            Vector3 ItemLocation = Reader.ReadVector3();
 
-            //Sort by item type what item is being added into the game world
-            switch (ItemType)
-            {
-                //First check for consumable items
-                case ("Consumable"):
-                    //Use the ItemManager to spawn the correct consumable pickup prefab into the game world
-                    ItemManager.Instance.AddConsumable(ItemNumber, ItemID, ItemName, ItemPosition);
-                    break;
-                //Second check for equipment pickups
-                case ("Equipment"):
-                    ItemManager.Instance.AddEquipment(ItemNumber, ItemID, ItemName, ItemPosition);
-                    break;
-            }
+            //Spawn each item into the game world as a new item pickup object
+            ItemManager.Instance.AddItemPickup(ItemNumber, ItemID, ItemLocation);
         }
-        
-        //Now use the player manager to spawn the players character into the game world
+
+        //Spawn our player character into the game world, change cameras and update the UI settings
         PlayerManager.Instance.SpawnLocalPlayer();
-        //Disable the main scene camera
         GameObject.Find("Main Camera").SetActive(false);
-        //Hide all UI components, then display only the chat window and inventory panel
-        UIManager UI = UIManager.Instance;
-        UI.HideAllPanels();
-        UI.TogglePanelDisplay("Chat Panel", true);
-        UI.TogglePanelDisplay("Inventory Panel", true);
-        UI.TogglePanelDisplay("Equipment Panel", true);
-        
+        UIManager.Instance.HideAllPanels();
+        UIManager.Instance.TogglePanelDisplay("Chat Panel", true);
+        UIManager.Instance.TogglePanelDisplay("Inventory Panel", true);
+        UIManager.Instance.TogglePanelDisplay("Equipment Panel", true);
+        UIManager.Instance.TogglePanelDisplay("Action Bar Panel", true);
+
         //Request from the server information regarding what the player has in their inventory
         SendPlayerInventoryRequest();
     }
@@ -622,9 +852,9 @@ public class PacketManager : MonoBehaviour
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
         int CharacterCount = Reader.ReadInt();
-        
+
         //If 0 characters data was sent through, go straight to the character creation screen
-        if(CharacterCount == 0)
+        if (CharacterCount == 0)
         {
             MenuPanelDisplayManager.Instance.DisplayPanel("Character Creation Panel");
             return;
@@ -705,7 +935,7 @@ public class PacketManager : MonoBehaviour
         PacketReader Reader = new PacketReader(PacketData);
         int PacketType = Reader.ReadInt();
         int EntityCount = Reader.ReadInt();
-        for(int i = 0; i < EntityCount; i++)
+        for (int i = 0; i < EntityCount; i++)
         {
             //Extract the information for each entity as we loop through them all
             string EntityID = Reader.ReadString();
@@ -726,7 +956,7 @@ public class PacketManager : MonoBehaviour
         int PacketType = Reader.ReadInt();
         int EntityCount = Reader.ReadInt();
         //Loop through and remove them all
-        for(int i = 0; i < EntityCount; i++)
+        for (int i = 0; i < EntityCount; i++)
         {
             string EntityID = Reader.ReadString();
             EntityManager.RemoveEntity(EntityID);

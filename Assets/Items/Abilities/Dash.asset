@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
+  m_Name: Dash
+  m_EditorClassIdentifier: 
+  Name: Dash
+  DisplayName: Dash
+  Description: 'A movement spell that causes the player to teleport to a location
+    directly ahead of the player. '
+  Type: 3
+  Slot: 0
+  Prefab: {fileID: 8558206972811174349, guid: 399d114480f79a841be04d1298e833e4, type: 3}
+  Icon: {fileID: 21300000, guid: a527c68a8df3d6f44b7d3e27a168e2ae, type: 3}
+  ItemNumber: 23
+  Rarity: 1
+  ConsumableEffect: {fileID: 0}

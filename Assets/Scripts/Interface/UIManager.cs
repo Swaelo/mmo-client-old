@@ -1,6 +1,6 @@
 ﻿// ================================================================================================================================
 // File:        UIManager.cs
-// Description: 
+// Description: Helps to easily toggle on/off different UI panels during the game
 // ================================================================================================================================
 
 using UnityEngine;
@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     //UIManager is a singleton so i can be accessed easily through the code base
     public static UIManager Instance = null;
     private void Awake() { Instance = this; }
-    
+
     //Complete set of UI components to be managed, indexed in dictionary by their name
     public GameObject[] UIPanelObjects;
     private Dictionary<string, GameObject> UIPanels = new Dictionary<string, GameObject>();

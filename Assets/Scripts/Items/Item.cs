@@ -11,4 +11,5 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour
 {
     public ItemData Data = null;
+    public int ItemID = -1;
 }

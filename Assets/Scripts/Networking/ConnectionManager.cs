@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ================================================================================================================================
+// File:        ConnectionManager.cs
+// Description: Manages the clients network connection to the master game server and all networking communication that happens with it
+// ================================================================================================================================
+
+using System;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -44,7 +49,7 @@ public class ConnectionManager : MonoBehaviour
     public void Update()
     {
         //Start automatically trying to connect to the server if absolutely nothing is happening
-        if (!TryingToConnect && !IsConnected && !DebugPlayerSwitch.Instance.UseDebugPlayer)
+        if (!TryingToConnect && !IsConnected)
             TryConnect();
 
         //If we are still waiting for establish a connection to the server, check if its been done yet or not

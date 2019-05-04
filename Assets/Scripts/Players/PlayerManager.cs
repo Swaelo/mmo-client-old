@@ -23,9 +23,22 @@ public class PlayerManager : MonoBehaviour
         OtherPlayers.Add(PlayerName, PlayerObject);
     }
 
+    //Returns the name of the character the player is currently active in the game world with
     public string GetCurrentPlayerName()
     {
         return LocalPlayer.CurrentCharacter.CharacterName;
+    }
+
+    //Returns the currently active characters game object
+    public GameObject GetCurrentCharacterObject()
+    {
+        return LocalPlayer.CurrentCharacter.CharacterObject;
+    }
+
+    //Returns the world position of the character the player is currently active in the game world with
+    public Vector3 GetCurrentCharacterLocation()
+    {
+        return LocalPlayer.CurrentCharacter.CharacterObject.transform.position;
     }
 
     //Removes a remote player from the game world

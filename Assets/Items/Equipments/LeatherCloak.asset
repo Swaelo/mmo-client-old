@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936303a6da1752945a572ebb519738bd, type: 3}
+  m_Name: LeatherCloak
+  m_EditorClassIdentifier: 
+  Name: LeatherCloak
+  DisplayName: Leather Cloak
+  Description: Cloak worn by the secret sorcerers at the Destruction Magic School.
+    They secretly share in some Necromancy based spells to those they trust the most,
+    never revealing themselves to strangers.
+  Type: 2
+  Slot: 2
+  Prefab: {fileID: 3286625730905775968, guid: 47528fcd75d2872408a1382bbdcda21a, type: 3}
+  Icon: {fileID: 21300000, guid: b5efa0397c3871545bc2b7817c8e2c53, type: 3}
+  ItemNumber: 0
+  Rarity: 1
+  ConsumableEffect: {fileID: 0}
