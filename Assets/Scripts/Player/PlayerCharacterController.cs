@@ -81,8 +81,8 @@ public class PlayerCharacterController : MonoBehaviour
             if (transform.position != PreviousUpdatePosition || transform.rotation != PreviousUpdateRotation)
             {
                 //Tell the server our new position value
-                if(PacketManager.Instance != null && ConnectionManager.Instance.IsConnected)
-                    PacketManager.Instance.SendPlayerUpdate(transform.position, transform.rotation);
+                if(ConnectionManager.Instance.IsConnected)
+                    PlayerManagementPacketSender.SendPlayerUpdate(transform.position, transform.rotation);
                 //Now remember what we last told the server our values where
                 PreviousUpdatePosition = transform.position;
                 PreviousUpdateRotation = transform.rotation;

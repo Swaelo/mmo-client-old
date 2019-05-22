@@ -29,7 +29,7 @@ public class PickupPrefabs : MonoBehaviour
     {
         if (!PickupsDictionary.ContainsKey(PickupName))
         {
-            l.og(PickupName + " key doesnt exist in PickupsDictionary.");
+            Log.PrintChatMessage(PickupName + " key doesnt exist in PickupsDictionary.");
             return null;
         }
 

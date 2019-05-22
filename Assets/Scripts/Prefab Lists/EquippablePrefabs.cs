@@ -28,7 +28,7 @@ public class EquippablePrefabs : MonoBehaviour
     {
         if(!EquippableDictionary.ContainsKey(EquippableName))
         {
-            l.og(EquippableName + " key doesnt exist in the equippable prefabs dictionary.");
+            Log.PrintChatMessage(EquippableName + " key doesnt exist in the equippable prefabs dictionary.");
             return null;
         }
 

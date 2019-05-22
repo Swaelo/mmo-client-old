@@ -22,29 +22,29 @@ public class AccountCreationButtonFunctions : MonoBehaviour
         //Ignore the request if any of the input fields have been left empty
         if(AccountName == "")
         {
-            l.og("Registration failed, no account name was entered.");
+            Log.PrintChatMessage("Registration failed, no account name was entered.");
             return;
         }
         else if(AccountPass == "")
         {
-            l.og("Registration failed, no password was entered.");
+            Log.PrintChatMessage("Registration failed, no password was entered.");
             return;
         }
         else if(PassVerify == "")
         {
-            l.og("Registration failed, please verify your password.");
+            Log.PrintChatMessage("Registration failed, please verify your password.");
             return;
         }
 
         //Make sure the password and verification fields match
         if(AccountPass != PassVerify)
         {
-            l.og("Registration failed, password verification did not match.");
+            Log.PrintChatMessage("Registration failed, password verification did not match.");
             return;
         }
 
         //Send the account registration request to the game server
-        PacketManager.Instance.SendRegisterRequest(AccountName, AccountPass);
+        AccountManagementPacketSender.SendRegisterRequest(AccountName, AccountPass);
         PlayerManager.Instance.LocalPlayer.AccountName = AccountName;
         PlayerManager.Instance.LocalPlayer.AccountPass = AccountPass;
 

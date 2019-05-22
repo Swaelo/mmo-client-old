@@ -66,11 +66,11 @@ public class DraggableUIComponent : MonoBehaviour, IPointerDownHandler, IPointer
         //            return;
 
         //        case (UIComponentType.EquipmentSlot):
-        //            l.og("right clicked equipment slot.");
+        //            Log.Print("right clicked equipment slot.");
         //            return;
 
         //        case (UIComponentType.ActionBarSlot):
-        //            l.og("right clicked action bar slot.");
+        //            Log.Print("right clicked action bar slot.");
         //            return;
         //    }
         //}

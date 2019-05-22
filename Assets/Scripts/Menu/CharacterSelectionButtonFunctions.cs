@@ -28,7 +28,7 @@ public class CharacterSelectionButtonFunctions : MonoBehaviour
         PlayerData LocalPlayer = PlayerManager.Instance.LocalPlayer;
         LocalPlayer.CurrentCharacter = LocalPlayer.PlayerCharacters[CharacterSlot - 1];
         MenuPanelDisplayManager.Instance.DisplayPanel("Waiting Panel");
-        PacketManager.Instance.SendEnterWorldRequest(LocalPlayer.CurrentCharacter);
+        GameWorldStatePacketSender.SendEnterWorldRequest(LocalPlayer.CurrentCharacter);
     }
 
     public void ClickCreateCharacter()

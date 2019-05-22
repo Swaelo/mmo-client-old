@@ -20,7 +20,7 @@ public class ChatWindowManager : MonoBehaviour
         Instance = this;
         MessageContents = new string[MessageLines.Length];
         for (int i = 0; i < MessageLines.Length; i++)
-            MessageContents[i] = "...";
+            MessageContents[i] = "";
     }
 
     public void DisplayMessage(string Message)
@@ -33,19 +33,7 @@ public class ChatWindowManager : MonoBehaviour
         }
 
         //Place the new message on the first line
-        MessageContents[0] = GetSystemTime() + ": " + Message;
+        MessageContents[0] = Message;
         MessageLines[0].GetComponent<Text>().text = MessageContents[0];
-    }
-
-    //Returns the current system time in a nice format
-    private string GetSystemTime()
-    {
-        DateTime Time = System.DateTime.Now;
-        bool PM = Time.Hour > 12;
-        int Hour = PM ? Time.Hour - 12 : Time.Hour;
-        Hour = Hour == 0 ? 12 : Hour;
-        string Minute = Time.Minute < 10 ? "0" + Time.Minute : Time.Minute.ToString();
-        string Second = Time.Second < 10 ? "0" + Time.Second : Time.Second.ToString();
-        return Hour + ":" + Minute + ":" + Second + " " + (PM ? "PM" : "AM");
     }
 }

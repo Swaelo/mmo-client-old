@@ -16,19 +16,19 @@ public class AccountLoginButtonFunctions : MonoBehaviour
         //Ignore the request if any of the input fields were left empty
         if(UsernameInput.text == "")
         {
-            l.og("Account Login failed, no username entered.");
+            Log.PrintChatMessage("Account Login failed, no username entered.");
             return;
         }
         else if(PasswordInput.text == "")
         {
-            l.og("Account Login failed, no password entered.");
+            Log.PrintChatMessage("Account Login failed, no password entered.");
             return;
         }
 
         //Send the account login request to the server
         PlayerManager.Instance.LocalPlayer.AccountName = UsernameInput.text;
         PlayerManager.Instance.LocalPlayer.AccountPass = PasswordInput.text;
-        PacketManager.Instance.SendLoginRequest(PlayerManager.Instance.LocalPlayer.AccountName, PlayerManager.Instance.LocalPlayer.AccountPass);
+        AccountManagementPacketSender.SendLoginRequest(PlayerManager.Instance.LocalPlayer.AccountName, PlayerManager.Instance.LocalPlayer.AccountPass);
         MenuPanelDisplayManager.Instance.DisplayPanel("Waiting Panel");
     }
 

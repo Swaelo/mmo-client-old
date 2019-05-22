@@ -23,12 +23,12 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
         //Ignore the character creation request if no character name was entered
         if (LocalPlayer.CurrentCharacter.CharacterName == "")
         {
-            l.og("Character creation failed: no name was entered.");
+            Log.PrintChatMessage("Character creation failed: no name was entered.");
             return;
         }
 
         //Send a request to the server to have this character created and display the waiting information
-        PacketManager.Instance.SendCreateCharacterRequest(LocalPlayer.AccountName, LocalPlayer.CurrentCharacter.CharacterName, LocalPlayer.CurrentCharacter.CharacterGender == Gender.Male);
+        AccountManagementPacketSender.SendCreateCharacterRequest(LocalPlayer.AccountName, LocalPlayer.CurrentCharacter.CharacterName, LocalPlayer.CurrentCharacter.CharacterGender == Gender.Male);
         MenuPanelDisplayManager.Instance.DisplayPanel("Waiting Panel");
     }
 
@@ -36,6 +36,6 @@ public class CharacterCreationButtonFunctions : MonoBehaviour
     {
         //Return to the character selection screen when the cancel button is clicked
         MenuPanelDisplayManager.Instance.DisplayPanel("Waiting Panel");
-        PacketManager.Instance.SendCharacterDataRequest(PlayerManager.Instance.LocalPlayer.AccountName);
+        AccountManagementPacketSender.SendCharacterDataRequest(PlayerManager.Instance.LocalPlayer.AccountName);
     }
 }

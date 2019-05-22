@@ -9,137 +9,123 @@ using UnityEngine;
 
 public class ConnectionManager : MonoBehaviour
 {
-    //Singleton Instance
+    //Singleton instance class, only needs to be one, and this makes it easy to access from anywhere in the code
     public static ConnectionManager Instance = null;
     private void Awake() { Instance = this; }
 
-    //Server Connection Configuration
-    public string ServerIP = "192.168.0.8";
+    //Server connection settings
+    public string ServerIP = "192.168.1.102";
     public int ServerPort = 5500;
 
-    //Active Connection Objects
-    private TcpClient ClientSocket = null;
-    public NetworkStream ClientStream = null;
+    //Current server connection and datastream used to communicate with it
+    private TcpClient ServerConnection = null;
+    public NetworkStream DataStream = null;
 
-    //Packet Data Buffer Storage
-    private byte[] ASyncBuffer;
-    private byte[] PacketBuffer;
-    private bool ShouldHandleData = false;
+    //Buffers to store data as its recieved from the server
+    private byte[] ASyncBuffer = null;
+    private byte[] PacketBuffer = null;
 
-    //Current Connection Status
+    //Current connection status
+    public bool TryingToConnect = false;
     public bool IsConnected = false;
-    private float ConnectionTimeout = 3f;
-    private bool TryingToConnect = false;
+    public bool ConnectionAnnounced = false;
+    public bool ShouldHandleData = false;
 
-    //Attempts to establish a connection to the game server, automatically retries every 3 seconds
+    //Attempts to establish a new connection with the game server
     public void TryConnect()
     {
-        l.og("Connecting to server...");
+        Log.PrintChatMessage("connecting to server...");
         TryingToConnect = true;
-        ClientSocket = new TcpClient();
-        ClientSocket.ReceiveBufferSize = 4096;
-        ClientSocket.SendBufferSize = 4096;
-        ClientSocket.NoDelay = false;
+        ServerConnection = new TcpClient();
+        ServerConnection.ReceiveBufferSize = 4096;
+        ServerConnection.SendBufferSize = 4096;
+        ServerConnection.NoDelay = false;
         Array.Resize(ref ASyncBuffer, 8192);
-        ClientSocket.BeginConnect(ServerIP, ServerPort, new AsyncCallback(ConnectionResult), ClientSocket);
-        MenuPanelDisplayManager.Instance.DisplayPanel("Waiting Panel");
-        MenuPanelDisplayManager.Instance.DisplayGameTitle();
+        ServerConnection.BeginConnect(ServerIP, ServerPort, new AsyncCallback(ConnectionResult), ServerConnection);
     }
 
     public void Update()
     {
-        //Start automatically trying to connect to the server if absolutely nothing is happening
-        if (!TryingToConnect && !IsConnected)
-            TryConnect();
-
-        //If we are still waiting for establish a connection to the server, check if its been done yet or not
-        if (TryingToConnect && IsConnected)
+        if(TryingToConnect && IsConnected)
         {
-            //Enable the main menu display once the server has been connected to
+            //Announce that we have connected to the server when it first happens
             MenuPanelDisplayManager.Instance.DisplayPanel("Main Menu Panel");
-            l.og("Connected to Server.");
+            Log.PrintChatMessage("connected!");
             TryingToConnect = false;
         }
 
-        //Wait for connection timeout if the connection hasnt been made yet
-        if (TryingToConnect && !IsConnected)
+        if(IsConnected && ShouldHandleData)
         {
-            ConnectionTimeout -= Time.deltaTime;
-            if (ConnectionTimeout <= 0f)
-            {
-                //When the timer expires reset it and try connecting to the server again
-                l.og("Server connection timed out, trying again.");
-                ConnectionTimeout = 3f;
-                TryConnect();
-            }
-        }
-
-        //Receive data from the server while the connection is active and send data to the PacketManager to be handled accordingly
-        if (IsConnected && ShouldHandleData)
-        {
-            PacketManager.Instance.HandlePacket(PacketBuffer);
+            //Process packet data when its received from the server
             ShouldHandleData = false;
+            PacketHandler.Instance.HandleServerPacket(PacketBuffer);
         }
     }
-    
-    //Callback Event triggered when trying to establish a new connection to the server
-    private void ConnectionResult(IAsyncResult Result)
-    {
-        //If the socket object doesnt exist then something is seriously wrong
-        if (ClientSocket != null)
-        {
-            //End the ongoing connection request now that we have connected to the game server
-            ClientSocket.EndConnect(Result);
 
-            //Double check the connection hasnt been dropped yet for some reason
-            if (!ClientSocket.Connected)
+    //Callback triggered when we first establish a connection to the game server
+    private void ConnectionResult(IAsyncResult result)
+    {
+        if(ServerConnection != null)
+        {
+            //End the connection request as we are now connected
+            ServerConnection.EndConnect(result);
+
+            //double check everything connected all right
+            if(!ServerConnection.Connected)
             {
                 IsConnected = false;
                 return;
             }
 
-            //Confirm the connection has been established
+            //note now that we have connected successfully
             IsConnected = true;
-            ClientSocket.NoDelay = true;
+            ServerConnection.NoDelay = true;
 
-            //Start handling packets sent to us from the server
-            ClientStream = ClientSocket.GetStream();
-            ClientStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
+            //open up the data stream and start listening for incoming packets sent to us from the game server
+            DataStream = ServerConnection.GetStream();
+            DataStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
         }
     }
 
-    //Reads packet data sent to us from the server, then sends it onto the PacketHandler class to be processed
-    private void ReadPacket(IAsyncResult Result)
+    //Callback triggered when we finish recieving a new packet of information from the game server
+    private void ReadPacket(IAsyncResult result)
     {
-        //Do nothing if no connection at all exists
-        if (ClientSocket == null)
+        if(ServerConnection == null)
         {
-            l.og("Ignoring ReadPacket function call, the socket connection does not exist.");
+            //double check the server connection is still up and running
+            Log.PrintChatMessage("socket connection lost, cant read packet");
             return;
         }
 
-        //Copy the data from the ASyncBuffer over to the PacketBuffer object
-        int PacketSize = ClientStream.EndRead(Result);
+        //Copy the packet data over into a new array so the asyncbuffer can immediately be used to stream in data from the server again
+        int PacketSize = DataStream.EndRead(result);
         PacketBuffer = null;
         Array.Resize(ref PacketBuffer, PacketSize);
         Buffer.BlockCopy(ASyncBuffer, 0, PacketBuffer, 0, PacketSize);
-
-        //Make sure no packets are received with a size of 0, this usually means the connection to the server has been lost for some reason
-        if (PacketSize == 0)
+        
+        if(PacketSize == 0)
         {
-            CloseConnection("Received network packet of size 0");
+            //if the connection was shut down from the servers end then the sudden end in the datastream will result in recieving an empty network packet
+            CloseConnection("recieve packet size 0");
             return;
         }
 
-        //Start listening to data sent to us from the game server again
+        //note that we now have a packet of data that needs to be handled, and start listening in for new data from the server
         ShouldHandleData = true;
-        ClientStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
+        DataStream.BeginRead(ASyncBuffer, 0, 8192, ReadPacket, null);
     }
 
-    //Closes the current connection to the game server
-    public void CloseConnection(string Reason)
+    //Severs our current connection to the game server
+    public void CloseConnection(string reason)
     {
-        l.og("Closing Server Connection, " + Reason);
-        ClientSocket.Close();
+        Log.PrintChatMessage("closing server connection: " + reason);
+        ServerConnection.Close();
+    }
+
+    //Sends a packet of data to the game server
+    public void SendPacket(PacketWriter Writer)
+    {
+        Log.PrintChatMessage("sending packet to server");
+        DataStream.Write(Writer.ToArray(), 0, Writer.ToArray().Length);
     }
 }

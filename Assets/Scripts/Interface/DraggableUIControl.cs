@@ -48,6 +48,7 @@ public class DraggableUIControl : MonoBehaviour
         }
 
         //Couldnt find the matching equipment slot
+        Debug.Log("couldnt find " + EquipmentSlotType.ToString() + " UI equipment slot");
         return null;
     }
 
@@ -82,7 +83,7 @@ public class DraggableUIControl : MonoBehaviour
     //Triggered by interacting with UI components while playing the game
     public void StartDragging(DraggableUIComponent UIComponent)
     {
-        //l.og("start dragging " + UIComponent.transform.name);
+        //Log.Print("start dragging " + UIComponent.transform.name);
         DraggingComponent = true;
         CurrentComponent = UIComponent;
         CurrentComponent.SetVisibility(false);
@@ -141,14 +142,14 @@ public class DraggableUIControl : MonoBehaviour
             if (InventorySlots[i].ItemData == null)
             {
                 //Dragged item from inventory to a different empty bag slot, move the item to that bag slot
-                PacketManager.Instance.SendMoveInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, InventorySlots[i].InventorySlotNumber);
+                ItemManagementPacketSender.SendMoveInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, InventorySlots[i].InventorySlotNumber);
                 return;
             }
             //Otherwise, we know there is an item here so the two items should swap positions
             else
             {
                 //Dragged item to another full bag space, swap the items positions in the inventory
-                PacketManager.Instance.SendSwapInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, InventorySlots[i].InventorySlotNumber);
+                ItemManagementPacketSender.SendSwapInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, InventorySlots[i].InventorySlotNumber);
                 return;
             }
         }
@@ -164,7 +165,7 @@ public class DraggableUIControl : MonoBehaviour
             if(DraggingSlot.ItemData.Slot != EquipmentSlots[i].EquipSlotType)
             {
                 //Dragged item from inventory to an incompatible equipment gear slot, do nothing
-                l.og("1: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " incompatible gear slot, do nothing.");
+                Log.PrintChatMessage("1: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " incompatible gear slot, do nothing.");
                 return;
             }
             else
@@ -173,17 +174,17 @@ public class DraggableUIControl : MonoBehaviour
                 if (EquipmentSlots[i].ItemData == null)
                 {
                     //Dragged item from inventory to an empty equipment gear slot, equip the item in this gear slot
-                    l.og("2: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " empty+compatible gear slot, equip it here.");
+                    Log.PrintChatMessage("2: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " empty+compatible gear slot, equip it here.");
 
-                    PacketManager.Instance.SendEquipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, EquipmentSlots[i].EquipSlotType);
+                    ItemManagementPacketSender.SendEquipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, EquipmentSlots[i].EquipSlotType);
                     return;
                 }
                 //Otherwise, the current piece needs to be removed and replaced with the piece that was dragged on
                 else
                 {
                     //Dragged item from inventory to a filled equipment gear slot, equip the new item to that slot and unequip the previous item placing it where the previous item was being stored
-                    l.og("3: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " full+compatible gear slot, swap them.");
-                    PacketManager.Instance.SendPlayerSwapEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, EquipmentSlots[i].EquipSlotType);
+                    Log.PrintChatMessage("3: " + DraggingSlot.ItemData.Name + " from inventory to " + EquipmentSlots[i].EquipSlotType + " full+compatible gear slot, swap them.");
+                    ItemManagementPacketSender.SendSwapEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, EquipmentSlots[i].EquipSlotType);
                     return;
                 }
             }
@@ -207,20 +208,20 @@ public class DraggableUIControl : MonoBehaviour
                 if(ActionBarSlots[i].ItemData == null)
                 {
                     //Dragged an ability gem from the inventory onto an empty action bar slot, equip the ability
-                    PacketManager.Instance.SendCharacterEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
+                    ItemManagementPacketSender.SendEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
                     return;
                 }
                 else
                 {
                     //Dragged an ability gem from the inventory onto a filled action bar slot, swap the gems positions around
-                    PacketManager.Instance.SendCharacterSwapEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
+                    ItemManagementPacketSender.SendSwapEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
                     return;
                 }
             }
         }
-        
+
         //Dragged an item from the inventory to the game world, remove the item from the players inventory and drop it at their current position
-        PacketManager.Instance.SendDropInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, PlayerManager.Instance.GetCurrentCharacterLocation());
+        ItemManagementPacketSender.SendDropInventoryItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.InventorySlotNumber, PlayerManager.Instance.GetCurrentCharacterLocation());
     }
 
     //Handles actions to be taken after finished dragging a piece of gear somewhere out of the players equipment screen
@@ -237,7 +238,7 @@ public class DraggableUIControl : MonoBehaviour
             if (InventorySlots[i].ItemData == null)
             {
                 //Dragged a piece of equipment to an empty inventory slot, unequip the item and store it in this bag slot
-                PacketManager.Instance.SendUnequipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.EquipSlotType, InventorySlots[i].InventorySlotNumber);
+                ItemManagementPacketSender.SendUnequipItemRequest(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.EquipSlotType);
                 return;
             }
             //Drag from equipment to filled inventory slot
@@ -247,7 +248,7 @@ public class DraggableUIControl : MonoBehaviour
                 if(InventorySlots[i].EquipSlotType == DraggingSlot.EquipSlotType)
                 {
                     //Dragged a piece of equipment to an already filled inventory slot with an item of the same gear slot type, swap the items positions around
-                    PacketManager.Instance.SendPlayerSwapEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.EquipSlotType);
+                    ItemManagementPacketSender.SendSwapEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.EquipSlotType);
                     return;
                 }
                 else
@@ -288,9 +289,10 @@ public class DraggableUIControl : MonoBehaviour
             //Dragged a piece of equipment onto the action bar, do nothing
             return;
         }
-        
+
         //Dragged a piece of equipment out into the game world, unequip that item and drop it at the characters current location
-        PacketManager.Instance.SendDropEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.EquipSlotType, PlayerManager.Instance.GetCurrentCharacterLocation());
+
+        ItemManagementPacketSender.SendDropEquipmentItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.EquipSlotType, PlayerManager.Instance.GetCurrentCharacterLocation());
     }
 
     //Handles actions to be taken after finished dragging a gem somewhere off of the players ability bar
@@ -306,7 +308,7 @@ public class DraggableUIControl : MonoBehaviour
             if (InventorySlots[i].ItemData == null)
             {
                 //Dragged an ability gem to an empty inventory slot, unequip the ability and store it in that bag slot
-                PacketManager.Instance.SendCharacterUnequipAbility(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.ActionBarSlotNumber);
+                ItemManagementPacketSender.SendUnequipAbility(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.ActionBarSlotNumber);
                 return;
             }
             else
@@ -314,7 +316,7 @@ public class DraggableUIControl : MonoBehaviour
                 if(InventorySlots[i].ItemData.Type == ItemType.AbilityGem)
                 {
                     //Dragged an ability gem to an already filled bag space containing some other ability gem, swap the gems locations around
-                    PacketManager.Instance.SendCharacterSwapEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.ActionBarSlotNumber);
+                    ItemManagementPacketSender.SendSwapEquipAbility(PlayerManager.Instance.GetCurrentPlayerName(), InventorySlots[i].InventorySlotNumber, DraggingSlot.ActionBarSlotNumber);
                     return;
                 }
                 else
@@ -346,19 +348,19 @@ public class DraggableUIControl : MonoBehaviour
             if (ActionBarSlots[i].ItemData == null)
             {
                 //Dragged an ability gem to one of the other empty action bar slots, move the ability to this slot
-                PacketManager.Instance.SendCharacterMoveAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
+                ItemManagementPacketSender.SendMoveAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
                 return;
             }
             else
             {
                 //Dragged an ability gem to one of the other nonempty action bar slots, swap the two abilities positions on the bar
-                PacketManager.Instance.SendCharacterSwapAbilities(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
+                ItemManagementPacketSender.SendSwapAbilities(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, ActionBarSlots[i].ActionBarSlotNumber);
                 return;
             }
         }
-        
+
         //Dragged an ability gem into the game world, unequip the ability and drop the item into the game world at the characters current location
-        PacketManager.Instance.SendDropActionBarItem(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, PlayerManager.Instance.GetCurrentCharacterLocation());
+        ItemManagementPacketSender.SendDropAbility(PlayerManager.Instance.GetCurrentPlayerName(), DraggingSlot.ActionBarSlotNumber, PlayerManager.Instance.GetCurrentCharacterLocation());
         return;
     }
 }

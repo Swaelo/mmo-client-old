@@ -52,11 +52,11 @@ public class PlayerTargetLock : MonoBehaviour
 
     private void AcquireNewTarget()
     {
-        l.og("searching for new target");
+        Log.PrintChatMessage("searching for new target");
 
         //Find all the enemies in the scene that are visible to the player and close enough to be targetted
         GameObject[] AllEnemies = GameObject.FindGameObjectsWithTag("Enemy");
-        l.og(AllEnemies.Length + " enemies in game");
+        Log.PrintChatMessage(AllEnemies.Length + " enemies in game");
         List<GameObject> NearbyEnemies = new List<GameObject>();
         
         for (int EnemyIter = 0; EnemyIter < AllEnemies.Length; EnemyIter++)
@@ -66,7 +66,7 @@ public class PlayerTargetLock : MonoBehaviour
             if (EnemyDistance <= MaxTargetDistance)
                 NearbyEnemies.Add(AllEnemies[EnemyIter]);
         }
-        l.og(NearbyEnemies.Count + " are in range");
+        Log.PrintChatMessage(NearbyEnemies.Count + " are in range");
 
         //The nearby enemies that are visible to the player are those that can be targetted
         List<GameObject> VisibleEnemies = new List<GameObject>();
@@ -86,7 +86,7 @@ public class PlayerTargetLock : MonoBehaviour
                         //if(Physics.Raycast(PlayerCam.transform.position, Target.transform.position - PlayerCam.transform.position, out RayHit))
                         if (Physics.Raycast(PlayerCam.transform.position, Target.transform.position - PlayerCam.transform.position, out RayHit, 1 << 9))
                         {
-                            l.og("ray hit " + RayHit.transform.name);
+                            Log.PrintChatMessage("ray hit " + RayHit.transform.name);
                             //If we hit the enemy add them to the visible targets list
                             if (RayHit.transform.tag == "Enemy")
                                 VisibleEnemies.Add(Target);
@@ -95,7 +95,7 @@ public class PlayerTargetLock : MonoBehaviour
                 }
             }
         }
-        l.og(VisibleEnemies.Count + " of those are visible");
+        Log.PrintChatMessage(VisibleEnemies.Count + " of those are visible");
 
         //Figure out which one of these enemies is kind of closest to where the camera is pointing as the new target
         GameObject NewTarget = null;
@@ -114,7 +114,7 @@ public class PlayerTargetLock : MonoBehaviour
         //Now finally, if we were able to find a target out of all this, assign it as such and set the reticle
         if(NewTarget != null)
         {
-            l.og(NewTarget.transform.name + " acquired as new target");
+            Log.PrintChatMessage(NewTarget.transform.name + " acquired as new target");
             CurrentTarget = NewTarget;
             TargettingReticle.enabled = true;
         }
@@ -122,7 +122,7 @@ public class PlayerTargetLock : MonoBehaviour
 
     private void DropCurrentTarget()
     {
-        l.og("dropping target");
+        Log.PrintChatMessage("dropping target");
         CurrentTarget = null;
         TargettingReticle.enabled = false;
     }

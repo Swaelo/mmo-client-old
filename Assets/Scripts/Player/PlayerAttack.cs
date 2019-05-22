@@ -34,8 +34,8 @@ public class PlayerAttack : MonoBehaviour
                 AnimationController.SetTrigger("Attack 1");
 
             //Tell the game server where our attack landed
-            if(PacketManager.Instance != null)
-                PacketManager.Instance.SendPlayerAttack(AttackBox.transform.position, AttackBox.transform.localScale, AttackBox.transform.rotation);
+            if(ConnectionManager.Instance.IsConnected)
+                PlayerManagementPacketSender.SendPlayerAttack(AttackBox.transform.position, AttackBox.transform.localScale, AttackBox.transform.rotation);
         }
     }
 }
