@@ -20,7 +20,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Empty the slots with nothing in them
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
             {
                 ItemSlots[i].ItemData = null;
                 ItemSlots[i].UpdateUIDisplay();
@@ -34,9 +34,6 @@ public static class InventoryEquipmentManagementPacketHandler
                 ItemSlots[i].UpdateUIDisplay();
             }
         }
-
-        //Inventory updated, now request the characters equipment information
-        //InventoryEquipmentManagementPacketSender.SendPlayerEquipmentRequest();
     }
 
     public static void HandlePlayerEquipment(PacketReader Reader)
@@ -51,7 +48,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Skip past the empty equipment slots
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
                 continue;
 
             //Fetch the items information from the master item list
@@ -64,9 +61,6 @@ public static class InventoryEquipmentManagementPacketHandler
             GearUISlot.UpdateUIDisplay();
             PlayerManager.Instance.GetCurrentCharacterObject().GetComponent<PlayerItemEquip>().EquipItem(ItemSlot, ItemData.Name);
         }
-
-        //Characters equipment has been handled, now ask for the action bar status
-        //InventoryEquipmentManagementPacketSender.SendPlayerActionBarRequest();
     }
 
     public static void HandlePlayerActionBar(PacketReader Reader)
@@ -82,7 +76,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Empty the action bar slots with nothing within them
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
             {
                 ActionBarSlots[i].ItemData = null;
                 ActionBarSlots[i].UpdateUIDisplay();
@@ -112,7 +106,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Empty the slots with nothing in them
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
             {
                 ItemSlots[i].ItemData = null;
                 ItemSlots[i].UpdateUIDisplay();
@@ -136,7 +130,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Empty UI slots / remove equipment from the player with empty equipment slots
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
             {
                 //Update the UI
                 DraggableUIComponent EquipmentSlot = DraggableUIControl.Instance.GetEquipmentSlot(GearSlot);
@@ -169,7 +163,7 @@ public static class InventoryEquipmentManagementPacketHandler
             int ItemID = Reader.ReadInt();
 
             //Empty slots
-            if (ItemNumber == 0)
+            if (ItemNumber == 0 || ItemNumber == -1)
             {
                 AbilitySlots[i].ItemData = null;
                 AbilitySlots[i].UpdateUIDisplay();

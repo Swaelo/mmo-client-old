@@ -32,7 +32,7 @@ public class ConnectionManager : MonoBehaviour
     public bool ShouldHandleData = false;
 
     //Attempts to establish a new connection with the game server
-    public void TryConnect()
+    public void TryConnect(string IPAddress)
     {
         Log.PrintChatMessage("connecting to server...");
         TryingToConnect = true;
@@ -41,7 +41,7 @@ public class ConnectionManager : MonoBehaviour
         ServerConnection.SendBufferSize = 4096;
         ServerConnection.NoDelay = false;
         Array.Resize(ref ASyncBuffer, 8192);
-        ServerConnection.BeginConnect(ServerIP, ServerPort, new AsyncCallback(ConnectionResult), ServerConnection);
+        ServerConnection.BeginConnect(IPAddress, ServerPort, new AsyncCallback(ConnectionResult), ServerConnection);
     }
 
     public void Update()
@@ -125,7 +125,6 @@ public class ConnectionManager : MonoBehaviour
     //Sends a packet of data to the game server
     public void SendPacket(PacketWriter Writer)
     {
-        Log.PrintChatMessage("sending packet to server");
         DataStream.Write(Writer.ToArray(), 0, Writer.ToArray().Length);
     }
 }

@@ -14,12 +14,12 @@ public static class Log
     //Display a message to the incoming packets display window
     public static void PrintIncomingPacket(string Message)
     {
-        IncomingPacketsDisplay.Instance.DisplayIncomingPacket(Message);
+        NetworkPacketsDisplay.Instance.DisplayIncomingPacket(Message);
     }
 
     //Display a message to the outgoing packets display window
     public static void PrintOutgoingPacket(string Message)
     {
-        OutgoingPacketsDisplay.Instance.DisplayOutgoingPacket(Message);
+        NetworkPacketsDisplay.Instance.DisplayOutgoingPacket(Message);
     }
 }

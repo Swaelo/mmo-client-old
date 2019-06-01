@@ -25,7 +25,9 @@ public class ItemList : MonoBehaviour
         Instance = this;
 
         //Import the master item list file listening every item and its ItemNumber values
-        string[] FileLines = System.IO.File.ReadAllLines("G:/gamedev/mmo-client/Assets/Exports/MasterItemList.txt");
+        string[] FileLines = System.IO.File.ReadAllLines(Application.dataPath + "/Exports/MasterItemList.txt");
+        Log.PrintChatMessage("Reading " + FileLines.Length + " lines in the MasterItemList file");
+        //string[] FileLines = System.IO.File.ReadAllLines("C:/Users/Harley/Desktop/mmo-client/Assets/Exports/MasterItemList.txt");
 
         //Look through and process each line of the text file
         foreach (string FileLine in FileLines)

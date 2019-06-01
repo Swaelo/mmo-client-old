@@ -33,8 +33,6 @@ public class PacketHandler : MonoBehaviour
             int PacketType = Reader.ReadInt();
             if (PacketHandlers.TryGetValue(PacketType, out PacketHandle PacketHandle))
                 PacketHandle.Invoke(Reader);
-
-            //Log.Print(Reader.BytesLeft() + " bytes of data left after reading the next section of data");
         }
     }
 
